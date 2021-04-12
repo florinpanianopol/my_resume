@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<link rel="stylesheet" type="text/css"  th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+<script type="text/javascript"  th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript"  th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+<title>My Resume Admin Control Panel</title>
+</head>
+<body> 
+<a th:href="@{/test}">est</a>
+<table class = "table table-responsive-xl">
+	<thead>
+			<tr>
+				<th>Id</th>
+				<th>Header</th>
+				<th>Sub Header</th>
+				<th>Current Job</th>
+				<th>Short Description</th>
+				<th>Birthday</th>
+				<th>Web site</th>
+				<th>Phone</th>
+				<th>City</th>
+				<th>Age</th>
+				<th>Degree</th>
+				<th>Email</th>
+				<th>Degree</th>
+				<th>Enabled</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="i: ${listAboutRecords}">
+				<td>[[${i.id}]]</td>
+				<td>[[${i.header}]]</td>
+				<td>[[${i.subHeader}]]</td>
+				<td>[[${i.currentJob}]]</td>
+				<td>[[${i.shortDesc}]]</td>
+				<td>[[${i.birthDay}]]</td>
+				<td>[[${i.webSite}]]</td>
+				<td>[[${i.phone}]]</td>
+				<td>[[${i.city}]]</td>
+				<td>[[${i.age}]]</td>
+				<td>[[${i.degree}]]</td>
+				<td>[[${i.email}]]</td>
+				<td>[[${i.degree}]]</td>
+				<td>[[${i.currInd}]]</td>
+				<td><a class = "fas fa-edit fa-2x icon-silver"
+				title = "Edit the user"></a>
+				<a class ="fas fa-trash fa-2x icon-silver link-delete" 
+				title = "Delete this user"></a>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+</body>
+</html>

@@ -1,0 +1,15 @@
+*.icon-white {color:white}
+*.icon-silver {color:silver}
+*.icon-green {color:green}
+*.icon-dark {color:gray}
+#thumbnail {
+width:30%
+}
+
+.uploadedPhoto {
+	width:150px;
+}
+.error {
+	color:red;
+}
+

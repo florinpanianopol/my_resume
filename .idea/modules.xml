@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MyResumeWebParent/MyResumeBackEnd/MyResumeBackEnd.iml" filepath="$PROJECT_DIR$/MyResumeWebParent/MyResumeBackEnd/MyResumeBackEnd.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyResumeCommon/MyResumeCommon.iml" filepath="$PROJECT_DIR$/MyResumeCommon/MyResumeCommon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyResumeWebParent/MyResumeFrontEnd/MyResumeFrontEnd.iml" filepath="$PROJECT_DIR$/MyResumeWebParent/MyResumeFrontEnd/MyResumeFrontEnd.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyResumeProject.iml" filepath="$PROJECT_DIR$/MyResumeProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyResumeWebParent/MyResumeWebParent.iml" filepath="$PROJECT_DIR$/MyResumeWebParent/MyResumeWebParent.iml" />
+    </modules>
+  </component>
+</project>
