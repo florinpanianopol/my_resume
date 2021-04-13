@@ -17,7 +17,7 @@ public class AboutSection {
     @NotEmpty(message="- is required")
     @Column(length=128, nullable = false)
     private String name;
-
+//
     @Size(min=3, message="- at least 3 characters")
     @NotEmpty(message="- is required")
     @Column(length=128, nullable = false)

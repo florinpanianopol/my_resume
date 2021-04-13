@@ -9,12 +9,12 @@
 <body>
 
 
-	<div th:fragment="column_link(fieldName, columnLabel)">
+	<div th:fragment="column_link(fieldName, columnLabel,removeTag)" th:remove="${removeTag}">
 				<a class="text-white"
 				 th:href="@{'/about_section/page/' + ${currentPage} + '?sortField='+${fieldName}+'&sortDir=' +${sortField != fieldName ?sortDir : reverseSortDir} +${keyword!=null ? '&keyword='+keyword : ''}+'#'+${fieldName}}">
 				 [[${columnLabel}]]
 				 </a>
-				
+
 				<span th:if="${sortField == fieldName}"
 				th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
 	<div>
