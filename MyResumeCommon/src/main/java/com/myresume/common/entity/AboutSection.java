@@ -3,39 +3,39 @@ package com.myresume.common.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.NotEmpty;
- 
+
 
 @Entity
-@Table(name="about_section")
+@Table(name = "about_section")
 public class AboutSection {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
-    @Column(length=128, nullable = false)
+
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
+    @Column(length = 128, nullable = false)
     private String name;
-//
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
-    @Column(length=128, nullable = false)
+    //
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
+    @Column(length = 128, nullable = false)
     private String header;
-    
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
-    @Column(length=1000, nullable = false)
+
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
+    @Column(length = 1000, nullable = false)
     private String subHeader;
 
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
-    @Column(length=128, nullable = false)
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
+    @Column(length = 128, nullable = false)
     private String currentJob;
 
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
-    @Column(length=250, nullable = false)
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
+    @Column(length = 250, nullable = false)
     private String shortDesc;
 
 //    @Size(min=3, message="- at least 3 characters")
@@ -43,8 +43,8 @@ public class AboutSection {
 //    @Column(length = 128, nullable = false)
 //    private String birthDay;
 
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false)
     private String webSite;
 
@@ -53,8 +53,8 @@ public class AboutSection {
 //    @Column(length = 128, nullable = false)
 //    private String phone;
 
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false)
     private String city;
 
@@ -63,65 +63,63 @@ public class AboutSection {
 //    @Column(length = 128, nullable = false)
 //    private int age;
 
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false)
     private String degree;
 
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
     @Column(length = 250, nullable = false)
     private String footer;
 
-    @Size(min=3, message="- at least 3 characters")
-    @NotEmpty(message="- is required")
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false)
     private String email;
-    
+
 
     @Column(length = 1, nullable = false)
     private boolean currInd;
-    
+
 
     @Column(length = 64)
-	private String profilePhoto;
-       
-    
-    
+    private String profilePhoto;
+
 
     public String getName() {
-		return name;
-	}
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name.trim();
-	}
+    public void setName(String name) {
+        this.name = name.trim();
+    }
 
-	public String getProfilePhoto() {
-		return profilePhoto;
-	}
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
 
-	public void setProfilePhoto(String profilePhoto) {
-		this.profilePhoto = profilePhoto;
-	}
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 
-	public boolean getCurrInd() {
-		return currInd;
-	}
+    public boolean getCurrInd() {
+        return currInd;
+    }
 
-	public void setCurrInd(boolean currInd) {
-		this.currInd = currInd;
-	}
+    public void setCurrInd(boolean currInd) {
+        this.currInd = currInd;
+    }
 
-	public Integer getId() {
+    public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
-		this.id = id;
-	}
+        this.id = id;
+    }
 
-	public String getHeader() {
+    public String getHeader() {
         return header;
     }
 
@@ -220,9 +218,9 @@ public class AboutSection {
     public AboutSection() {
     }
 
-    public AboutSection(String name,String header, String subHeader, String currentJob, String shortDesc,String webSite, String city, String degree, String footer, String email, boolean currInd) {
+    public AboutSection(String name, String header, String subHeader, String currentJob, String shortDesc, String webSite, String city, String degree, String footer, String email, boolean currInd) {
         this.name = name;
-    	this.header = header;
+        this.header = header;
         this.subHeader = subHeader;
         this.currentJob = currentJob;
         this.shortDesc = shortDesc;
@@ -253,11 +251,11 @@ public class AboutSection {
                 ", currInd='" + currInd + '\'' +
                 '}';
     }
-    
+
     @Transient
-	public String getProfilePhotoImagePath() {
-		if(id==null||profilePhoto ==null) return "/images/pic.png";
-		
-		return "/profile-photos/"+this.id +"/" +this.profilePhoto;
-	}
+    public String getProfilePhotoImagePath() {
+        if (id == null || profilePhoto == null) return "/images/pic.png";
+
+        return "/profile-photos/" + this.id + "/" + this.profilePhoto;
+    }
 }
