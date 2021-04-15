@@ -115,8 +115,8 @@ public class UserController {
     }
 
     private String getRedirectURLtoAffectedUser(User user) {
-        String firstPartOfEmail=user.getEmail().split("@")[0];
-        return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" +firstPartOfEmail;
+        String email=user.getEmail();
+        return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" +email;
     }
 
     @GetMapping("/users/edit/{id}")
