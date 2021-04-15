@@ -54,6 +54,10 @@ public class UserService {
         return (List<Role>) roleRepo.findAll();
     }
 
+    public List<User> findAllActiveRecords() {
+        return(List<User>) userRepo.findAllActiveRecords();
+    }
+
     public User save(User user) {
         boolean isUpdatingUser = (user.getId()!= null);
 

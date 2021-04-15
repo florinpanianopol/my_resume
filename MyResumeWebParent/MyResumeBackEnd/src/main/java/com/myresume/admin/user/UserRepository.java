@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 
 
 public interface UserRepository extends PagingAndSortingRepository<User, Integer> {
@@ -23,4 +24,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Integer
     @Query("UPDATE User u SET u.enabled=?2 WHERE u.id = ?1")
     @Modifying
     public void updateEnabledStatus(Integer id, boolean enabled);
+
+    @Query("SELECT u FROM User u WHERE u.enabled = 1")
+    Collection<User> findAllActiveRecords();
 }

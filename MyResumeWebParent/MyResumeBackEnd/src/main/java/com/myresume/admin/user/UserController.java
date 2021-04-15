@@ -29,6 +29,20 @@ public class UserController {
 
     @GetMapping("/users")
     public String listFirstPage(Model model) {
+        List<User> listUsers = service.listAll();
+        model.addAttribute("listUsers", listUsers);
+
+        int noOfCol = 0;
+        if (listUsers.size() > 0) {
+            noOfCol = listUsers.get(0).getClass().getDeclaredFields().length;
+        }
+
+        List<User> listActiveUsers = service.findAllActiveRecords();
+        int activeRecordsCount = listActiveUsers.size();
+
+        model.addAttribute("noOfCol", noOfCol);
+        model.addAttribute("activeRecordsCount", activeRecordsCount);
+
         return listByPage(1,model,"firstName","asc",null);
     }
 
@@ -37,11 +51,19 @@ public class UserController {
                              @Param("sortField") String sortField, @Param("sortDir") String sortDir,
                              @Param("keyword") String keyword
     ) {
-        System.out.print("Sort field "+ sortField);
-        System.out.print("Sort order "+ sortDir);
-
         Page<User> page = service.listByPage(pageNum, sortField, sortDir,keyword);
         List<User> listUsers = page.getContent();
+
+        int noOfCol = 0;
+        if (listUsers.size() > 0) {
+            noOfCol = listUsers.get(0).getClass().getDeclaredFields().length;
+        }
+
+        List<User> listActiveUsers = service.findAllActiveRecords();
+        int activeRecordsCount = listActiveUsers.size();
+
+        model.addAttribute("noOfCol", noOfCol);
+        model.addAttribute("activeRecordsCount", activeRecordsCount);
 
 //		System.out.print("PageNum = "+pageNum);
 //		System.out.print("Total elements = "+page.getTotalElements());
