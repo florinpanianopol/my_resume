@@ -66,13 +66,14 @@ public class UserService {
 
             if(user.getPassword().isEmpty()) {
                 user.setPassword(existingUser.getPassword());
-            } else { encodePassword(user);
+            } else {
+                encodePassword(user);
             }
         } else {
             encodePassword(user);
         }
 
-        encodePassword(user);
+//        encodePassword(user);
         return userRepo.save(user);
 
     }
