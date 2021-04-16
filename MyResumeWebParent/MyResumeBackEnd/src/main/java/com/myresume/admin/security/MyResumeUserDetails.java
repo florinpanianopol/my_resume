@@ -37,13 +37,11 @@ public class MyResumeUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        System.out.print(user.getPassword());
         return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        System.out.print(user.getEmail());
         return user.getEmail();
     }
 
@@ -68,6 +66,10 @@ public class MyResumeUserDetails implements UserDetails {
     public boolean isEnabled() {
         // TODO Auto-generated method stub
         return user.isEnabled();
+    }
+
+    public String getFullname(){
+        return this.user.getFirstName()+" "+this.user.getLastName();
     }
 
 }

@@ -25,6 +25,7 @@ public class AboutSectionController {
     @Autowired
     private AboutSectionService service;
 
+
     @GetMapping("/about_section")
     public String listFirstPage(Model model) {
         List<AboutSection> listAboutRecords = service.listAll();
