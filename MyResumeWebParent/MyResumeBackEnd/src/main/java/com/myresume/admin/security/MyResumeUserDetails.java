@@ -72,5 +72,18 @@ public class MyResumeUserDetails implements UserDetails {
         return this.user.getFirstName()+" "+this.user.getLastName();
     }
 
+    public String getPhotosImagePath() {
+        if(this.user.getId()==null||this.user.getPhotos() ==null) return "/images/pic.png";
+
+        return "/user-photos/"+this.user.getId() +"/" +this.user.getPhotos();
+    }
+
+    public void setFirstName(String firstName) {
+        this.user.setFirstName(firstName);
+    }
+    public void setLastName(String lastName) {
+        this.user.setLastName(lastName);
+    }
+
 }
 

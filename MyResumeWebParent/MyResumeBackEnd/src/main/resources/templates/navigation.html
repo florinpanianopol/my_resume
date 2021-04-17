@@ -48,10 +48,10 @@
 				<li class="nav-item dropdown mr-3">
 					<!--                    <i class="fas fa-user"></i>-->
 					<a href="#" class="nav-link dropdown-toggle" sec:authentication="principal.fullname" data-toggle="dropdown">
-
 					</a>
+
 					<div class="dropdown-menu">
-						<a href="profile.html" class="dropdown-item">
+						<a th:href="@{/account}" class="dropdown-item">
 							<i class="fas fa-user-circle"></i> Profile
 						</a>
 						<a href="settings.html" class="dropdown-item">
@@ -67,6 +67,9 @@
 			</ul>
 		</div>
 	</div>
+
+<!--	<img id="thumbnail" alt="default picture" th:src="@{${user.photosImagePath}}">-->
+
 </nav>
 </div>
 
