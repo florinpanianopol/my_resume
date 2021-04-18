@@ -260,6 +260,7 @@
 		 		Showing records # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
 		 		</span>
                     </div>
+                    <div th:if="${totalPages > 1}">
                     <nav>
                         <ul class="pagination justify-content-center">
                             <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
@@ -285,7 +286,7 @@
                             </li>
                         </ul>
                     </nav>
-
+                    </div>
 
                 </div>
             </div>

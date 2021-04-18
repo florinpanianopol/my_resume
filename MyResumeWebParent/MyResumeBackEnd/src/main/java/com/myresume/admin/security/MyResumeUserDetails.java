@@ -85,5 +85,9 @@ public class MyResumeUserDetails implements UserDetails {
         this.user.setLastName(lastName);
     }
 
+    public void setPhotos(String photos) {
+        this.user.setPhotos(photos);
+    }
+
 }
 

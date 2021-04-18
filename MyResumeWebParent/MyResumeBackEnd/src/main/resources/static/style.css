@@ -13,6 +13,11 @@ width:30%
 	color:red;
 }
 
+#profilePhoto {
+	border-radius:50%;
+	padding:2px;
+}
+
 @media screen and (max-width: 768px){
 	/* small screen */
 	div.full-details {display:none}
