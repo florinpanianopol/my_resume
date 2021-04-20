@@ -1,7 +1,9 @@
-package com.myresume.admin.user;
+package com.myresume.admin.user.controller;
 
 
 import com.myresume.admin.FileUploadUtil;
+import com.myresume.admin.user.UserNotFoundException;
+import com.myresume.admin.user.UserService;
 import com.myresume.common.entity.Role;
 import com.myresume.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +90,7 @@ public class UserController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
-        return "users";
+        return "users/users";
 
     }
 
@@ -102,7 +104,7 @@ public class UserController {
         model.addAttribute("user",user);
         model.addAttribute("listRoles",listRoles);
         model.addAttribute("pageTitle","Create New User");
-        return "user_form";
+        return "users/user_form";
     }
 
     @PostMapping("/users/save")
@@ -153,7 +155,7 @@ public class UserController {
             model.addAttribute("user",user);
             model.addAttribute("pageTitle","Edit User with ID: " + id);
             model.addAttribute("listRoles",listRoles);
-            return "user_form";
+            return "users/user_form";
 
         } catch (UserNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message","din edit "+ ex.getMessage());
@@ -175,11 +177,6 @@ public class UserController {
             String uploadDir = "user-photos/" + id;
             File f = new File(uploadDir);
             removeDirectory(f);
-
-            System.out.print("uploadDir ="+uploadDir+"\n");
-
-            System.out.print("f ="+f+"\n");
-
             service.delete(id);
 
             redirectAttributes.addFlashAttribute("message","The user ID "+ id +" has been deleted successfully");

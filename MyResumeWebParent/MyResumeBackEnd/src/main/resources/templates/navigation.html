@@ -35,9 +35,9 @@
 					<a href="categories.html" class="nav-link">Contact Section</a>
 				</li>
 				<li class="nav-item px-2">
-					<a href="users.html" class="nav-link">Footer Section</a>
+					<a href="users/users.html" class="nav-link">Footer Section</a>
 				</li>
-				<li class="nav-item px-2">
+				<li class="nav-item px-2" sec:authorize="hasAuthority('Admin')">
 					<a th:href="@{/users}"
 					   th:class="${activeParam == 'users' ? 'nav-link active' : 'nav-link'}"
 					   class="nav-link active">Users</a>

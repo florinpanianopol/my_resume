@@ -1,7 +1,8 @@
-package com.myresume.admin.user;
+package com.myresume.admin.user.controller;
 
 import com.myresume.admin.FileUploadUtil;
 import com.myresume.admin.security.MyResumeUserDetails;
+import com.myresume.admin.user.UserService;
 import com.myresume.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +30,7 @@ public class AccountController {
         User user = service.getByEmail(email);
         model.addAttribute("user",user);
 
-        return "account_form";
+        return "users/account_form";
     }
 
     @PostMapping("/account/update")
