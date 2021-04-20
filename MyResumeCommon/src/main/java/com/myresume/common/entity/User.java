@@ -1,6 +1,8 @@
 package com.myresume.common.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,15 +14,23 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false, unique = true)
     private String email;
 
+//    @Size(min = 8, message = "- at least 8 characters")
+//    @NotEmpty(message = "- is required")
     @Column(length = 64, nullable = false)
     private String password;
 
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
     @Column(name="first_name", length = 45, nullable = false)
     private String firstName;
 
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
     @Column(name="last_name", length = 45, nullable = false)
     private String lastName;
 
@@ -35,6 +45,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn( name = "role_id")
     )
+    @NotEmpty(message = "- is required")
     private Set<Role> roles = new HashSet<>();
 
     public User() {

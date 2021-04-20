@@ -12,14 +12,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -108,9 +107,37 @@ public class UserController {
     }
 
     @PostMapping("/users/save")
-    public String saveUser(User user, RedirectAttributes redirectAttributes,
-                           @RequestParam("image") MultipartFile multipartFile
+    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                           @RequestParam("image") MultipartFile multipartFile, Model model
     ) throws IOException {
+        boolean passwordFlag = false;
+        boolean userExistingFlag = false;
+
+        List<User> listUsers = service.listAll();
+        List<Role> listRoles = service.listRoles();
+        model.addAttribute("user", user);
+        model.addAttribute("listRoles",listRoles);
+
+        for(int i =0;i<listUsers.size();i++){
+            if(listUsers.get(i).getId().equals(user.getId())){
+                userExistingFlag=true;
+                break;
+            }
+        }
+
+        if(user.getPassword().length()==0 &&!userExistingFlag){
+            ObjectError error = new ObjectError("artificialBindingError", "artificialBindingError");
+            bindingResult.addError(error);
+            passwordFlag=true;
+        }
+
+        if (bindingResult.hasErrors()) {
+            if(passwordFlag) {
+                model.addAttribute("password_message", "The password cannot be empty!");
+            }
+        return "users/user_form";
+        }
+
 
         if(!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
@@ -168,16 +195,15 @@ public class UserController {
 
     @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable(name="id") Integer id,
-                             Model model,
                              RedirectAttributes redirectAttributes
-    ) throws InterruptedException {
+    )  {
 
         try {
 
-            String uploadDir = "user-photos/" + id;
-            File f = new File(uploadDir);
-            removeDirectory(f);
+
             service.delete(id);
+            String uploadDir = "user-photos/" + id;
+            FileUploadUtil.removeDir(uploadDir);
 
             redirectAttributes.addFlashAttribute("message","The user ID "+ id +" has been deleted successfully");
 
@@ -223,23 +249,23 @@ public class UserController {
 //    }
 
 
-    public static void removeDirectory(File dir) throws InterruptedException {
-
-        if (dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            if (files != null && files.length > 0) {
-
-                for (File aFile : files) {
-                    removeDirectory(aFile);
-                }
-            }
-            dir.delete();
-
-        } else {
-
-            dir.delete();
-
-        }
-    }
+//    public static void removeDirectory(File dir) throws InterruptedException {
+//
+//        if (dir.isDirectory()) {
+//            File[] files = dir.listFiles();
+//            if (files != null && files.length > 0) {
+//
+//                for (File aFile : files) {
+//                    removeDirectory(aFile);
+//                }
+//            }
+//            dir.delete();
+//
+//        } else {
+//
+//            dir.delete();
+//
+//        }
+//    }
 }
 
