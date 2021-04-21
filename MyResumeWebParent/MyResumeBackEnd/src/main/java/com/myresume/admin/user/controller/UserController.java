@@ -125,7 +125,7 @@ public class UserController {
             }
         }
 
-        if(user.getPassword().length()==0 &&!userExistingFlag){
+        if(user.getPassword().trim().length()<8 &&!userExistingFlag){
             ObjectError error = new ObjectError("artificialBindingError", "artificialBindingError");
             bindingResult.addError(error);
             passwordFlag=true;
@@ -133,7 +133,7 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             if(passwordFlag) {
-                model.addAttribute("password_message", "The password cannot be empty!");
+                model.addAttribute("password_message", "The password must be greater than 8 characters!");
             }
         return "users/user_form";
         }
