@@ -2,13 +2,16 @@ package com.myresume.admin.user.controller;
 
 
 import com.myresume.admin.FileUploadUtil;
+import com.myresume.admin.security.MyResumeUserDetails;
 import com.myresume.admin.user.UserNotFoundException;
 import com.myresume.admin.user.UserService;
 import com.myresume.common.entity.Role;
 import com.myresume.common.entity.User;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -108,7 +112,7 @@ public class UserController {
 
     @PostMapping("/users/save")
     public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                           @RequestParam("image") MultipartFile multipartFile, Model model
+                           @RequestParam("image") MultipartFile multipartFile, Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser
     ) throws IOException {
         boolean passwordFlag = false;
         boolean userExistingFlag = false;
@@ -143,10 +147,8 @@ public class UserController {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             user.setPhotos(fileName);
             User savedUser = service.save(user);
-            System.out.print("fileName ="+fileName+"\n");
             String uploadDir = "user-photos/" + savedUser.getId();
-            System.out.print("uploadDir ="+uploadDir+"\n");
-            FileUploadUtil.cleanDir(uploadDir);
+//            FileUploadUtil.cleanDir(uploadDir);
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
 
@@ -156,7 +158,11 @@ public class UserController {
             service.save(user);
         }
 
-
+        if(user.getEmail().equals(loggedUser.getUsername())) {
+            loggedUser.setFirstName(user.getFirstName());
+            loggedUser.setLastName(user.getLastName());
+            loggedUser.setPhotos(user.getPhotos());
+        }
 
 
         redirectAttributes.addFlashAttribute("message","The user has been saved successfully");
@@ -194,20 +200,19 @@ public class UserController {
 
 
     @GetMapping("/users/delete/{id}")
-    public String deleteUser(@PathVariable(name="id") Integer id,
+    public String deleteUser(@PathVariable(name="id") Integer id,Model model,
                              RedirectAttributes redirectAttributes
     )  {
 
         try {
-
-
             service.delete(id);
             String uploadDir = "user-photos/" + id;
-            FileUploadUtil.removeDir(uploadDir);
-
+            File file = new File("user-photos/" + id);
+//            FileUploadUtil.removeDir(uploadDir);
+            FileUtils.deleteDirectory(file);
             redirectAttributes.addFlashAttribute("message","The user ID "+ id +" has been deleted successfully");
 
-        } catch (UserNotFoundException ex) {
+        } catch (UserNotFoundException | IOException ex) {
             redirectAttributes.addFlashAttribute("message","din delete "+ ex.getMessage());
 
         }
