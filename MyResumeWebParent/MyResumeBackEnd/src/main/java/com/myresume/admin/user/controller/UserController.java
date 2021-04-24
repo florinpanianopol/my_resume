@@ -157,7 +157,7 @@ public class UserController {
             if(user.getPhotos().isEmpty()) user.setPhotos(null);
             service.save(user);
         }
-
+        //for updating the profile photo of the logged user
         if(user.getEmail().equals(loggedUser.getUsername())) {
             loggedUser.setFirstName(user.getFirstName());
             loggedUser.setLastName(user.getLastName());
