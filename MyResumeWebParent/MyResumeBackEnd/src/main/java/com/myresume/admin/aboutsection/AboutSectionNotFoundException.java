@@ -1,4 +1,4 @@
-package com.myresume.admin.section;
+package com.myresume.admin.aboutsection;
 
 
 public class AboutSectionNotFoundException extends Exception {

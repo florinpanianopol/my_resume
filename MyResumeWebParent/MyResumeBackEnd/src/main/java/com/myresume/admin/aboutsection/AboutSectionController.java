@@ -1,9 +1,9 @@
-package com.myresume.admin.section;
+package com.myresume.admin.aboutsection;
 
 import com.myresume.admin.FileUploadUtil;
-import com.myresume.admin.section.export.AboutSectionCsvExporter;
-import com.myresume.admin.section.export.AboutSectionExcelExporter;
-import com.myresume.admin.section.export.AboutSectionPDFExporter;
+import com.myresume.admin.aboutsection.export.AboutSectionCsvExporter;
+import com.myresume.admin.aboutsection.export.AboutSectionExcelExporter;
+import com.myresume.admin.aboutsection.export.AboutSectionPDFExporter;
 import com.myresume.common.entity.AboutSection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 //import com.myresume.common.entity.AboutSection;
 
 @Controller
-@ComponentScan({"com.myresume.common.entity","com.myresume.admin.section"})
+@ComponentScan({"com.myresume.common.entity", "com.myresume.admin.aboutsection"})
 @EntityScan({"com.myresume.common.entity","com.myresume.admin.section"})
-@EnableJpaRepositories("com.myresume.admin.section")
+@EnableJpaRepositories("com.myresume.admin.aboutsection")
 public class MainController {
 
 	@GetMapping("")

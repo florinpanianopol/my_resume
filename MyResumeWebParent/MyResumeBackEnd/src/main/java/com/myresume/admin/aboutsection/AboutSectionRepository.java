@@ -1,16 +1,14 @@
-package com.myresume.admin.section;
+package com.myresume.admin.aboutsection;
 
-import java.util.Collection;
-
+import com.myresume.common.entity.AboutSection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.myresume.common.entity.AboutSection;
+import java.util.Collection;
 
 @Repository
 public interface AboutSectionRepository extends PagingAndSortingRepository<AboutSection,Integer> {

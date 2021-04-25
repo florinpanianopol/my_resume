@@ -33,9 +33,9 @@
 	</footer>
 </div>
 
-	<div th:fragment="column_link(fieldName, columnLabel,removeTag)" th:remove="${removeTag}">
+	<div th:fragment="column_link(fieldName, columnLabel,removeTag,sectionName)" th:remove="${removeTag}">
 				<a class="text-white"
-				 th:href="@{'/about_section/page/' + ${currentPage} + '?sortField='+${fieldName}+'&sortDir=' +${sortField != fieldName ?sortDir : reverseSortDir} +${keyword!=null ? '&keyword='+keyword : ''}+'#'+${fieldName}}">
+				 th:href="@{'/'+ ${sectionName} +'/page/' + ${currentPage} + '?sortField='+${fieldName}+'&sortDir=' +${sortField != fieldName ?sortDir : reverseSortDir} +${keyword!=null ? '&keyword='+keyword : ''}+'#'+${fieldName}}">
 				 [[${columnLabel}]]
 				 </a>
 
