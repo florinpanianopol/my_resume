@@ -26,11 +26,11 @@ public class SkillsSectionService {
         return(List<SkillsSection>) skillsRepo.findAll(Sort.by("skillTitle").ascending());
     }
 
-    public List<SkillsSection> findAllActiveRecords() {
-        return(List<SkillsSection>) skillsRepo.findAllActiveRecords();
+    public List<SkillsSection> findAllActiveRecords(Integer userId) {
+        return(List<SkillsSection>) skillsRepo.findAllActiveRecords(userId);
     }
 
-    public Page<SkillsSection> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
+    public Page<SkillsSection> listByPage(int pageNum, String sortField, String sortDir, String keyword,Integer userId) {
         Sort sort = Sort.by(sortField);
         sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 
@@ -38,9 +38,9 @@ public class SkillsSectionService {
         Pageable pageable = PageRequest.of(pageNum - 1, SKILLS_PER_PAGE, sort);
 
         if(keyword != null) {
-            return skillsRepo.findAll(keyword,pageable);
+            return skillsRepo.findAll(userId,keyword,pageable);
         }
-        return skillsRepo.findAll(pageable);
+        return skillsRepo.findAll(userId,pageable);
     }
 
     public SkillsSection save(SkillsSection skillsSection) {
@@ -56,7 +56,7 @@ public class SkillsSectionService {
         try {
             return skillsRepo.findById(id).get();
         } catch (NoSuchElementException ex) {
-            throw new AboutSectionNotFoundException("Could not find any about section with ID "+id);
+            throw new AboutSectionNotFoundException("Could not find any skill section with ID "+id);
         }
     }
 

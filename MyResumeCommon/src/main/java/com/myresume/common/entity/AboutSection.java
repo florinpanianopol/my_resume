@@ -86,6 +86,15 @@ public class AboutSection {
     @Column(length = 64)
     private String profilePhoto;
 
+    private Integer user_id;
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
 
     public String getName() {
         return name;
@@ -218,7 +227,7 @@ public class AboutSection {
     public AboutSection() {
     }
 
-    public AboutSection(String name, String header, String subHeader, String currentJob, String shortDesc, String webSite, String city, String degree, String footer, String email, boolean currInd) {
+    public AboutSection(String name, String header, String subHeader, String currentJob, String shortDesc, String webSite, String city, String degree, String footer, String email, boolean currInd,Integer user_id) {
         this.name = name;
         this.header = header;
         this.subHeader = subHeader;
@@ -233,6 +242,7 @@ public class AboutSection {
         this.footer = footer;
         this.email = email;
         this.currInd = currInd;
+        this.user_id = user_id;
     }
 
     @Override
@@ -249,6 +259,7 @@ public class AboutSection {
                 ", footer='" + footer + '\'' +
                 ", email='" + email + '\'' +
                 ", currInd='" + currInd + '\'' +
+                ", user_id='" + user_id + '\'' +
                 '}';
     }
 

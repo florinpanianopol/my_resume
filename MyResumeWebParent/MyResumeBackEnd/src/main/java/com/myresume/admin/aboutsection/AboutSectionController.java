@@ -4,10 +4,13 @@ import com.myresume.admin.FileUploadUtil;
 import com.myresume.admin.aboutsection.export.AboutSectionCsvExporter;
 import com.myresume.admin.aboutsection.export.AboutSectionExcelExporter;
 import com.myresume.admin.aboutsection.export.AboutSectionPDFExporter;
+import com.myresume.admin.security.MyResumeUserDetails;
 import com.myresume.common.entity.AboutSection;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,8 +22,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class AboutSectionController {
@@ -30,7 +35,7 @@ public class AboutSectionController {
 
 
     @GetMapping("/about_section")
-    public String listFirstPage(Model model) {
+    public String listFirstPage(Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
         List<AboutSection> listAboutRecords = service.listAll();
         model.addAttribute("listAboutRecords", listAboutRecords);
 
@@ -40,22 +45,22 @@ public class AboutSectionController {
         }
 
 
-        List<AboutSection> listActiveAboutRecords = service.findAllActiveRecords();
+        List<AboutSection> listActiveAboutRecords =service.findAllActiveRecords(loggedUser.getId());
         int activeRecordsCount = listActiveAboutRecords.size();
 
         model.addAttribute("noOfCol", noOfCol);
         model.addAttribute("activeRecordsCount", activeRecordsCount);
 
-        return listByPage(1, model, "name", "asc", null);
+        return listByPage(1, model, "name", "asc", null,loggedUser);
     }
 
     @GetMapping("about_section/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
                              @Param("sortField") String sortField, @Param("sortDir") String sortDir,
-                             @Param("keyword") String keyword) {
+                             @Param("keyword") String keyword,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
 
 
-        Page<AboutSection> page = service.listByPage(pageNum, sortField, sortDir, keyword);
+        Page<AboutSection> page = service.listByPage(pageNum, sortField, sortDir, keyword,loggedUser.getId());
         List<AboutSection> listAboutRecords = page.getContent();
 
         int noOfCol = 0;
@@ -64,7 +69,7 @@ public class AboutSectionController {
         }
 
 
-        List<AboutSection> listActiveAboutRecords = service.findAllActiveRecords();
+        List<AboutSection> listActiveAboutRecords = service.findAllActiveRecords(loggedUser.getId());
         int activeRecordsCount = listActiveAboutRecords.size();
 
         model.addAttribute("noOfCol", noOfCol);
@@ -106,7 +111,7 @@ public class AboutSectionController {
     public String saveAboutSection(@ModelAttribute("aboutsection") @Valid AboutSection aboutsection, BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes,
                                    @RequestParam("image") MultipartFile multipartFile,
-                                   Model model) throws IOException {
+                                   Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) throws IOException {
 
         String target = "";
         boolean flag = false;
@@ -126,7 +131,7 @@ public class AboutSectionController {
             }
         }
 
-
+        aboutsection.setUser_id(loggedUser.getId());
         if (bindingResult.hasErrors()) {
             if (flag) {
                 model.addAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");
@@ -140,7 +145,15 @@ public class AboutSectionController {
                 AboutSection savedSection = service.save(aboutsection);
                 String uploadDir = "profile-photos/" + savedSection.getId();
 
-                FileUploadUtil.cleanDir(uploadDir);
+                try {
+                    File file = new File("profile-photos/" + savedSection.getId());
+                    FileUtils.cleanDirectory(file);
+                }
+                catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+//                FileUploadUtil.cleanDir(uploadDir);
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
 
@@ -189,9 +202,13 @@ public class AboutSectionController {
 
         try {
             service.delete(id);
-            redirectAttributes.addFlashAttribute("message", "The about_section with ID " + id + " has been deleted successfully");
+            String uploadDir = "profile-photos/" + id;
+            File file = new File("profile-photos/" + id);
+//            FileUploadUtil.removeDir(uploadDir);
+            FileUtils.deleteDirectory(file);
+            redirectAttributes.addFlashAttribute("message","The section ID "+ id +" has been deleted successfully");
 
-        } catch (AboutSectionNotFoundException ex) {
+        } catch (AboutSectionNotFoundException | IOException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
         return "redirect:/about_section";
@@ -200,7 +217,7 @@ public class AboutSectionController {
     @GetMapping("/about_section/{id}/currInd/{status}")
     public String updateCurrentInd(@PathVariable("id") Integer id,
                                    @PathVariable("status") boolean currInd, RedirectAttributes redirectAttributes, AboutSection aboutsection,
-                                   Model model) {
+                                   Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
 
 
         boolean flag = false;
@@ -208,8 +225,11 @@ public class AboutSectionController {
         List<AboutSection> listAboutRecords = service.listAll();
         model.addAttribute("aboutsection", aboutsection);
 
-        for (int i = 0; i < listAboutRecords.size(); i++) {
-            if (listAboutRecords.get(i).getCurrInd() && listAboutRecords.get(i).getId() != id
+        List<AboutSection> filteredlistAboutRecords = listAboutRecords.stream()
+                .filter(p -> p.getUser_id()==loggedUser.getId()).collect(Collectors.toList());
+
+        for (int i = 0; i < filteredlistAboutRecords.size(); i++) {
+            if (filteredlistAboutRecords.get(i).getCurrInd() && !filteredlistAboutRecords.get(i).getId().equals(id)
             ) {
                 flag = true;
                 break;

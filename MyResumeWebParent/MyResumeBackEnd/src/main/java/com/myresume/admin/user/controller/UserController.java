@@ -148,7 +148,13 @@ public class UserController {
             user.setPhotos(fileName);
             User savedUser = service.save(user);
             String uploadDir = "user-photos/" + savedUser.getId();
-//            FileUploadUtil.cleanDir(uploadDir);
+            try {
+                File file = new File("user-photos/" + savedUser.getId());
+                FileUtils.cleanDirectory(file);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
 

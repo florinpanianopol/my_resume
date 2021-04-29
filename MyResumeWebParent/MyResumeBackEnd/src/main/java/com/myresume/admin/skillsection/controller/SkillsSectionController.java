@@ -30,7 +30,7 @@ public class SkillsSectionController {
     private SkillsSectionService service;
 
     @GetMapping("/skills_section")
-    public String listFirstPage(Model model) {
+    public String listFirstPage(Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
         List<SkillsSection> listSkillsRecords = service.listAll();
         model.addAttribute("listSkillsRecords", listSkillsRecords);
 
@@ -40,22 +40,22 @@ public class SkillsSectionController {
         }
 
 
-        List<SkillsSection> listActiveSkillsRecords = service.findAllActiveRecords();
+        List<SkillsSection> listActiveSkillsRecords = service.findAllActiveRecords(loggedUser.getId());
         int activeRecordsCount = listActiveSkillsRecords.size();
 
         model.addAttribute("noOfCol", noOfCol);
         model.addAttribute("activeRecordsCount", activeRecordsCount);
 
-        return listByPage(1, model, "skillTitle", "asc", null);
+        return listByPage(1, model, "skillTitle", "asc", null, loggedUser);
     }
 
     @GetMapping("skills_section/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
                              @Param("sortField") String sortField, @Param("sortDir") String sortDir,
-                             @Param("keyword") String keyword) {
+                             @Param("keyword") String keyword,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
 
 
-        Page<SkillsSection> page = service.listByPage(pageNum, sortField, sortDir, keyword);
+        Page<SkillsSection> page = service.listByPage(pageNum, sortField, sortDir, keyword,loggedUser.getId());
         List<SkillsSection> listSkillsRecords = page.getContent();
 
         int noOfCol = 0;
@@ -64,7 +64,7 @@ public class SkillsSectionController {
         }
 
 
-        List<SkillsSection> listActiveSkillsRecords = service.findAllActiveRecords();
+        List<SkillsSection> listActiveSkillsRecords = service.findAllActiveRecords(loggedUser.getId());
         int activeRecordsCount = listActiveSkillsRecords.size();
 
         model.addAttribute("noOfCol", noOfCol);

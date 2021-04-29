@@ -25,11 +25,11 @@ public class AboutSectionService {
 				return(List<AboutSection>) repo.findAll(Sort.by("name").ascending());
 		}
 		
-		public List<AboutSection> findAllActiveRecords() {
-			return(List<AboutSection>) repo.findAllActiveRecords();
+		public List<AboutSection> findAllActiveRecords(Integer userId) {
+			return(List<AboutSection>) repo.findAllActiveRecords(userId);
 		}
 		
-		public Page<AboutSection> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
+		public Page<AboutSection> listByPage(int pageNum, String sortField, String sortDir, String keyword,Integer userId) {
 			Sort sort = Sort.by(sortField);
 			sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 			
@@ -37,9 +37,9 @@ public class AboutSectionService {
 			Pageable pageable = PageRequest.of(pageNum - 1, USERS_PER_PAGE, sort);
 			
 			if(keyword != null) {
-				return repo.findAll(keyword,pageable);
+				return repo.findAll(userId,keyword,pageable);
 			}
-			return repo.findAll(pageable);
+			return repo.findAll(userId,pageable);
 		}
 		
 		public AboutSection save(AboutSection aboutsection) {

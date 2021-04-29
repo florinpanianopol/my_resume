@@ -1,22 +1,20 @@
 package com.myresume.admin.aboutsection;
 
+import com.myresume.common.entity.AboutSection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
-import com.myresume.common.entity.AboutSection;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace=Replace.NONE)
@@ -34,7 +32,7 @@ public class AboutSectionRepositoryTests {
 	    	listRows.forEach(row -> tempList.add(row));
 	    	
 	        AboutSection aboutTestRow = new AboutSection("Florin","About mASDSAD2e","I am pizza delivery guy","QA Manual","I qa the shit out of things",
-	                "linkedin","Bucharest","Developer","Thats all there is","john@yahoo.com",false);
+	                "linkedin","Bucharest","Developer","Thats all there is","john@yahoo.com",false,1);
 	        
 	        for(int i=0;i<tempList.size();i++) {
 	        	if(tempList.get(i).getCurrInd() && aboutTestRow.getCurrInd()) {
@@ -57,9 +55,9 @@ public class AboutSectionRepositoryTests {
 	    public void testCreateMultipleRows(){
 	    	
 	    	AboutSection aboutTestRow1 = new AboutSection("Florin","About me","I am police offer","LAPD","I qa the shit out of things",
-	                "linkedin","Pitesti","Developer","Thats all there is","marcus@yahoo.com",false);
+	                "linkedin","Pitesti","Developer","Thats all there is","marcus@yahoo.com",false,1);
 	    	AboutSection aboutTestRow2 = new AboutSection("Florin","About me","I am fireman","LAPD","I qa the shit out of things",
-	                "linkedin","Pitesti","Developer","Thats all there is","marcus@yahoo.com",false);
+	                "linkedin","Pitesti","Developer","Thats all there is","marcus@yahoo.com",false,1);
 	    	
 	    	repo.saveAll(List.of(aboutTestRow1,aboutTestRow2));
 	    }
@@ -101,12 +99,12 @@ public class AboutSectionRepositoryTests {
 	    @Test
 	    public void testSearchUsers() {
 	    	String keyword = "bruce";
-	    	
+	    	Integer userId = 2;
 	    	int pageNumber = 0;
 	    	int pageSize = 4;
 	    	
 	    	Pageable pageable = PageRequest.of(pageNumber,pageSize);
-	    	Page<AboutSection> page = repo.findAll(keyword, pageable);
+	    	Page<AboutSection> page = repo.findAll(userId,keyword, pageable);
 	    	
 	    	List<AboutSection> listAboutSections = page.getContent();
 	    	listAboutSections.forEach(aboutsection -> System.out.println(aboutsection));
