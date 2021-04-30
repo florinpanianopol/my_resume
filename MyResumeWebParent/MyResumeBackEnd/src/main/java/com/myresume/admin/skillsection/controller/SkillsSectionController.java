@@ -116,7 +116,9 @@ public class SkillsSectionController {
         model.addAttribute("skillSection", skillsSection);
 
         for(int i =0;i<listSkills.size();i++){
-            if(listSkills.get(i).getSkillTitle().toLowerCase().equals(skillsSection.getSkillTitle().toLowerCase())&& listSkills.get(i).getUser_id()==(loggedUser.getId())){
+            if(listSkills.get(i).getSkillTitle().toLowerCase().equals(skillsSection.getSkillTitle().toLowerCase())&& listSkills.get(i).getUser_id()==(loggedUser.getId())
+            &&listSkills.get(i).getId()!=skillsSection.getId()
+            ){
                 existingSkillFlag=true;
                 break;
             }

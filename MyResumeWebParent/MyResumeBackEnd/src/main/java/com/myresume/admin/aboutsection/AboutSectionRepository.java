@@ -27,4 +27,6 @@ public interface AboutSectionRepository extends PagingAndSortingRepository<About
 
 	@Query("SELECT u FROM AboutSection u WHERE u.user_id=?1")
 	public Page<AboutSection> findAll(Integer userId, Pageable pageable);
+
+
 }

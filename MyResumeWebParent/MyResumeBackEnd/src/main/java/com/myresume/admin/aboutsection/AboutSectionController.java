@@ -116,22 +116,25 @@ public class AboutSectionController {
         String target = "";
         boolean flag = false;
 
-        List<AboutSection> listAboutRecords = service.listAll();
+        List<AboutSection> listAboutRecords = service.listAll().stream()
+                .filter(p -> p.getUser_id().equals(loggedUser.getId())).collect(Collectors.toList());
+        List<AboutSection> listAboutActiveRecords = service.listAll().stream()
+                .filter(p -> p.getUser_id().equals(loggedUser.getId())&&p.getCurrInd()).collect(Collectors.toList());
         model.addAttribute("aboutsection", aboutsection);
         model.addAttribute("pageTitle", "Create New Record");
+        aboutsection.setUser_id(loggedUser.getId());
 
-        for (int i = 0; i < listAboutRecords.size(); i++) {
-            if (listAboutRecords.get(i).getCurrInd() && aboutsection.getCurrInd()
-                    && listAboutRecords.get(i).getId() != aboutsection.getId()
-            ) {
+        if(aboutsection.getCurrInd()&& aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
+        flag = false;
+        }
+        else if(aboutsection.getCurrInd()&& !aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())){
                 ObjectError error = new ObjectError("currIndError", "There is already an Enabled record. Disable it first and then insert a new one!");
                 bindingResult.addError(error);
                 flag = true;
-                break;
             }
-        }
 
-        aboutsection.setUser_id(loggedUser.getId());
+
+
         if (bindingResult.hasErrors()) {
             if (flag) {
                 model.addAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");

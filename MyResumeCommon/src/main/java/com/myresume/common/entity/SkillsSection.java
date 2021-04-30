@@ -28,7 +28,7 @@ public class SkillsSection {
 
 
     @Min(value = 1, message = "Value should not be less than 1")
-    @Max(value = 10, message = "Value should not be greater than 10")
+    @Max(value = 100, message = "Value should not be greater than 10")
     @Column(length = 128, nullable = false)
     private int skillLevel;
 
