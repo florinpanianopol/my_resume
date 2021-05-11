@@ -4,13 +4,20 @@
 <body>
 
 <div th:replace="navigation :: menu('skills_section')"></div>
+
+<header id="main-header" class="py-2 bg-primary text-white mb-2">
+    <div class="container">
+        <div class="col-md-12">
+            <h1>
+                <i class="fas fa-cog"></i>
+                Manage Records | [[${pageTitle}]]
+            </h1>
+        </div>
+    </div>
+</header>
+
 <div class ="container-fluid">
 
-
-
-    <div>
-        <h2>Manage Skills | [[${pageTitle}]]</h2>
-    </div>
     <div th:if="${skills_message != null}" class = "alert alert-danger text-center">
         [[${skills_message}]]
     </div>

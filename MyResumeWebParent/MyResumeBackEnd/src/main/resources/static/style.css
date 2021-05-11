@@ -2,6 +2,13 @@
 *.icon-silver {color:silver}
 *.icon-green {color:green}
 *.icon-dark {color:gray}
+
+.textareaWrap
+{
+	white-space: pre;
+
+}
+
 #thumbnail {
 width:30%
 }
