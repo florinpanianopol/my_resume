@@ -23,7 +23,7 @@ public class SkillsSectionService {
     private SkillsSectionRepository skillsRepo;
 
     public List<SkillsSection> listAll() {
-        return(List<SkillsSection>) skillsRepo.findAll(Sort.by("skillTitle").ascending());
+        return(List<SkillsSection>) skillsRepo.findAll(Sort.by("skillCategory").ascending());
     }
 
     public List<SkillsSection> findAllActiveRecords(Integer userId) {

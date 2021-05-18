@@ -119,17 +119,44 @@
           <h3>My Skills</h3>
           <p>These are the skills i have obtained through out the years:</p>
           <hr>
+          <div class="row no-gutters">
+          <div th:each="i: ${distinctCategories}">
+
+            <div class = "col-12-sm">
+              <span class = "categorySpan badge badge-success mr-1" style="transition: 0.5s;" type="button" data-toggle="collapse" th:data-target="'#'+${i}" aria-expanded="false" th:aria-controls="${i}">
+              [[${i}]]
+                </span>
+            </div>
+          </div>
+          </div>
           <div th:each="i: ${listSkillRecords}">
-          <h4>[[${i.skillTitle}]]</h4>
-            <div class="progress mb-3" th:if="${i.skillLevel>70}">
+
+            <div th:id="${i.skillCategory}" class = "collapse show" th:if="${i.skillLevel>70}">
+            <span>[[${i.skillTitle}]]</span>
+            <div class="progress mb-3">
               <div class="progress-bar bg-success" style="width:100%" th:style="|width:${i.skillLevel}%|"></div>
             </div>
-          <div class="progress mb-3" th:if="${i.skillLevel>40 && i.skillLevel<=70}">
-            <div class="progress-bar bg-warning" style="width:100%" th:style="|width:${i.skillLevel}%|"></div>
-          </div>
-            <div class="progress mb-3" th:if="${i.skillLevel<=40}">
-              <div class="progress-bar bg-danger" style="width:100%" th:style="|width:${i.skillLevel}%|"></div>
             </div>
+            <div th:id="${i.skillCategory}" class = "collapse show" th:if="${i.skillLevel>40 && i.skillLevel<=70}">
+              <span>[[${i.skillTitle}]]</span>
+              <div class="progress mb-3">
+                <div class="progress-bar bg-warning" style="width:100%" th:style="|width:${i.skillLevel}%|"></div>
+              </div>
+            </div>
+            <div th:id="${i.skillCategory}" class = "collapse show" th:if="${i.skillLevel<=40}">
+              <span>[[${i.skillTitle}]]</span>
+              <div class="progress mb-3">
+                <div class="progress-bar bg-danger" style="width:100%" th:style="|width:${i.skillLevel}%|"></div>
+              </div>
+            </div>
+<!--          <div th:id="${i.skillCategory}" class="progress mb-3 collapse show" th:if="${i.skillLevel>40 && i.skillLevel<=70}">-->
+<!--            <div class="progress-bar bg-warning" style="width:100%" th:style="|width:${i.skillLevel}%|"></div>-->
+<!--          </div>-->
+<!--            <div th:id="${i.skillCategory}" class="progress mb-3 collapse show" th:if="${i.skillLevel<=40}">-->
+<!--              <div class="progress-bar bg-danger" style="width:100%" th:style="|width:${i.skillLevel}%|"></div>-->
+<!--            </div>-->
+
+          </div>
           </div>
         </div>
       </div>
@@ -324,5 +351,14 @@
      $('[data-toggle="tooltip"]').tooltip();
    });
  </script>
+
+
+ <script>
+   $('.categorySpan').click(function() {
+     $(this).toggleClass("badge-success badge-secondary");
+   });
+
+ </script>
+
 </body>
 </html>

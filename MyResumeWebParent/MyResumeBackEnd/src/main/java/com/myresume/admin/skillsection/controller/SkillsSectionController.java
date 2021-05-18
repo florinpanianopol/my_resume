@@ -34,6 +34,12 @@ public class SkillsSectionController {
         List<SkillsSection> listSkillsRecords = service.listAll();
         model.addAttribute("listSkillsRecords", listSkillsRecords);
 
+        getNoOfCols(model, loggedUser, listSkillsRecords);
+
+        return listByPage(1, model, "skillCategory", "asc", null, loggedUser);
+    }
+
+    private void getNoOfCols(Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser, List<SkillsSection> listSkillsRecords) {
         int noOfCol = 0;
         if (listSkillsRecords.size() > 0) {
             noOfCol = listSkillsRecords.get(0).getClass().getDeclaredFields().length;
@@ -45,8 +51,6 @@ public class SkillsSectionController {
 
         model.addAttribute("noOfCol", noOfCol);
         model.addAttribute("activeRecordsCount", activeRecordsCount);
-
-        return listByPage(1, model, "skillTitle", "asc", null, loggedUser);
     }
 
     @GetMapping("skills_section/page/{pageNum}")
@@ -58,17 +62,7 @@ public class SkillsSectionController {
         Page<SkillsSection> page = service.listByPage(pageNum, sortField, sortDir, keyword,loggedUser.getId());
         List<SkillsSection> listSkillsRecords = page.getContent();
 
-        int noOfCol = 0;
-        if (listSkillsRecords.size() > 0) {
-            noOfCol = listSkillsRecords.get(0).getClass().getDeclaredFields().length;
-        }
-
-
-        List<SkillsSection> listActiveSkillsRecords = service.findAllActiveRecords(loggedUser.getId());
-        int activeRecordsCount = listActiveSkillsRecords.size();
-
-        model.addAttribute("noOfCol", noOfCol);
-        model.addAttribute("activeRecordsCount", activeRecordsCount);
+        getNoOfCols(model, loggedUser, listSkillsRecords);
 
         long startCount = (pageNum - 1) * SkillsSectionService.SKILLS_PER_PAGE + 1;
         long endCount = startCount + SkillsSectionService.SKILLS_PER_PAGE - 1;

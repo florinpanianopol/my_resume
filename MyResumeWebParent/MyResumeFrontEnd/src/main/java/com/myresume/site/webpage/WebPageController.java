@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -38,7 +40,12 @@ public class WebPageController {
 		List<AboutSection> listAboutRecords = aboutService.findAllActiveRecords(listUsers.get(0).getId());
 
 
+		Set<String> distinctCategories = new HashSet<String>();
+		for(int i=0;i<listSkillRecords.size();i++){
+			distinctCategories.add(listSkillRecords.get(i).getSkillCategory());
+		}
 
+		model.addAttribute("distinctCategories",distinctCategories);
 		model.addAttribute("listAboutRecords",listAboutRecords);
 		model.addAttribute("listSkillRecords",listSkillRecords);
 

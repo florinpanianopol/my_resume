@@ -17,7 +17,7 @@ public interface SkillsSectionRepository extends PagingAndSortingRepository<Skil
 
     public Long countById(Integer id);
 
-    @Query("SELECT u FROM SkillsSection u WHERE u.user_id=?1 AND (u.skillTitle LIKE %?2% OR u.skillDescription LIKE %?2%)")
+    @Query("SELECT u FROM SkillsSection u WHERE u.user_id=?1 AND (u.skillTitle LIKE %?2% OR u.skillDescription LIKE %?2% OR u.skillCategory LIKE %?2%)")
     public Page<SkillsSection> findAll(Integer userId,String keyword, Pageable pageable);
 
     @Query("UPDATE SkillsSection u SET u.enabled=?2 WHERE u.id = ?1")

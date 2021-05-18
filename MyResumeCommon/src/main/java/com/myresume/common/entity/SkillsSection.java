@@ -26,6 +26,11 @@ public class SkillsSection {
     @Column(length = 128, nullable = false)
     private String skillTitle;
 
+    @Size(min = 3, message = "- at least 3 characters")
+    @NotEmpty(message = "- is required")
+    @Column(length = 128, nullable = false)
+    private String skillCategory;
+
 
     @Min(value = 1, message = "Value should not be less than 1")
     @Max(value = 100, message = "Value should not be greater than 10")
@@ -40,12 +45,14 @@ public class SkillsSection {
 
     }
 
-    public SkillsSection(@Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String skillDescription, @Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String skillTitle, @Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") int skillLevel, Integer user_id) {
+    public SkillsSection(@Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String skillDescription, @Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String skillTitle, @Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String skillCategory, @Min(value = 1, message = "Value should not be less than 1") @Max(value = 100, message = "Value should not be greater than 10") int skillLevel, Integer user_id) {
         this.skillDescription = skillDescription;
         this.skillTitle = skillTitle;
+        this.skillCategory = skillCategory;
         this.skillLevel = skillLevel;
         this.user_id = user_id;
     }
+
 
     public Integer getId() {
         return id;
@@ -61,6 +68,14 @@ public class SkillsSection {
 
     public void setSkillDescription(String skillDescription) {
         this.skillDescription = skillDescription;
+    }
+
+    public String getSkillCategory() {
+        return skillCategory;
+    }
+
+    public void setSkillCategory(String skillCategory) {
+        this.skillCategory = skillCategory;
     }
 
     public String getSkillTitle() {
@@ -101,6 +116,7 @@ public class SkillsSection {
                 "id=" + id +
                 ", skillDescription='" + skillDescription + '\'' +
                 ", skillTitle='" + skillTitle + '\'' +
+                ", skillCategory=" + skillCategory +
                 ", skillLevel=" + skillLevel +
                 ", user_id=" + user_id +
                 ", enabled=" + enabled +
