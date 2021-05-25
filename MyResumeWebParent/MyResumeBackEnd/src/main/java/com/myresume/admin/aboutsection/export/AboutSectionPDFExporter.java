@@ -55,7 +55,6 @@ public class AboutSectionPDFExporter extends AbstractExporter{
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getId().toString(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getName(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getHeader(),font)));
-			table.addCell(new PdfPCell(new Phrase(aboutSection.getSubHeader(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getCurrentJob(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getShortDesc(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getWebSite(),font)));

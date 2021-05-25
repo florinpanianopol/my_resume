@@ -1,12 +1,16 @@
 package com.myresume.common.entity;
 
+import com.myresume.common.entity.customvalidation.RichTextEditorMaxLength;
+import com.myresume.common.entity.customvalidation.RichTextEditorMinLength;
+
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 
 @Entity
 @Table(name = "about_section")
+
 public class AboutSection {
 
     @Id
@@ -23,19 +27,15 @@ public class AboutSection {
     @Column(length = 128, nullable = false)
     private String header;
 
-    @Size(min = 3, message = "- at least 3 characters")
-    @NotEmpty(message = "- is required")
-    @Column(length = 1000, nullable = false)
-    private String subHeader;
 
     @Size(min = 3, message = "- at least 3 characters")
     @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false)
     private String currentJob;
 
-    @Size(min = 3, message = "- at least 3 characters")
-    @NotEmpty(message = "- is required")
-    @Column(length = 250, nullable = false)
+    @RichTextEditorMinLength(message="- at least 3 characters")
+    @RichTextEditorMaxLength(message="- max 1000 characters")
+    @Column(length = 1000, nullable = false,name="short_desc")
     private String shortDesc;
 
 //    @Size(min=3, message="- at least 3 characters")
@@ -136,14 +136,6 @@ public class AboutSection {
         this.header = header.trim();
     }
 
-    public String getSubHeader() {
-        return subHeader;
-    }
-
-    public void setSubHeader(String subHeader) {
-        this.subHeader = subHeader.trim();
-    }
-
     public String getCurrentJob() {
         return currentJob;
     }
@@ -227,10 +219,9 @@ public class AboutSection {
     public AboutSection() {
     }
 
-    public AboutSection(String name, String header, String subHeader, String currentJob, String shortDesc, String webSite, String city, String degree, String footer, String email, boolean currInd,Integer user_id) {
+    public AboutSection(String name, String header, String currentJob, String shortDesc, String webSite, String city, String degree, String footer, String email, boolean currInd,Integer user_id) {
         this.name = name;
         this.header = header;
-        this.subHeader = subHeader;
         this.currentJob = currentJob;
         this.shortDesc = shortDesc;
 //        this.birthDay = birthDay;
@@ -251,7 +242,6 @@ public class AboutSection {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", header='" + header + '\'' +
-                ", subHeader='" + subHeader + '\'' +
                 ", currentJob='" + currentJob + '\'' +
                 ", webSite='" + webSite + '\'' +
                 ", city='" + city + '\'' +

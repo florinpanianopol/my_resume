@@ -1,6 +1,8 @@
-package com.myresume.admin.aboutsection;
+package com.myresume.admin.aboutsection.controller;
 
 import com.myresume.admin.FileUploadUtil;
+import com.myresume.admin.aboutsection.AboutSectionNotFoundException;
+import com.myresume.admin.aboutsection.AboutSectionService;
 import com.myresume.admin.aboutsection.export.AboutSectionCsvExporter;
 import com.myresume.admin.aboutsection.export.AboutSectionExcelExporter;
 import com.myresume.admin.aboutsection.export.AboutSectionPDFExporter;
@@ -94,7 +96,7 @@ public class AboutSectionController {
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
 
-        return "about_section";
+        return "aboutsection/about_section";
     }
 
     @GetMapping("/about_section/new")
@@ -104,7 +106,7 @@ public class AboutSectionController {
 
         model.addAttribute("aboutsection", aboutsection);
         model.addAttribute("pageTitle", "Create New Record");
-        return "about_section_form";
+        return "aboutsection/about_section_form";
     }
 
     @PostMapping("/about_section/save")
@@ -139,7 +141,7 @@ public class AboutSectionController {
             if (flag) {
                 model.addAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");
             }
-            target = "about_section_form";
+            target = "aboutsection/about_section_form";
         } else {
 
             if (!multipartFile.isEmpty()) {
@@ -187,7 +189,7 @@ public class AboutSectionController {
 
             model.addAttribute("aboutsection", aboutsection);
             model.addAttribute("pageTitle", "Edit about section with ID: " + id);
-            return "about_section_form";
+            return "aboutsection/about_section_form";
 
         } catch (AboutSectionNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());

@@ -31,7 +31,7 @@ public class AboutSectionRepositoryTests {
 	    	Iterable<AboutSection> listRows = repo.findAll();
 	    	listRows.forEach(row -> tempList.add(row));
 	    	
-	        AboutSection aboutTestRow = new AboutSection("Florin","About mASDSAD2e","I am pizza delivery guy","QA Manual","I qa the shit out of things",
+	        AboutSection aboutTestRow = new AboutSection("Florin","About mASDSAD2e","QA Manual","I qa the shit out of things",
 	                "linkedin","Bucharest","Developer","Thats all there is","john@yahoo.com",false,1);
 	        
 	        for(int i=0;i<tempList.size();i++) {
@@ -54,9 +54,9 @@ public class AboutSectionRepositoryTests {
 	    @Test
 	    public void testCreateMultipleRows(){
 	    	
-	    	AboutSection aboutTestRow1 = new AboutSection("Florin","About me","I am police offer","LAPD","I qa the shit out of things",
+	    	AboutSection aboutTestRow1 = new AboutSection("Florin","About me","LAPD","I qa the shit out of things",
 	                "linkedin","Pitesti","Developer","Thats all there is","marcus@yahoo.com",false,1);
-	    	AboutSection aboutTestRow2 = new AboutSection("Florin","About me","I am fireman","LAPD","I qa the shit out of things",
+	    	AboutSection aboutTestRow2 = new AboutSection("Florin","About me","LAPD","I qa the shit out of things",
 	                "linkedin","Pitesti","Developer","Thats all there is","marcus@yahoo.com",false,1);
 	    	
 	    	repo.saveAll(List.of(aboutTestRow1,aboutTestRow2));

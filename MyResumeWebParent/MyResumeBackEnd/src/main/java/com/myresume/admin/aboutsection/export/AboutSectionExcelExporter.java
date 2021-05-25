@@ -1,20 +1,13 @@
 package com.myresume.admin.aboutsection.export;
 
-import java.io.IOException;
-import java.util.List;
+import com.myresume.common.entity.AboutSection;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.xssf.usermodel.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import com.myresume.common.entity.AboutSection;
+import java.io.IOException;
+import java.util.List;
 
 public class AboutSectionExcelExporter extends AbstractExporter {
 	
@@ -94,7 +87,6 @@ private void createCell(XSSFRow row, int columnIndex, Object value, CellStyle st
 			createCell(row, columnIndex++, aboutSection.getId(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getName(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getHeader(),cellStyle);
-			createCell(row, columnIndex++, aboutSection.getSubHeader(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getCurrentJob(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getShortDesc(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getWebSite(),cellStyle);

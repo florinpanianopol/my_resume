@@ -4,10 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 <title>[[${pageTitle}]]</title>
+	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
 <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+
+	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
 </head>
 <body>
 
@@ -51,16 +56,7 @@
 				<span th:if="${#fields.hasErrors('header')}" th:errors="*{header}" class="error"></span>
 			</div>
 		</div>
-		
-		<div class = "form-group row">
-			<label class = "col-sm-4 col-form-label">Sub Header</label>
-			<div class = "col-sm-8">
-				<textarea type="text" class = "form-control textareaWrap" th:field="*{subHeader}"></textarea>
-			<span th:if="${#fields.hasErrors('subHeader')}" th:errors="*{subHeader}" class="error"></span>
-			</div>
-			 
-		</div>
-		
+
 		<div class = "form-group row">
 			<label class = "col-sm-4 col-form-label">Current Job</label>
 			<div class = "col-sm-8">
@@ -72,11 +68,10 @@
 		<div class = "form-group row">
 			<label class = "col-sm-4 col-form-label">Short Description</label>
 			<div class = "col-sm-8">
-				<textarea type="text" class = "form-control" th:field="*{shortDesc}"></textarea>
+				<textarea class = "form-control" th:field="*{shortDesc}" rows="5"></textarea>
 				<span th:if="${#fields.hasErrors('shortDesc')}" th:errors="*{shortDesc}" class="error"></span>
 			</div>
 		</div>
-		
 		
 		<div class = "form-group row">
 			<label class = "col-sm-4 col-form-label">Web site</label>
@@ -158,12 +153,15 @@
 	</form>
 </div>
 <div th:replace="fragments :: footer"></div>
+
+
 <script type="text/javascript">
 	$(document).ready(function(){
+		$("#shortDesc").richText();
 		$("#buttonCancel").on("click",function(){
 			window.location = "[[@{/about_section}]]";
 		});
-		
+
 		$("#fileImage").change(function(){
 		fileSize = this.files[0].size;
 
@@ -178,7 +176,7 @@
 			}
 		});	
 	});
-	
+
 	function showImageThumbnail(fileInput){
 	var file = fileInput.files[0];
 	var reader = new FileReader();
