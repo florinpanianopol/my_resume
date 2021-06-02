@@ -100,14 +100,10 @@
 
           </p>
           <div class="row no-gutters">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <ul>
               <li><strong>Website:</strong> <a th:href="@{${i.webSite}}"class="text-white" target="_blank" >Linkedin Profile</a> </li>
               <li><strong>City:</strong> [[${i.city}]]</li>
-            </ul>
-          </div>
-          <div class="col-md-6">
-            <ul>
               <li><strong>Degree:</strong> [[${i.degree}]]</li>
               <li><strong>Email:</strong> [[${i.email}]]</li>
             </ul>
@@ -130,7 +126,7 @@
           </div>
           </div>
           <div th:each="i: ${listSkillRecords}">
-
+<!--  aici putem pune totul intr-un tabel, ca sa putem face sortare-->
             <div th:id="${i.skillCategory}" class = "collapse show" th:if="${i.skillLevel>70}">
             <span>[[${i.skillTitle}]]</span>
             <div class="progress mb-3">
