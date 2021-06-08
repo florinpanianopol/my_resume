@@ -112,4 +112,29 @@ public class AboutSectionRepositoryTests {
 	    	assertThat(listAboutSections.size()).isGreaterThan(0);
 	    	
 	    }
+
+	@Test
+	public void testDeleteRow() {
+		Integer aboutSectionId = 27;
+		repo.deleteById(aboutSectionId);
+	}
+
+	@Test
+	public void testUpdateRecord() {
+		AboutSection aboutSection = repo.findById(26).get();
+		aboutSection.setHeader("Header");
+		aboutSection.setShortDesc("shortdesc");
+		repo.save(aboutSection);
+
+	}
+
+	@Test
+	public void testGetUserByHeader(){
+
+			String header = "Header";
+			AboutSection aboutSection = repo.getAboutSectionsByHeader(header);
+			assertThat(aboutSection).isNotNull();
+
+	}
+
 }
