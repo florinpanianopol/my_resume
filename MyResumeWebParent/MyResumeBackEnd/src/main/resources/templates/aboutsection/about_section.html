@@ -93,25 +93,26 @@
                     <div class="card-header">
                         <h4>
                             Records for the About Section
-                            <a th:href="@{/about_section/export/csv}" class="fas fa-file-csv fa-1x icon-dark mr-1"></a>
+                            <a th:href="@{/about_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
                             <a th:href="@{/about_section/export/excel}"
-                               class="fas fa-file-excel fa-1x icon-dark mr-1"></a>
-                            <a th:href="@{/about_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-dark mr-1"></a>
+                               class="fas fa-file-excel fa-1x icon-green mr-1"></a>
+                            <a th:href="@{/about_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
                         </h4>
 
                     </div>
+
                     <div>
                         <form th:action="@{/about_section/page/1}" class="form-inline m-3">
                             <input type="hidden" name="sortField" th:value="${sortField}"/>
                             <input type="hidden" name="sortDir" th:value="${sortDir}"/>
-                            Filter:&nbsp
-                            <input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
+                            <h5>Filter:&nbsp</h5>
+                            <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form" required/>
                             &nbsp;&nbsp;
-                            <button type="submit" class="btn btn-primary"/>
+                            <button type="submit" class="btn btn-success"/>
                             <i class="fas fa-search"></i>
                             </button>
                             &nbsp; &nbsp;
-                            <button type="button" class="btn btn-secondary" onclick="clearFilter()">
+                            <button type="button" class="btn btn-danger" onclick="clearFilter()">
                                 <i class="fas fa-eraser"></i>
                             </button>
                         </form>
@@ -120,7 +121,7 @@
                         <table class="table table-responsive">
                             <thead class="thead-dark">
                             <tr class="d-flex">
-                                <th class="hideable-column col-1">
+                                <th class="hideable-column col-1" id="id">
                                 <th th:replace="fragments :: column_link('id','Id','tag','about_section')"/>
                                 </th>
                                 <th class="col-2">Profile Photo</th>
@@ -145,17 +146,21 @@
                                 </th>
                                 <th class="col-3">Short Description</th>
                                 <th class="col-1">Web site</th>
-                                <th class="col-1">City</th>
+                                <th class="col-2">City</th>
                                 <th class="col-2">Degree</th>
                                 <th class="col-2">Email</th>
                                 <th class="col-1">Footer</th>
-                                <th class="col-1">Enabled</th>
+                                <th class="col-1" id="enabled">Enabled</th>
                                 <th class="col-1">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr class="d-flex" th:each="i: ${listAboutRecords}">
-                                <td class="col-1 hideable-column">[[${i.id}]]</td>
+                                <td class="col-1 hideable-column">
+                                    <span class="badge badge-primary">
+                                    [[${i.id}]]
+                                    </span>
+                                </td>
                                 <td class="col-2">
                                     <span th:if="${i.profilePhoto ==null}"
                                           class="fas fa-portrait fa-3x icon-silver"></span>
@@ -165,26 +170,26 @@
                                 <td class="col-1">[[${i.name}]]</td>
                                 <td class="col-1">[[${i.header}]]</td>
                                 <td class="col-2">[[${i.currentJob}]]</td>
-                                <td class="col-3" th:utext="${i.shortDesc}"></td>
+                                <td th:class="${i.shortDesc.contains('#ffffff')} ? 'col-3 bg-dark' : 'col-3'" th:utext="${i.shortDesc}"></td>
                                 <td class="col-1"><a th:href="${i.webSite}">Click Here</a></td>
-                                <td class="col-1">[[${i.city}]]</td>
+                                <td class="col-2">[[${i.city}]]</td>
                                 <td class="col-2">[[${i.degree}]]</td>
                                 <td class="col-2">[[${i.email}]]</td>
                                 <td class="col-1">[[${i.footer}]]</td>
                                 <td class="col-1">
-                                    <a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green"
-                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/false'}"
-                                       title="Disable this user"
+                                    <a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green text-decoration-none"
+                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/false#enabled'}"
+                                       title="Disable this user" style=""
                                     ></a>
-                                    <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark"
-                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/true'}"
+                                    <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark text-decoration-none"
+                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/true#enabled'}"
                                        title="Enable this user"
                                     ></a>
                                 </td>
-                                <td class="col-1"><a class="fas fa-edit fa-2x icon-silver text-decoration-none"
+                                <td class="col-1"><a class="fas fa-edit fa-2x icon-blue text-decoration-none"
                                                      th:href="@{'/about_section/edit/' + ${i.id}}"
                                                      title="Edit the user"></a>
-                                    <a class="fas fa-trash fa-2x icon-silver link-delete text-decoration-none"
+                                    <a class="fas fa-trash fa-2x link-delete icon-red text-decoration-none"
                                        th:href="@{'/about_section/delete/' + ${i.id}}"
                                        th:aboutSectionId="${i.id}"
                                        title="Delete this user"></a>
@@ -196,46 +201,151 @@
 
 
                     <div class="less-details">
-                        <div th:each="i: ${listAboutRecords}" class="row m-1">
+                        <div th:each="i: ${listAboutRecords}" class="row m-1 less_details_row">
                             <div class="col-4">
                                 <span th:if="${i.profilePhoto ==null}"
                                       class="fas fa-portrait fa-3x icon-silver"></span>
                                 <img class="uploadedPhoto" th:if="${i.profilePhoto !=null}"
                                      th:src="@{${i.profilePhotoImagePath}}"/>
-                            </div>
-                            <div class="col-8">
-                                <div>Name</div>
-                                <div>[[${i.name}]]</div>
-                                <div>Header</div>
-                                <div>[[${i.header}]]</div>
-                                <div>Current Job</div>
-                                <div>[[${i.currentJob}]]</div>
-                                <div>Short Description</div>
-                                <div th:utext="${i.shortDesc}"></div>
-                                <div>Website</div>
-                                <div>[[${i.webSite}]]</div>
-                                <div>City</div>
-                                <div>[[${i.city}]]</div>
-                                <div>Degree</div>
-                                <div>[[${i.degree}]]</div>
-                                <div>Email</div>
-                                <div>[[${i.email}]]</div>
-                                <div>Footer</div>
-                                <div>[[${i.footer}]]</div>
                                 <div class="mt-2">
-                                    <a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green"
+                                    <a th:if="${i.currInd == true}" class="fas fa-check-circle icon-green"
                                        th:href="@{'/about_section/' + ${i.id} + '/currInd/false'}"
                                        title="Disable this user"></a>
-                                    <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark"
+                                    <a th:if="${i.currInd != true}" class="fas fa-circle icon-dark"
                                        th:href="@{'/about_section/' + ${i.id} + '/currInd/true'}"
                                        title="Enable this user"></a>
-                                    <a class="fas fa-edit fa-2x icon-silver text-decoration-none"
+                                    <a class="fas fa-edit icon-silver text-decoration-none"
                                        th:href="@{'/about_section/edit/' + ${i.id}}"
                                        title="Edit the user"></a>
-                                    <a class="fas fa-trash fa-2x icon-silver link-delete text-decoration-none"
+                                    <a class="fas fa-trash icon-silver link-delete text-decoration-none"
                                        th:href="@{'/about_section/delete/' + ${i.id}}"
                                        th:aboutSectionId="${i.id}" title="Delete this user"></a>
                                 </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="row">
+                                <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Name
+                                    </span>
+                                </div>
+                                <div class="col-7">
+                                        <span class="badge badge-info">
+                                            [[${i.name}]]
+                                        </span>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Header
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                        <span class="badge badge-info">
+                                            [[${i.header}]]
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Current Job
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                        <span class="badge badge-info">
+                                            [[${i.currentJob}]]
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="text-primary font-weight-bold">Short Description</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div th:class="${i.shortDesc.contains('#ffffff')} ? 'bg-dark pt-1 pb-1 pl-1 pr-1 font-weight-light' : ''" th:utext="${i.shortDesc}"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Website
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                        </span><a th:href="${i.webSite}"><span class="badge badge-info">Click Here</span></a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        City
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                        <span class="badge badge-info">
+                                            [[${i.city}]]
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Degree
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                        <span class="badge badge-info">
+                                            [[${i.degree}]]
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                                <div class="row" th:if="${i.email.length() <= 17}">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Email
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                        <span class="badge badge-info">
+                                            [[${i.email}]]
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row" th:if="${i.email.length() > 17}">
+                                    <div class="col-12">
+                                    <span class="text-primary font-weight-bold">
+                                        Email
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="row" th:if="${i.email.length() > 17}">
+                                    <div class="col-12">
+                                        <span class="badge badge-info">
+                                            [[${i.email}]]
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Footer
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                        <span class="badge badge-info">
+                                            [[${i.footer}]]
+                                        </span>
+                                    </div>
+                                </div>
+
                             </div>
 
 
@@ -255,24 +365,24 @@
                         <ul class="pagination justify-content-center">
                             <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
                                 <a class="page-link"
-                                   th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">First</a>
+                                   th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">First</a>
                             </li>
                             <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
-                                                                                                     th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Previous</a>
+                               th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">Previous</a>
                             </li>
                             <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
                                 th:each="i:${#numbers.sequence(1,totalPages)}">
                                 <a class="page-link"
-                                   th:href="@{'/about_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">[[${i}]]</a>
+                                   th:href="@{'/about_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">[[${i}]]</a>
                             </li>
                             <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
                                     class="page-link"
-                                    th:href="@{'/about_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Next</a>
+                                    th:href="@{'/about_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">Next</a>
                             </li>
                             <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
                                 <a class="page-link"
-                                   th:href="@{'/about_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Last
-                                    Page</a>
+                                   th:href="@{'/about_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">
+                                    Last</a>
                             </li>
                         </ul>
                     </nav>

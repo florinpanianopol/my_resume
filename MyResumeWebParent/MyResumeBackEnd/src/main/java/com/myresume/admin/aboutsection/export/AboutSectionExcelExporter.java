@@ -30,7 +30,6 @@ public class AboutSectionExcelExporter extends AbstractExporter {
 		createCell(row, 0, "Id", cellStyle);
 		createCell(row, 1, "Name", cellStyle);
 		createCell(row, 2, "Header", cellStyle);
-		createCell(row, 3, "SubHeader", cellStyle);
 		createCell(row, 4, "Current Job", cellStyle);
 		createCell(row, 5, "Short Description", cellStyle);
 		createCell(row, 6, "Website", cellStyle);
@@ -83,12 +82,12 @@ private void createCell(XSSFRow row, int columnIndex, Object value, CellStyle st
 		for(AboutSection aboutSection : listAboutsSection) {
 			XSSFRow row = sheet.createRow(rowIndex++);
 			int columnIndex = 0;
-			
+
 			createCell(row, columnIndex++, aboutSection.getId(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getName(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getHeader(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getCurrentJob(),cellStyle);
-			createCell(row, columnIndex++, aboutSection.getShortDesc(),cellStyle);
+			createCell(row, columnIndex++, aboutSection.getShortDesc().replaceAll("\\<.*?\\>", "").replace("&nbsp;", ""),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getWebSite(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getCity(),cellStyle);
 			createCell(row, columnIndex++, aboutSection.getDegree(),cellStyle);

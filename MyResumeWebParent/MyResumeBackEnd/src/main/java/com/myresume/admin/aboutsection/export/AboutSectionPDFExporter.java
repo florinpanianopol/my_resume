@@ -56,7 +56,7 @@ public class AboutSectionPDFExporter extends AbstractExporter{
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getName(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getHeader(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getCurrentJob(),font)));
-			table.addCell(new PdfPCell(new Phrase(aboutSection.getShortDesc(),font)));
+			table.addCell(new PdfPCell(new Phrase(aboutSection.getShortDesc().replaceAll("\\<.*?\\>", "").replace("&nbsp;", ""),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getWebSite(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getCity(),font)));
 			table.addCell(new PdfPCell(new Phrase(aboutSection.getDegree(),font)));
@@ -87,9 +87,6 @@ public class AboutSectionPDFExporter extends AbstractExporter{
 		table.addCell(cell);
 		
 		cell.setPhrase(new Phrase("Header",font));
-		table.addCell(cell);
-		
-		cell.setPhrase(new Phrase("SubHeader",font));
 		table.addCell(cell);
 		
 		cell.setPhrase(new Phrase("CurrentJob",font));

@@ -2,6 +2,16 @@
 *.icon-silver {color:silver}
 *.icon-green {color:green}
 *.icon-dark {color:gray}
+*.icon-blue {color:blue}
+*.icon-red {color:red}
+
+.uploadedPhoto {
+	border-radius:15px;
+}
+
+.fa-circle:before {
+	text-decoration:none;
+}
 
 .textareaWrap
 {
@@ -29,6 +39,7 @@ width:30%
 	/* small screen */
 	div.full-details {display:none}
 	div.less-details {display:block}
+	.search-form {margin-bottom:3px}
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px){
@@ -42,5 +53,11 @@ width:30%
 	/* large screen */
 	div.less-details {display:none}
 	.hideable-column{display:table-cell}
+
+}
+
+.less_details_row {
+	border-bottom: 1px solid black;
+	padding-top: 2px;
 }
 
