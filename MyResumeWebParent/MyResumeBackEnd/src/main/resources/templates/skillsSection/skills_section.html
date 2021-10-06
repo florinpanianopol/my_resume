@@ -8,7 +8,7 @@
 <div th:replace="navigation :: menu('skills_section')"></div>
 
 <!-- Header -->
-<header id="main-header" class="py-2 bg-primary text-white">
+<header id="main-header" class="py-2 bg-primary text-white mb-2">
     <div class="container">
         <div class="col-md-6">
             <h1>
@@ -21,18 +21,6 @@
 
 
 <!-- Actions -->
-<section id="actions" class="py-4 mb-4 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <a th:href="@{/skills_section/new}" class="btn btn-primary btn-block">
-                    <i class="fas fa-plus"></i> Add Record
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
 <div class="container">
     <div th:if="${message != null}"
          class="alert alert-success text-center">
@@ -79,20 +67,18 @@
     </div>
 </div>
 
-<section id="about_section_records">
+<section id="skills_section_records">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <span th:if="${totalItems ==0}"
-                      class="alert alert-danger text-center">No records for the Skills Section!</span>
-                <div th:if="${totalItems !=0}" class="card border-0">
+                <div class="card border-0">
                     <div class="card-header">
                         <h4>
                             Records for the Skills Section
-                            <a th:href="@{/skills_section/export/csv}" class="fas fa-file-csv fa-1x icon-dark mr-1"></a>
+                            <a th:href="@{/skills_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
                             <a th:href="@{/skills_section/export/excel}"
-                               class="fas fa-file-excel fa-1x icon-dark mr-1"></a>
-                            <a th:href="@{/skills_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-dark mr-1"></a>
+                               class="fas fa-file-excel fa-1x icon-green mr-1"></a>
+                            <a th:href="@{/skills_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
                         </h4>
 
                     </div>
@@ -100,16 +86,19 @@
                         <form th:action="@{/skills_section/page/1}" class="form-inline m-3">
                             <input type="hidden" name="sortField" th:value="${sortField}"/>
                             <input type="hidden" name="sortDir" th:value="${sortDir}"/>
-                            Filter:&nbsp
-                            <input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
-                            &nbsp;&nbsp;
-                            <button type="submit" class="btn btn-primary"/>
+                            <h5>Filter:&nbsp</h5>
+                            <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2" required/>
+                            <button type="submit" class="btn btn-success"/>
                             <i class="fas fa-search"></i>
                             </button>
-                            &nbsp; &nbsp;
-                            <button type="button" class="btn btn-secondary" onclick="clearFilter()">
+                            <button type="button" class="btn btn-danger ml-2" onclick="clearFilter()">
                                 <i class="fas fa-eraser"></i>
                             </button>
+                            <a th:href="@{/skills_section/new}">
+                                <button type="button" class="btn btn-primary ml-2"/>
+                                <i class="fas fa-plus"></i>
+                                </button>
+                            </a>
                         </form>
                     </div>
                     <div class="full-details">
@@ -205,7 +194,7 @@
                     </div>
 
                     <div class="text-center m-1">
-				<span th:if="${currentPage > totalPages}">
+				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
 				No records found
 				</span>
                         <span th:unless="${currentPage > totalPages}">
@@ -246,7 +235,7 @@
     </div>
 </section>
 
-<div th:replace="fragments :: footer"></div>
+<div th:replace="fragments :: footer(0)"></div>
 
 <div class="modal fade text-center" id="confirmModal">
     <div class="modal-dialog">

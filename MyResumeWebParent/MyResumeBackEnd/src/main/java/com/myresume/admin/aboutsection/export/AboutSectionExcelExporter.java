@@ -30,14 +30,14 @@ public class AboutSectionExcelExporter extends AbstractExporter {
 		createCell(row, 0, "Id", cellStyle);
 		createCell(row, 1, "Name", cellStyle);
 		createCell(row, 2, "Header", cellStyle);
-		createCell(row, 4, "Current Job", cellStyle);
-		createCell(row, 5, "Short Description", cellStyle);
-		createCell(row, 6, "Website", cellStyle);
-		createCell(row, 7, "City", cellStyle);
-		createCell(row, 8, "Degree", cellStyle);
-		createCell(row, 9, "Email", cellStyle);
-		createCell(row, 10, "Footer", cellStyle);
-		createCell(row, 11, "Enabled", cellStyle);
+		createCell(row, 3, "Current Job", cellStyle);
+		createCell(row, 4, "Short Description", cellStyle);
+		createCell(row, 5, "Website", cellStyle);
+		createCell(row, 6, "City", cellStyle);
+		createCell(row, 7, "Degree", cellStyle);
+		createCell(row, 8, "Email", cellStyle);
+		createCell(row, 9, "Footer", cellStyle);
+		createCell(row, 10, "Enabled", cellStyle);
 		
 	}
 	

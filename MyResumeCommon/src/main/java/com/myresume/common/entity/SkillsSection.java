@@ -1,6 +1,8 @@
 package com.myresume.common.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -14,6 +16,7 @@ public class SkillsSection {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
     @Size(min = 3, message = "- at least 3 characters")
@@ -38,7 +41,7 @@ public class SkillsSection {
     private int skillLevel;
 
     private Integer user_id;
-
+    @JsonIgnore
     private boolean enabled;
 
     public SkillsSection() {

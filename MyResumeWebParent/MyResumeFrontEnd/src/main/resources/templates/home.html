@@ -128,7 +128,7 @@
           <div th:each="i: ${listSkillRecords}">
 <!--  aici putem pune totul intr-un tabel, ca sa putem face sortare-->
             <div th:id="${i.skillCategory}" class = "collapse show" th:if="${i.skillLevel>70}">
-            <span>[[${i.skillTitle}]]</span>
+            <span th:text="${i.skillTitle}"></span>
             <div class="progress mb-3">
               <div class="progress-bar bg-success" style="width:100%" th:style="|width:${i.skillLevel}%|"></div>
             </div>
@@ -328,9 +328,8 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"
 		integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g=="
-		crossorigin="anonymous"></script>
+		crossorigin="anonymous">
 
-	<script>
    $('.port-item').click(function(){
     $('.collapsePane').collapse('hide');
    });   
@@ -340,16 +339,11 @@
         event.preventDefault();
         $(this).ekkoLightbox();
     });
-    </script>
 
- <script>
    $(document).ready(function(){
      $('[data-toggle="tooltip"]').tooltip();
    });
- </script>
 
-
- <script>
    $('.categorySpan').click(function() {
      $(this).toggleClass("badge-success badge-secondary");
    });

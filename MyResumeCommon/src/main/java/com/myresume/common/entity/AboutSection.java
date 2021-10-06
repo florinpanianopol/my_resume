@@ -1,5 +1,6 @@
 package com.myresume.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myresume.common.entity.customvalidation.RichTextEditorMaxLength;
 import com.myresume.common.entity.customvalidation.RichTextEditorMinLength;
 
@@ -15,6 +16,7 @@ public class AboutSection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
     @Size(min = 3, message = "- at least 3 characters")
@@ -26,7 +28,6 @@ public class AboutSection {
     @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false)
     private String header;
-
 
     @Size(min = 3, message = "- at least 3 characters")
     @NotEmpty(message = "- is required")
@@ -80,10 +81,12 @@ public class AboutSection {
 
 
     @Column(length = 1, nullable = false)
+    @JsonIgnore
     private boolean currInd;
 
 
     @Column(length = 64)
+    @JsonIgnore
     private String profilePhoto;
 
     private Integer user_id;

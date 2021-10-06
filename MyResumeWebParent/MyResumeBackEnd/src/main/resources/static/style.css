@@ -5,10 +5,6 @@
 *.icon-blue {color:blue}
 *.icon-red {color:red}
 
-.uploadedPhoto {
-	border-radius:15px;
-}
-
 .fa-circle:before {
 	text-decoration:none;
 }

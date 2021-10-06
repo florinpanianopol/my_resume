@@ -30,10 +30,10 @@ public class AboutSectionPDFExporter extends AbstractExporter{
 		paragraph.setAlignment(Paragraph.ALIGN_CENTER);
 		document.add(paragraph);
 		
-		PdfPTable table = new PdfPTable(12);
+		PdfPTable table = new PdfPTable(11);
 		table.setWidthPercentage(100f);
 		table.setSpacingBefore(10);
-		table.setWidths(new float[] {2.5f,3.5f,3.5f,4.5f,3.5f,3.5f,3.5f,3.5f,3.5f,3.5f,3.5f,3.5f}); //trebuie umblat la latimi ca sa fie documentul lizibil
+		table.setWidths(new float[] {2.5f,3.5f,4.5f,3.5f,3.5f,3.5f,3.5f,3.5f,3.5f,3.5f,3.5f}); //trebuie umblat la latimi ca sa fie documentul lizibil
 		//alta data
 		
 		writeTableHeader(table);

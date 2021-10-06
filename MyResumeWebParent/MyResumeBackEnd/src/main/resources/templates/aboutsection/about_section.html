@@ -8,11 +8,11 @@
 <div th:replace="navigation :: menu('about_section')"></div>
 
 <!-- Header -->
-<header id="main-header" class="py-2 bg-primary text-white">
+<header id="main-header" class="py-2 bg-primary text-white mb-2">
     <div class="container">
         <div class="col-md-6">
             <h1>
-                <i class="fas fa-cog"></i>
+                <i class="fas fa-address-book"></i>
                 About Section
             </h1>
         </div>
@@ -20,18 +20,7 @@
 </header>
 
 
-<!-- Actions -->
-<section id="actions" class="py-4 mb-4 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <a th:href="@{/about_section/new}" class="btn btn-primary btn-block">
-                    <i class="fas fa-plus"></i> Add Record
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <div class="container">
     <div th:if="${message != null && message == 'There is already an Enabled record. Disable it first and then insert a new one!'}"
@@ -87,9 +76,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <span th:if="${totalItems ==0}"
-                      class="alert alert-danger text-center">No records for the About Section!</span>
-                <div th:if="${totalItems !=0}" class="card border-0">
+                <div class="card border-0">
                     <div class="card-header">
                         <h4>
                             Records for the About Section
@@ -101,23 +88,29 @@
 
                     </div>
 
-                    <div>
-                        <form th:action="@{/about_section/page/1}" class="form-inline m-3">
-                            <input type="hidden" name="sortField" th:value="${sortField}"/>
-                            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
-                            <h5>Filter:&nbsp</h5>
-                            <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form" required/>
-                            &nbsp;&nbsp;
-                            <button type="submit" class="btn btn-success"/>
-                            <i class="fas fa-search"></i>
-                            </button>
-                            &nbsp; &nbsp;
-                            <button type="button" class="btn btn-danger" onclick="clearFilter()">
+
+                    <div class="full-details" id="main_section">
+                        <div>
+                            <form id="searchForm" th:action="@{/about_section/page/1/}" class="form-inline m-3">
+                                <input type="hidden" name="sortField" th:value="${sortField}"/>
+                                <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+                                <h5>Filter:&nbsp</h5>
+                                <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2" required/>
+                                <button type="submit" class="btn btn-success"/>
+                                <i class="fas fa-search"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger ml-2" onclick="clearFilter()"/>
                                 <i class="fas fa-eraser"></i>
-                            </button>
-                        </form>
-                    </div>
-                    <div class="full-details">
+                                </button>
+                                <a th:href="@{/about_section/new}">
+                                    <button type="button" class="btn btn-primary ml-2"/>
+                                    <i class="fas fa-plus"></i>
+                                    </button>
+                                </a>
+
+                            </form>
+
+                        </div>
                         <table class="table table-responsive">
                             <thead class="thead-dark">
                             <tr class="d-flex">
@@ -197,10 +190,68 @@
                             </tr>
                             </tbody>
                         </table>
+
+                        <div class="text-center m-1">
+				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
+				No records found
+				</span>
+                            <span th:unless="${currentPage > totalPages}">
+		 		Showing records # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
+		 		</span>
+                        </div>
+                        <div th:if="${totalPages > 1}">
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
+                                        <a class="page-link"
+                                           th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">First</a>
+                                    </li>
+                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
+                                                                                                             th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Previous</a>
+                                    </li>
+                                    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
+                                        th:each="i:${#numbers.sequence(1,totalPages)}">
+                                        <a class="page-link"
+                                           th:href="@{'/about_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">[[${i}]]</a>
+                                    </li>
+                                    <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
+                                            class="page-link"
+                                            th:href="@{'/about_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Next</a>
+                                    </li>
+                                    <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
+                                        <a class="page-link"
+                                           th:href="@{'/about_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">
+                                            Last</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
                     </div>
 
 
-                    <div class="less-details">
+                    <div class="less-details" id="main">
+                        <div>
+                            <form th:action="@{/about_section/page/1}" class="form-inline m-3">
+                                <input type="hidden" name="sortField" th:value="${sortField}"/>
+                                <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+                                <h5>Filter:&nbsp</h5>
+                                <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2" required/>
+                                <button type="submit" class="btn btn-success"/>
+                                <i class="fas fa-search"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger ml-2" onclick="clearFilterMobile()"/>
+                                <i class="fas fa-eraser"></i>
+                                </button>
+                                <a th:href="@{/about_section/new}">
+                                    <button type="button" class="btn btn-primary ml-2"/>
+                                    <i class="fas fa-plus"></i>
+                                    </button>
+                                </a>
+
+                            </form>
+
+                        </div>
                         <div th:each="i: ${listAboutRecords}" class="row m-1 less_details_row">
                             <div class="col-4">
                                 <span th:if="${i.profilePhoto ==null}"
@@ -230,7 +281,7 @@
                                     </span>
                                 </div>
                                 <div class="col-7">
-                                        <span class="badge badge-info">
+                                       <span class="text-info">
                                             [[${i.name}]]
                                         </span>
                                 </div>
@@ -242,7 +293,7 @@
                                     </span>
                                     </div>
                                     <div class="col-7">
-                                        <span class="badge badge-info">
+                                       <span class="text-info">
                                             [[${i.header}]]
                                         </span>
                                     </div>
@@ -254,7 +305,7 @@
                                     </span>
                                     </div>
                                     <div class="col-7">
-                                        <span class="badge badge-info">
+                                       <span class="text-info">
                                             [[${i.currentJob}]]
                                         </span>
                                     </div>
@@ -286,7 +337,7 @@
                                     </span>
                                     </div>
                                     <div class="col-7">
-                                        <span class="badge badge-info">
+                                       <span class="text-info">
                                             [[${i.city}]]
                                         </span>
                                     </div>
@@ -298,36 +349,36 @@
                                     </span>
                                     </div>
                                     <div class="col-7">
-                                        <span class="badge badge-info">
+                                       <span class="text-info">
                                             [[${i.degree}]]
                                         </span>
                                     </div>
                                 </div>
 
 
-                                <div class="row" th:if="${i.email.length() <= 17}">
+                                <div class="row" th:if="${i.email.length() <= 11}">
                                     <div class="col-5">
                                     <span class="text-primary font-weight-bold">
                                         Email
                                     </span>
                                     </div>
                                     <div class="col-7">
-                                        <span class="badge badge-info">
+                                       <span class="text-info">
                                             [[${i.email}]]
                                         </span>
                                     </div>
                                 </div>
 
-                                <div class="row" th:if="${i.email.length() > 17}">
+                                <div class="row" th:if="${i.email.length() > 11}">
                                     <div class="col-12">
                                     <span class="text-primary font-weight-bold">
                                         Email
                                     </span>
                                     </div>
                                 </div>
-                                <div class="row" th:if="${i.email.length() > 17}">
+                                <div class="row" th:if="${i.email.length() > 11}">
                                     <div class="col-12">
-                                        <span class="badge badge-info">
+                                       <span class="text-info">
                                             [[${i.email}]]
                                         </span>
                                     </div>
@@ -340,7 +391,7 @@
                                     </span>
                                     </div>
                                     <div class="col-7">
-                                        <span class="badge badge-info">
+                                       <span class="text-info">
                                             [[${i.footer}]]
                                         </span>
                                     </div>
@@ -350,43 +401,48 @@
 
 
                         </div>
-                    </div>
 
-                    <div class="text-center m-1">
-				<span th:if="${currentPage > totalPages}">
+
+                        <div class="text-center m-1">
+				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
 				No records found
 				</span>
-                        <span th:unless="${currentPage > totalPages}">
+                            <span th:unless="${currentPage > totalPages}">
 		 		Showing records # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
 		 		</span>
+                        </div>
+                        <div th:if="${totalPages > 1}">
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
+                                        <a class="page-link"
+                                           th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">First</a>
+                                    </li>
+                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
+                                                                                                             th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">Previous</a>
+                                    </li>
+                                    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
+                                        th:each="i:${#numbers.sequence(1,totalPages)}">
+                                        <a class="page-link"
+                                           th:href="@{'/about_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">[[${i}]]</a>
+                                    </li>
+                                    <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
+                                            class="page-link"
+                                            th:href="@{'/about_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">Next</a>
+                                    </li>
+                                    <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
+                                        <a class="page-link"
+                                           th:href="@{'/about_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">
+                                            Last</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
+
                     </div>
-                    <div th:if="${totalPages > 1}">
-                    <nav>
-                        <ul class="pagination justify-content-center">
-                            <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
-                                <a class="page-link"
-                                   th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">First</a>
-                            </li>
-                            <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
-                               th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">Previous</a>
-                            </li>
-                            <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
-                                th:each="i:${#numbers.sequence(1,totalPages)}">
-                                <a class="page-link"
-                                   th:href="@{'/about_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">[[${i}]]</a>
-                            </li>
-                            <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
-                                    class="page-link"
-                                    th:href="@{'/about_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">Next</a>
-                            </li>
-                            <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
-                                <a class="page-link"
-                                   th:href="@{'/about_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#id'}">
-                                    Last</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    </div>
+
+
 
                 </div>
             </div>
@@ -394,7 +450,7 @@
     </div>
 </section>
 
-<div th:replace="fragments :: footer"></div>
+<div th:replace="fragments :: footer(0)"></div>
 
 <div class="modal fade text-center" id="confirmModal">
     <div class="modal-dialog">
@@ -429,8 +485,11 @@
         });
     });
 
+    function clearFilterMobile() {
+        window.location = "[[@{/about_section#main}]]"
+    }
     function clearFilter() {
-        window.location = "[[@{/about_section}]]"
+        window.location = "[[@{/about_section#main_section}]]"
     }
 </script>
 

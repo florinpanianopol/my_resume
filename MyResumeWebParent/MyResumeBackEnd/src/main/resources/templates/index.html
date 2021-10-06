@@ -6,20 +6,69 @@
 <body>
 
 <div th:replace="navigation :: menu('home')"></div>
-    <div>
-        <h2>
-            MyResume Control Panel
-        </h2>
-        Welcome
-        <a th:href="@{/account}" sec:authentication="principal.fullname">
-        </a>
-        <span sec:authentication="principal.authorities"></span>
 
+<header id="main-header" class="py-2 bg-primary text-white mb-2">
+    <div class="container">
+        <div class="col-md-6">
+            <h1>
+                Welcome
+                <span sec:authentication="principal.fullname">
+                </span>
+            </h1>
+            <span sec:authentication="principal.authorities"></span>
+        </div>
     </div>
+</header>
 
-<div th:replace="fragments :: footer"></div>
+<section id="main_section_records">
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">MyResume Control Panel</h1>
+                <p class="lead">This is the control panel from where i can change information on my resume.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center bg-danger text-white mb-4">
+                <div class="card-body">
+                    <h3>Personal Info!</h3>
+                    <h4 class="display-4">
+                        <i class="fas fa-info"></i>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center bg-warning text-white mb-4">
+                <div class="card-body">
+                    <h3>Skills!</h3>
+                    <h4 class="display-4">
+                        <i class="far fa-chart-bar"></i>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center bg-primary text-white mb-4">
+                <div class="card-body">
+                    <h3>Experience!</h3>
+                    <h4 class="display-4">
+                        <i class="fas fa-university"></i>
+
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments :: footer(1)"></div>
 
 </body>
 </html>
