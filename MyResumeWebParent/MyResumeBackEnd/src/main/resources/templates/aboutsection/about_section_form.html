@@ -1,21 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!--<head>-->
-<!--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
-<!--<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">-->
-<!--<title>[[${pageTitle}]]</title>-->
-<!--	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />-->
-<!--<link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>-->
-<!--<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />-->
-<!--<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>-->
-<!--<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>-->
-
-
-<!--	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>-->
-<!--	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>-->
-<!--</head>-->
-<body>
-
 <head th:replace="fragments :: page_head('About Section - MyResume')"></head>
 <body>
 
@@ -48,14 +32,6 @@
 			<div class = "col-sm-8">
 				<input type="text" class = "form-control" th:field="*{name}" />
 				<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></span>
-			</div>
-		</div>
-	
-		<div class = "form-group row">
-			<label class = "col-sm-4 col-form-label">Header</label>
-			<div class = "col-sm-8">
-				<input type="text" class = "form-control" th:field="*{header}" />
-				<span th:if="${#fields.hasErrors('header')}" th:errors="*{header}" class="error"></span>
 			</div>
 		</div>
 
@@ -108,15 +84,7 @@
 				<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
 			</div>
 		</div>
-		
-		<div class = "form-group row">
-			<label class = "col-sm-4 col-form-label">Footer</label>
-			<div class = "col-sm-8">
-				<input type="text" class = "form-control" th:field="*{footer}" />
-				<span th:if="${#fields.hasErrors('footer')}" th:errors="*{footer}" class="error"></span>
-			</div>
-		</div>
-		
+
 		<div class = "form-group row">
 			<label class = "col-sm-4 col-form-label">Enabled</label>
 			<div class = "col-sm-8">
@@ -135,18 +103,6 @@
 			</div>
 		</div>
 		
-		
-		
-		
-<!-- 		<div class = "form-group row"> -->
-<!-- 			<label class = "col-sm-4 col-form-label">Enabled</label> -->
-<!-- 			<div class = "col-sm-8"> -->
-<!-- 				<input type="checkbox" th:field="*{enabled}"/> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-		
-		
-		
 		<div class = "text-center">
 			<input type="submit" value="Save" class = "btn btn-primary m-3"/>
 			<input type="button" value="Cancel" class = "btn btn-secondary" id="buttonCancel"/>
@@ -154,7 +110,7 @@
 	</div>
 	</form>
 </div>
-<div th:replace="fragments :: footer(1)"></div>
+
 
 
 <script type="text/javascript">

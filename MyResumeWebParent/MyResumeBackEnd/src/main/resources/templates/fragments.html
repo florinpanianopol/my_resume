@@ -18,20 +18,6 @@
 </head>
 <body>
 
-<div th:fragment="footer(isFixed)">
-	<footer id="main-footer" class="bg-dark text-white mt-5 p-5"  th:style = "${isFixed==1} ? 'position: fixed; width: 100%;padding: 10px 10px 0px 10px;bottom: 0' : '' ">
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<p class="lead text-center">
-					Copyright Florin Pani 2020 &copy; <span id="year"></span>
-				</p>
-			</div>
-		</div>
-	</div>
-	</footer>
-</div>
-
 	<div th:fragment="column_link(fieldName, columnLabel,removeTag,sectionName)" th:remove="${removeTag}">
 				<a class="text-white"
 				 th:href="@{'/'+ ${sectionName} +'/page/' + ${currentPage} + '?sortField='+${fieldName}+'&sortDir=' +${sortField != fieldName ?sortDir : reverseSortDir} +${keyword!=null ? '&keyword='+keyword : ''}+'#'+${fieldName}}">
@@ -40,7 +26,7 @@
 
 				<span th:if="${sortField == fieldName}"
 				th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
-	<div>
+	</div>
 
 </body>
 </html>

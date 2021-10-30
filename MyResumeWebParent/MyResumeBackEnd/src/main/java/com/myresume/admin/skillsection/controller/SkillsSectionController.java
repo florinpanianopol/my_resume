@@ -1,6 +1,5 @@
 package com.myresume.admin.skillsection.controller;
 
-import com.myresume.admin.aboutsection.AboutSectionNotFoundException;
 import com.myresume.admin.security.MyResumeUserDetails;
 import com.myresume.admin.skillsection.SkillsSectionNotFoundException;
 import com.myresume.admin.skillsection.SkillsSectionService;
@@ -179,7 +178,7 @@ public class SkillsSectionController {
     }
 
     @GetMapping("/skills_section/edit/{id}")
-    public String editAboutSection(@PathVariable(name = "id") Integer id,
+    public String editSkillsSection(@PathVariable(name = "id") Integer id,
                                    Model model,
                                    RedirectAttributes redirectAttributes) {
 
@@ -191,7 +190,7 @@ public class SkillsSectionController {
             model.addAttribute("pageTitle", "Edit skills section with ID: " + id);
             return "skillsSection/skills_section_form";
 
-        } catch (AboutSectionNotFoundException ex) {
+        } catch (SkillsSectionNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/skills_section";
         }

@@ -3,7 +3,7 @@
 <head th:replace="fragments :: page_head(${pageTitle})"></head>
 <body>
 
-<div th:replace="navigation :: menu('skills_section')"></div>
+<div th:replace="navigation :: menu('language_section')"></div>
 
 <header id="main-header" class="py-2 bg-primary text-white mb-2">
     <div class="container">
@@ -18,45 +18,27 @@
 
 <div class ="container-fluid">
 
-    <div th:if="${skills_message != null}" class = "alert alert-danger text-center">
-        [[${skills_message}]]
+    <div th:if="${language_message != null}" class = "alert alert-danger text-center">
+        [[${language_message}]]
     </div>
-    <form th:action="@{/skills_section/save}" method="post" style="max-width: 700px; margin:0 auto"
-          th:object="${skillsSection}">
+    <form th:action="@{/language_section/save}" method="post" style="max-width: 700px; margin:0 auto"
+          th:object="${languageSection}">
         <input type="hidden" th:field="*{id}"/>
         <div class = "border border-secondary rounded p-3">
 
             <div class = "form-group row">
-                <label class = "col-sm-4 col-form-label">Skill Category</label>
+                <label class = "col-sm-4 col-form-label">Language</label>
                 <div class = "col-sm-8">
-                    <input type="text" class = "form-control" th:field="*{skillCategory}"/>
-                    <span th:if="${#fields.hasErrors('skillCategory')}" th:errors="*{skillCategory}" class="error"></span>
+                    <input type="text" class = "form-control" th:field="*{language}"/>
+                    <span th:if="${#fields.hasErrors('language')}" th:errors="*{language}" class="error"></span>
                 </div>
             </div>
 
             <div class = "form-group row">
-                <label class = "col-sm-4 col-form-label">Skill Title</label>
+                <label class = "col-sm-4 col-form-label">Language Level</label>
                 <div class = "col-sm-8">
-                    <input type="text" class = "form-control" th:field="*{skillTitle}"/>
-                    <span th:if="${#fields.hasErrors('skillTitle')}" th:errors="*{skillTitle}" class="error"></span>
-                </div>
-            </div>
-
-            <div class = "form-group row">
-                <label class = "col-sm-4 col-form-label">Skill Description</label>
-                <div class = "col-sm-8">
-                    <input type="text" class = "form-control" th:field="*{skillDescription}"/>
-                    <span th:if="${#fields.hasErrors('skillDescription')}" th:errors="*{skillDescription}" class="error"></span>
-                </div>
-            </div>
-
-
-
-            <div class = "form-group row">
-                <label class = "col-sm-4 col-form-label">Skill Level</label>
-                <div class = "col-sm-8">
-                    <input type="number" class = "form-control" th:field="*{skillLevel}"/>
-                    <span th:if="${#fields.hasErrors('skillLevel')}" th:errors="*{skillLevel}" class="error"></span>
+                    <input type="number" class = "form-control" th:field="*{languageLevel}"/>
+                    <span th:if="${#fields.hasErrors('languageLevel')}" th:errors="*{languageLevel}" class="error"></span>
                 </div>
             </div>
 
@@ -95,7 +77,7 @@
 
 </div>
 <script type="text/javascript">
-    moduleURL ="[[@{/skills_section}]]";
+    moduleURL ="[[@{/language_section}]]";
 
     function showModalDialog(title, message) {
         $("#modalTitle").text(title);

@@ -24,6 +24,7 @@ public class SectionDaoService {
     @Autowired
     private SkillsSectionService skillService;
 
+
     private static final List<AboutSection> abSections = new ArrayList<>();
     private static final List<SkillsSection> skillsSections = new ArrayList<>();
 
@@ -31,9 +32,9 @@ public class SectionDaoService {
         abSections.clear();
         List<User> listUsers = getUsers();
         List<AboutSection> listAboutRecords = getAboutSections(listUsers);
-        abSections.add(new AboutSection(listAboutRecords.get(0).getName(),listAboutRecords.get(0).getHeader(),listAboutRecords.get(0).getCurrentJob(),
+        abSections.add(new AboutSection(listAboutRecords.get(0).getName(),listAboutRecords.get(0).getCurrentJob(),
                 listAboutRecords.get(0).getShortDesc().replaceAll("\\<[^>]*>",""),listAboutRecords.get(0).getWebSite(),listAboutRecords.get(0).getCity(),
-                listAboutRecords.get(0).getDegree(),listAboutRecords.get(0).getFooter(),listAboutRecords.get(0).getEmail(),listAboutRecords.get(0).getCurrInd(),listAboutRecords.get(0).getUser_id()));
+                listAboutRecords.get(0).getDegree(),listAboutRecords.get(0).getEmail(),listAboutRecords.get(0).getCurrInd(),listAboutRecords.get(0).getUser_id()));
         return abSections;
     }
 

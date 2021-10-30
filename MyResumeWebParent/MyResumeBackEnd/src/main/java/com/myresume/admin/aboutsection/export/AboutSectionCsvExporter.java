@@ -15,8 +15,8 @@ public class AboutSectionCsvExporter extends AbstractExporter {
 		super.setResponseHeader(response,  "text/csv",".csv");
 				
 		ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),CsvPreference.STANDARD_PREFERENCE);
-		String[] csvHeader = {"Id","Name","Header","Current Job","Short Description","WebSite","City","Degree","Email","Footer","Enabled"};
-		String[] fieldMapping = {"id","name","header","currentJob","shortDesc","webSite","city","degree","email","footer","currInd"};
+		String[] csvHeader = {"Id","Name","Current Job","Short Description","WebSite","City","Degree","Email","Enabled"};
+		String[] fieldMapping = {"id","name","currentJob","shortDesc","webSite","city","degree","email","currInd"};
 		
 		csvWriter.writeHeader(csvHeader);
 

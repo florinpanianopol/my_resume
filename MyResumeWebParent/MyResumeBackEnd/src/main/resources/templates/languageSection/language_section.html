@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-<head th:replace="fragments :: page_head('Skills Section - MyResume')"></head>
+<head th:replace="fragments :: page_head('Language Section - MyResume')"></head>
 <body>
 
-<div th:replace="navigation :: menu('skills_section')"></div>
+<div th:replace="navigation :: menu('language_section')"></div>
 
 <!-- Header -->
 <header id="main-header" class="py-2 bg-primary text-white mb-2">
@@ -13,7 +13,7 @@
         <div class="col-md-6">
             <h1>
                 <i class="fas fa-cog"></i>
-                Skills Section
+                Language Section
             </h1>
         </div>
     </div>
@@ -67,23 +67,23 @@
     </div>
 </div>
 
-<section id="skills_section_records">
+<section id="language_section_records">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="card border-0">
                     <div class="card-header">
                         <h4>
-                            Records for the Skills Section
-                            <a th:href="@{/skills_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
-                            <a th:href="@{/skills_section/export/excel}"
+                            Records for the Languages Section
+                            <a th:href="@{/language_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
+                            <a th:href="@{/language_section/export/excel}"
                                class="fas fa-file-excel fa-1x icon-green mr-1"></a>
-                            <a th:href="@{/skills_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
+                            <a th:href="@{/language_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
                         </h4>
 
                     </div>
                     <div>
-                        <form th:action="@{/skills_section/page/1}" class="form-inline m-3">
+                        <form th:action="@{/language_section/page/1}" class="form-inline m-3">
                             <input type="hidden" name="sortField" th:value="${sortField}"/>
                             <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                             <h5>Filter:&nbsp</h5>
@@ -94,7 +94,7 @@
                             <button type="button" class="btn btn-danger ml-2" onclick="clearFilter()">
                                 <i class="fas fa-eraser"></i>
                             </button>
-                            <a th:href="@{/skills_section/new}">
+                            <a th:href="@{/language_section/new}">
                                 <button type="button" class="btn btn-primary ml-2"/>
                                 <i class="fas fa-plus"></i>
                                 </button>
@@ -106,22 +106,13 @@
                             <thead class ="thead-dark">
                             <tr>
                                 <th class="hideable-column">
-                                <th th:replace="fragments :: column_link('id','Id','tag','skills_section')"/>
+                                <th th:replace="fragments :: column_link('id','Id','tag','language_section')"/>
                                 </th>
-                                <th id="skillCategory">
-                                    <div th:replace="fragments :: column_link('skillCategory', 'Skill Category','none','skills_section')">
+                                <th id="language">
+                                    <div th:replace="fragments :: column_link('language', 'Language','none','language_section')">
                                     </div>
-                                </th>
-                                <th id="skillTitle">
-                                    <div th:replace="fragments :: column_link('skillTitle', 'Skill Title','none','skills_section')">
-                                    </div>
-                                </th>
-                                <th id="skillDescription">
-                                    <div th:replace="fragments :: column_link('skillDescription', 'Skill Description','none','skills_section')">
-                                    </div>
-                                </th>
-                                <th id="skillLevel">
-                                    <div th:replace="fragments :: column_link('skillLevel', 'Skill Level','none','skills_section')">
+                                <th id="languageLevel">
+                                    <div th:replace="fragments :: column_link('languageLevel', 'Language Level','none','language_section')">
                                     </div>
                                 </th>
                                 <th>Enabled
@@ -131,33 +122,25 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="i: ${listSkillsRecords}">
+                            <tr th:each="i: ${listLanguageRecords}">
                                 <th class="hideable-column" scope="row">[[${i.id}]]</th>
-                                <td>
-                                    <span th:if="${i.skillCategory.toUpperCase.contains('FRONT')}" class="badge badge-primary">[[${i.skillCategory}]]</span>
-<!--                                    <span class="badge badge-primary">[[${i.skillCategory}]]</span>-->
-                                    <span th:if="${i.skillCategory.toUpperCase.contains('BACK')}" class="badge badge-secondary">[[${i.skillCategory}]]</span>
-                                    <span th:if="${i.skillCategory.toUpperCase.contains('DATABASE')}" class="badge badge-danger">[[${i.skillCategory}]]</span>
-                                    <span th:if="${!i.skillCategory.toUpperCase.contains('BACK') && !i.skillCategory.toUpperCase.contains('DATABASE') && !i.skillCategory.toUpperCase.contains('FRONT')}" class="badge badge-success">[[${i.skillCategory}]]</span>
-                                </td>
-                                <td>[[${i.skillTitle}]]</td>
-                                <td>[[${i.skillDescription}]]</td>
-                                <td>[[${i.skillLevel}]]</td>
+                                <td>[[${i.language}]]</td>
+                                <td>[[${i.languageLevel}]]</td>
                                 <td>
                                     <a th:if="${i.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                                       th:href="@{'/skills_section/' + ${i.id} + '/enabled/false'}"
-                                       title="Disable this user"
+                                       th:href="@{'/language_section/' + ${i.id} + '/enabled/false'}"
+                                       title="Disable this language"
                                     ></a>
                                     <a th:if="${i.enabled != true}" class="fas fa-circle fa-2x icon-dark"
-                                       th:href="@{'/skills_section/' + ${i.id} + '/enabled/true'}"
-                                       title="Enable this user"
+                                       th:href="@{'/language_section/' + ${i.id} + '/enabled/true'}"
+                                       title="Enable this language"
                                     ></a>
                                 </td>
-                                <td><a class = "fas fa-edit fa-2x icon-silver" th:href="@{'/skills_section/edit/' + ${i.id}}"
-                                       title = "Edit this skill"></a>
-                                    <a class ="fas fa-trash fa-2x icon-silver link-delete" th:href="@{'/skills_section/delete/' + ${i.id}}"
-                                       th:skillSectionId = "${i.id}"
-                                       title = "Delete this skill"></a>
+                                <td><a class = "fas fa-edit fa-2x icon-silver" th:href="@{'/language_section/edit/' + ${i.id}}"
+                                       title = "Edit this language"></a>
+                                    <a class ="fas fa-trash fa-2x icon-silver link-delete" th:href="@{'/language_section/delete/' + ${i.id}}"
+                                       th:languageSectionId = "${i.id}"
+                                       title = "Delete this language"></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -165,27 +148,25 @@
                     </div>
 
                     <div class="less-details">
-                        <div th:each="i: ${listSkillsRecords}" class="row m-1">
+                        <div th:each="i: ${listLanguageRecords}" class="row m-1">
                             <div class="col-12">
-                                <div>Skill Title</div>
-                                <div>[[${i.skillTitle}]]</div>
-                                <div>Skill Description</div>
-                                <div>[[${i.skillDescription}]]</div>
-                                <div>Skill Level</div>
-                                <div>[[${i.skillLevel}]]</div>
+                                <div>Language</div>
+                                <div>[[${i.language}]]</div>
+                                <div>Language Level</div>
+                                <div>[[${i.languageLevel}]]</div>
                                 <div class="mt-2">
                                     <a th:if="${i.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                                       th:href="@{'/skills_section/' + ${i.id} + '/enabled/false'}"
-                                       title="Disable this user"></a>
+                                       th:href="@{'/language_section/' + ${i.id} + '/enabled/false'}"
+                                       title="Disable this language"></a>
                                     <a th:if="${i.enabled != true}" class="fas fa-circle fa-2x icon-dark"
-                                       th:href="@{'/skills_section/' + ${i.id} + '/enabled/true'}"
-                                       title="Enable this user"></a>
+                                       th:href="@{'/language_section/' + ${i.id} + '/enabled/true'}"
+                                       title="Enable this language"></a>
                                     <a class="fas fa-edit fa-2x icon-silver text-decoration-none"
-                                       th:href="@{'/skills_section/edit/' + ${i.id}}"
+                                       th:href="@{'/language_section/edit/' + ${i.id}}"
                                        title="Edit the user"></a>
                                     <a class="fas fa-trash fa-2x icon-silver link-delete text-decoration-none"
-                                       th:href="@{'/skills_section/delete/' + ${i.id}}"
-                                       th:skillsSectionId="${i.id}" title="Delete this user"></a>
+                                       th:href="@{'/language_section/delete/' + ${i.id}}"
+                                       th:languageSectionId="${i.id}" title="Delete this language"></a>
                                 </div>
                             </div>
 
@@ -206,23 +187,23 @@
                             <ul class="pagination justify-content-center">
                                 <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
                                     <a class="page-link"
-                                       th:href="@{'/skills_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">First</a>
+                                       th:href="@{'/language_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">First</a>
                                 </li>
                                 <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
-                                                                                                         th:href="@{'/skills_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Previous</a>
+                                                                                                         th:href="@{'/language_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Previous</a>
                                 </li>
                                 <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
                                     th:each="i:${#numbers.sequence(1,totalPages)}">
                                     <a class="page-link"
-                                       th:href="@{'/skills_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">[[${i}]]</a>
+                                       th:href="@{'/language_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">[[${i}]]</a>
                                 </li>
                                 <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
                                         class="page-link"
-                                        th:href="@{'/skills_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Next</a>
+                                        th:href="@{'/language_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Next</a>
                                 </li>
                                 <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
                                     <a class="page-link"
-                                       th:href="@{'/skills_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Last
+                                       th:href="@{'/language_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Last
                                         Page</a>
                                 </li>
                             </ul>
@@ -262,15 +243,15 @@
         $(".link-delete").on("click", function (e) {
             e.preventDefault();
             link = $(this);
-            skillSectionId = link.attr("skillSectionId");
+            languageSectionId = link.attr("languageSectionId");
             $("#yesButton").attr("href", link.attr("href"));
-            $("#confirmText").text("Are you sure you want to delete this skill " + skillSectionId + "?");
+            $("#confirmText").text("Are you sure you want to delete language with id " + languageSectionId + "?");
             $("#confirmModal").modal();
         });
     });
 
     function clearFilter() {
-        window.location = "[[@{/skills_section}]]"
+        window.location = "[[@{/language_section}]]"
     }
 </script>
 

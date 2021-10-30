@@ -1,7 +1,6 @@
 package com.myresume.admin.skillsection;
 
 
-import com.myresume.admin.aboutsection.AboutSectionNotFoundException;
 import com.myresume.common.entity.SkillsSection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,11 +51,11 @@ public class SkillsSectionService {
         return skillsRepo.save(skillsSection);
     }
 
-    public SkillsSection get(Integer id) throws AboutSectionNotFoundException {
+    public SkillsSection get(Integer id) throws SkillsSectionNotFoundException {
         try {
             return skillsRepo.findById(id).get();
         } catch (NoSuchElementException ex) {
-            throw new AboutSectionNotFoundException("Could not find any skill section with ID "+id);
+            throw new SkillsSectionNotFoundException("Could not find any skill section with ID "+id);
         }
     }
 

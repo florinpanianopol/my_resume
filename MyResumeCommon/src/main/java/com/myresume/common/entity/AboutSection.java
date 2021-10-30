@@ -23,11 +23,6 @@ public class AboutSection {
     @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false)
     private String name;
-    //
-    @Size(min = 3, message = "- at least 3 characters")
-    @NotEmpty(message = "- is required")
-    @Column(length = 128, nullable = false)
-    private String header;
 
     @Size(min = 3, message = "- at least 3 characters")
     @NotEmpty(message = "- is required")
@@ -68,11 +63,6 @@ public class AboutSection {
     @NotEmpty(message = "- is required")
     @Column(length = 128, nullable = false)
     private String degree;
-
-    @Size(min = 3, message = "- at least 3 characters")
-    @NotEmpty(message = "- is required")
-    @Column(length = 250, nullable = false)
-    private String footer;
 
     @Size(min = 3, message = "- at least 3 characters")
     @NotEmpty(message = "- is required")
@@ -131,14 +121,6 @@ public class AboutSection {
         this.id = id;
     }
 
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header.trim();
-    }
-
     public String getCurrentJob() {
         return currentJob;
     }
@@ -155,14 +137,6 @@ public class AboutSection {
         this.shortDesc = shortDesc.trim();
     }
 
-//    public String getBirthDay() {
-//        return birthDay;
-//    }
-//
-//    public void setBirthDay(String birthDay) {
-//        this.birthDay = birthDay.trim();
-//    }
-
     public String getWebSite() {
         return webSite;
     }
@@ -170,14 +144,6 @@ public class AboutSection {
     public void setWebSite(String webSite) {
         this.webSite = webSite.trim();
     }
-
-//    public String getPhone() {
-//        return phone;
-//    }
-//
-//    public void setPhone(String phone) {
-//        this.phone = phone.trim();
-//    }
 
     public String getCity() {
         return city;
@@ -187,28 +153,12 @@ public class AboutSection {
         this.city = city.trim();
     }
 
-//    public int getAge() {
-//        return age;
-//    }
-//
-//    public void setAge(int age) {
-//        this.age = age;
-//    }
-
     public String getDegree() {
         return degree;
     }
 
     public void setDegree(String degree) {
         this.degree = degree.trim();
-    }
-
-    public String getFooter() {
-        return footer;
-    }
-
-    public void setFooter(String footer) {
-        this.footer = footer.trim();
     }
 
     public String getEmail() {
@@ -222,9 +172,8 @@ public class AboutSection {
     public AboutSection() {
     }
 
-    public AboutSection(String name, String header, String currentJob, String shortDesc, String webSite, String city, String degree, String footer, String email, boolean currInd,Integer user_id) {
+    public AboutSection(String name, String currentJob, String shortDesc, String webSite, String city, String degree, String email, boolean currInd,Integer user_id) {
         this.name = name;
-        this.header = header;
         this.currentJob = currentJob;
         this.shortDesc = shortDesc;
 //        this.birthDay = birthDay;
@@ -233,7 +182,6 @@ public class AboutSection {
         this.city = city;
 //        this.age = age;
         this.degree = degree;
-        this.footer = footer;
         this.email = email;
         this.currInd = currInd;
         this.user_id = user_id;
@@ -244,12 +192,10 @@ public class AboutSection {
         return "About{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", header='" + header + '\'' +
                 ", currentJob='" + currentJob + '\'' +
                 ", webSite='" + webSite + '\'' +
                 ", city='" + city + '\'' +
                 ", degree='" + degree + '\'' +
-                ", footer='" + footer + '\'' +
                 ", email='" + email + '\'' +
                 ", currInd='" + currInd + '\'' +
                 ", user_id='" + user_id + '\'' +

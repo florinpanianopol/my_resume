@@ -19,8 +19,8 @@ public class User {
     @Column(length = 128, nullable = false, unique = true)
     private String email;
 
-//    @Size(min = 8, message = "- at least 8 characters")
-//    @NotEmpty(message = "- is required")
+    @Size(min = 8, message = "- at least 8 characters")
+    @NotEmpty(message = "- is required")
     @Column(length = 64, nullable = false)
     private String password;
 

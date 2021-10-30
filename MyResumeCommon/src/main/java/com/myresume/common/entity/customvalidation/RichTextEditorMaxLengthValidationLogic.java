@@ -8,7 +8,7 @@ public class RichTextEditorMaxLengthValidationLogic implements ConstraintValidat
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         String temp = value.replaceAll("\\<.*?\\>", "").replace("&nbsp;","");
-        return temp.trim().length()<=1000;
+        return temp.trim().length()<=12000;
     }
 
     @Override

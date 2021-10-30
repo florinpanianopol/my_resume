@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-<head th:replace="fragments :: page_head('About Section - MyResume')"></head>
+<head th:replace="fragments :: page_head('Work Section - MyResume')"></head>
 <body>
 
-<div th:replace="navigation :: menu('about_section')"></div>
+<div th:replace="navigation :: menu('work_section')"></div>
 
 <!-- Header -->
 <header id="main-header" class="py-2 bg-primary text-white mb-2">
@@ -13,7 +13,7 @@
         <div class="col-md-6">
             <h1>
                 <i class="fas fa-address-book"></i>
-                About Section
+                Work Section
             </h1>
         </div>
     </div>
@@ -72,18 +72,18 @@
     </div>
 </div>
 
-<section id="about_section_records">
+<section id="work_section_records">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="card border-0">
                     <div class="card-header">
                         <h4>
-                            Records for the About Section
-                            <a th:href="@{/about_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
-                            <a th:href="@{/about_section/export/excel}"
+                            Records for the Work Section
+                            <a th:href="@{/work_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
+                            <a th:href="@{/work_section/export/excel}"
                                class="fas fa-file-excel fa-1x icon-green mr-1"></a>
-                            <a th:href="@{/about_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
+                            <a th:href="@{/work_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
                         </h4>
 
                     </div>
@@ -91,7 +91,7 @@
 
                     <div class="full-details" id="main_section">
                         <div>
-                            <form id="searchForm" th:action="@{/about_section/page/1/}" class="form-inline m-3">
+                            <form id="searchForm" th:action="@{/work_section/page/1/}" class="form-inline m-3">
                                 <input type="hidden" name="sortField" th:value="${sortField}"/>
                                 <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                                 <h5>Filter:&nbsp</h5>
@@ -102,7 +102,7 @@
                                 <button type="button" class="btn btn-danger ml-2" onclick="clearFilter()"/>
                                 <i class="fas fa-eraser"></i>
                                 </button>
-                                <a th:href="@{/about_section/new}">
+                                <a th:href="@{/work_section/new}">
                                     <button type="button" class="btn btn-primary ml-2"/>
                                     <i class="fas fa-plus"></i>
                                     </button>
@@ -114,79 +114,70 @@
                         <table class="table table-responsive">
                             <thead class="thead-dark">
                             <tr class="d-flex">
-                                <th class="col-1">Actions</th>
+                                <th class="col-2">Actions</th>
                                 <th class="hideable-column col-1" id="id">
-                                <th th:replace="fragments :: column_link('id','Id','tag','about_section')"/>
+                                <th th:replace="fragments :: column_link('id','Id','tag','work_section')"/>
                                 </th>
-                                <th class="col-2">Profile Photo</th>
 
 
-                                <th class="col-1" id="name">
-                                    <div th:replace="fragments :: column_link('name', 'Name','none','about_section')">
+                                <th class="col-2" id="jobName">
+                                    <div th:replace="fragments :: column_link('jobName', 'Job Name','none','work_section')">
                                     </div>
 
                                 </th>
 
-                                <th class="col-2" id="currentJob">
+                                <th class="col-2" id="company">
 
-                                    <div th:replace="fragments :: column_link('currentJob', 'Current Job','none','about_section')">
+                                    <div th:replace="fragments :: column_link('company', 'Company','none','work_section')">
                                     </div>
 
                                 </th>
-                                <th class="col-3">Short Description</th>
+                                <th class="col-5">Job Desc</th>
                                 <th class="col-1">Web site</th>
-                                <th class="col-2">City</th>
-                                <th class="col-2">Degree</th>
-                                <th class="col-2">Email</th>
-                                <th class="col-1" id="enabled">Enabled</th>
-                                <th class="col-1">Actions</th>
+                                <th class="col-2">From Date</th>
+                                <th class="col-2">To date</th>
+                                <th class="col-2" id="enabled">Enabled</th>
+                                <th class="col-2">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="d-flex" th:each="i: ${listAboutRecords}">
-                                <td class="col-1"><a class="fas fa-edit fa-2x icon-blue text-decoration-none"
-                                                     th:href="@{'/about_section/edit/' + ${i.id}}"
-                                                     title="Edit the user"></a>
+                            <tr class="d-flex" th:each="i: ${listWorkSectionRecords}">
+                                <td class="col-2"><a class="fas fa-edit fa-2x icon-blue text-decoration-none"
+                                                     th:href="@{'/work_section/edit/' + ${i.id}}"
+                                                     title="Edit the work section"></a>
                                     <a class="fas fa-trash fa-2x link-delete icon-red text-decoration-none"
-                                       th:href="@{'/about_section/delete/' + ${i.id}}"
-                                       th:aboutSectionId="${i.id}"
-                                       title="Delete this user"></a>
+                                       th:href="@{'/work_section/delete/' + ${i.id}}"
+                                       th:workSectionId="${i.id}"
+                                       title="Delete this work section"></a>
                                 </td>
                                 <td class="col-1 hideable-column">
                                     <span class="badge badge-primary">
                                     [[${i.id}]]
                                     </span>
                                 </td>
-                                <td class="col-2">
-                                    <span th:if="${i.profilePhoto ==null}"
-                                          class="fas fa-portrait fa-3x icon-silver"></span>
-                                    <img class="uploadedPhoto" th:if="${i.profilePhoto !=null}"
-                                         th:src="@{${i.profilePhotoImagePath}}"/>
-                                </td>
-                                <td class="col-1">[[${i.name}]]</td>
-                                <td class="col-2">[[${i.currentJob}]]</td>
-                                <td class="col-3" th:utext="${i.shortDesc}"></td>
+                                <td class="col-2">[[${i.jobName}]]</td>
+                                <td class="col-2">[[${i.company}]]</td>
+                                <td class="col-5" th:utext="${i.jobDesc}"></td>
                                 <td class="col-1"><a th:href="${i.webSite}">Click Here</a></td>
-                                <td class="col-2">[[${i.city}]]</td>
-                                <td class="col-2">[[${i.degree}]]</td>
-                                <td class="col-2">[[${i.email}]]</td>
-                                <td class="col-1">
-                                    <a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green text-decoration-none"
-                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/false#enabled'}"
-                                       title="Disable this user" style=""
+                                <td class="col-2">[[${i.fromDate}]]</td>
+                                <td class="col-2">[[${i.toDate}]]</td>
+                                <td class="col-2">
+                                    <a th:if="${i.enabled == true}" class="fas fa-check-circle fa-2x icon-green text-decoration-none"
+                                       th:href="@{'/work_section/' + ${i.id} + '/enabled/false#enabled'}"
+                                       title="Disable this work section" style=""
                                     ></a>
-                                    <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark text-decoration-none"
-                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/true#enabled'}"
-                                       title="Enable this user"
+                                    <a th:if="${i.enabled != true}" class="fas fa-circle fa-2x icon-dark text-decoration-none"
+                                       th:href="@{'/work_section/' + ${i.id} + '/enabled/true#enabled'}"
+                                       title="Enable this work section"
                                     ></a>
                                 </td>
-                                <td class="col-1"><a class="fas fa-edit fa-2x icon-blue text-decoration-none"
-                                                     th:href="@{'/about_section/edit/' + ${i.id}}"
-                                                     title="Edit the user"></a>
+                                <td class="col-2"><a class="fas fa-edit fa-2x icon-blue text-decoration-none"
+                                                     th:href="@{'/work_section/edit/' + ${i.id}}"
+                                                     title="Edit the work section"></a>
                                     <a class="fas fa-trash fa-2x link-delete icon-red text-decoration-none"
-                                       th:href="@{'/about_section/delete/' + ${i.id}}"
-                                       th:aboutSectionId="${i.id}"
-                                       title="Delete this user"></a>
+                                       th:href="@{'/work_section/delete/' + ${i.id}}"
+                                       th:workSectionId="${i.id}"
+                                       title="Delete this work section"></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -205,23 +196,23 @@
                                 <ul class="pagination justify-content-center">
                                     <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
                                         <a class="page-link"
-                                           th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">First</a>
+                                           th:href="@{'/work_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">First</a>
                                     </li>
                                     <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
-                                                                                                             th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Previous</a>
+                                                                                                             th:href="@{'/work_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Previous</a>
                                     </li>
                                     <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
                                         th:each="i:${#numbers.sequence(1,totalPages)}">
                                         <a class="page-link"
-                                           th:href="@{'/about_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">[[${i}]]</a>
+                                           th:href="@{'/work_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">[[${i}]]</a>
                                     </li>
                                     <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
                                             class="page-link"
-                                            th:href="@{'/about_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Next</a>
+                                            th:href="@{'/work_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Next</a>
                                     </li>
                                     <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
                                         <a class="page-link"
-                                           th:href="@{'/about_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">
+                                           th:href="@{'/work_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">
                                             Last</a>
                                     </li>
                                 </ul>
@@ -233,7 +224,7 @@
 
                     <div class="less-details" id="main">
                         <div>
-                            <form th:action="@{/about_section/page/1}" class="form-inline m-3">
+                            <form th:action="@{/work_section/page/1}" class="form-inline m-3">
                                 <input type="hidden" name="sortField" th:value="${sortField}"/>
                                 <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                                 <h5>Filter:&nbsp</h5>
@@ -244,7 +235,7 @@
                                 <button type="button" class="btn btn-danger ml-2" onclick="clearFilterMobile()"/>
                                 <i class="fas fa-eraser"></i>
                                 </button>
-                                <a th:href="@{/about_section/new}">
+                                <a th:href="@{/work_section/new}">
                                     <button type="button" class="btn btn-primary ml-2"/>
                                     <i class="fas fa-plus"></i>
                                     </button>
@@ -253,60 +244,58 @@
                             </form>
 
                         </div>
-                        <div th:each="i: ${listAboutRecords}" class="row m-1 less_details_row">
+                        <div th:each="i: ${listWorkSectionRecords}" class="row m-1 less_details_row">
                             <div class="col-4">
-                                <span th:if="${i.profilePhoto ==null}"
-                                      class="fas fa-portrait fa-3x icon-silver"></span>
-                                <img class="uploadedPhoto" th:if="${i.profilePhoto !=null}"
-                                     th:src="@{${i.profilePhotoImagePath}}"/>
                                 <div class="mt-2">
-                                    <a th:if="${i.currInd == true}" class="fas fa-check-circle icon-green"
-                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/false'}"
-                                       title="Disable this user"></a>
-                                    <a th:if="${i.currInd != true}" class="fas fa-circle icon-dark"
-                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/true'}"
-                                       title="Enable this user"></a>
+                                    <a th:if="${i.enabled == true}" class="fas fa-check-circle icon-green"
+                                       th:href="@{'/work_section/' + ${i.id} + '/enabled/false'}"
+                                       title="Disable this work section"></a>
+                                    <a th:if="${i.enabled != true}" class="fas fa-circle icon-dark"
+                                       th:href="@{'/work_section/' + ${i.id} + '/enabled/true'}"
+                                       title="Enable this work section"></a>
                                     <a class="fas fa-edit icon-silver text-decoration-none"
-                                       th:href="@{'/about_section/edit/' + ${i.id}}"
-                                       title="Edit the user"></a>
+                                       th:href="@{'/work_section/edit/' + ${i.id}}"
+                                       title="Edit the work section"></a>
                                     <a class="fas fa-trash icon-silver link-delete text-decoration-none"
-                                       th:href="@{'/about_section/delete/' + ${i.id}}"
-                                       th:aboutSectionId="${i.id}" title="Delete this user"></a>
+                                       th:href="@{'/work_section/delete/' + ${i.id}}"
+                                       th:workSectionId="${i.id}" title="Delete this work section"></a>
                                 </div>
                             </div>
                             <div class="col-8">
                                 <div class="row">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Company
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                       <span class="text-info">
+                                            [[${i.company}]]
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
                                 <div class="col-5">
                                     <span class="text-primary font-weight-bold">
-                                        Name
+                                        Job Name
                                     </span>
                                 </div>
                                 <div class="col-7">
                                        <span class="text-info">
-                                            [[${i.name}]]
+                                            [[${i.jobName}]]
                                         </span>
                                 </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-5">
                                     <span class="text-primary font-weight-bold">
-                                        Current Job
+                                        Job Description
                                     </span>
                                     </div>
                                     <div class="col-7">
                                        <span class="text-info">
-                                            [[${i.currentJob}]]
+                                            [[${i.jobDesc}]]
                                         </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <span class="text-primary font-weight-bold">Short Description</span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div th:class="${i.shortDesc.contains('#ffffff')} ? 'bg-dark pt-1 pb-1 pl-1 pr-1 font-weight-light' : ''" th:utext="${i.shortDesc}"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -319,58 +308,27 @@
                                         </span><a th:href="${i.webSite}"><span class="badge badge-info">Click Here</span></a>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-5">
                                     <span class="text-primary font-weight-bold">
-                                        City
+                                        From date
                                     </span>
                                     </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.city}]]
+                                    <span class="text-info">
+                                            [[${i.fromDate}]]
                                         </span>
-                                    </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-5">
                                     <span class="text-primary font-weight-bold">
-                                        Degree
+                                        To date
                                     </span>
                                     </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.degree}]]
+                                    <span class="text-info">
+                                            [[${i.toDate}]]
                                         </span>
-                                    </div>
-                                </div>
-
-
-                                <div class="row" th:if="${i.email.length() <= 11}">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Email
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.email}]]
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="row" th:if="${i.email.length() > 11}">
-                                    <div class="col-12">
-                                    <span class="text-primary font-weight-bold">
-                                        Email
-                                    </span>
-                                    </div>
-                                </div>
-                                <div class="row" th:if="${i.email.length() > 11}">
-                                    <div class="col-12">
-                                       <span class="text-info">
-                                            [[${i.email}]]
-                                        </span>
-                                    </div>
                                 </div>
 
                             </div>
@@ -392,23 +350,23 @@
                                 <ul class="pagination justify-content-center">
                                     <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
                                         <a class="page-link"
-                                           th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">First</a>
+                                           th:href="@{'/work_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">First</a>
                                     </li>
                                     <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
-                                                                                                             th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">Previous</a>
+                                                                                                             th:href="@{'/work_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">Previous</a>
                                     </li>
                                     <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
                                         th:each="i:${#numbers.sequence(1,totalPages)}">
                                         <a class="page-link"
-                                           th:href="@{'/about_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">[[${i}]]</a>
+                                           th:href="@{'/work_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">[[${i}]]</a>
                                     </li>
                                     <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
                                             class="page-link"
-                                            th:href="@{'/about_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">Next</a>
+                                            th:href="@{'/work_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">Next</a>
                                     </li>
                                     <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
                                         <a class="page-link"
-                                           th:href="@{'/about_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">
+                                           th:href="@{'/work_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">
                                             Last</a>
                                     </li>
                                 </ul>
@@ -452,18 +410,18 @@
         $(".link-delete").on("click", function (e) {
             e.preventDefault();
             link = $(this);
-            aboutSectionId = link.attr("aboutSectionId");
+            workSectionId = link.attr("workSectionId");
             $("#yesButton").attr("href", link.attr("href"));
-            $("#confirmText").text("Are you sure you want to delete this user ID " + aboutSectionId + "?");
+            $("#confirmText").text("Are you sure you want to delete this worksection with ID " + workSectionId + "?");
             $("#confirmModal").modal();
         });
     });
 
     function clearFilterMobile() {
-        window.location = "[[@{/about_section#main}]]"
+        window.location = "[[@{/work_section#main}]]"
     }
     function clearFilter() {
-        window.location = "[[@{/about_section#main_section}]]"
+        window.location = "[[@{/work_section#main_section}]]"
     }
 </script>
 

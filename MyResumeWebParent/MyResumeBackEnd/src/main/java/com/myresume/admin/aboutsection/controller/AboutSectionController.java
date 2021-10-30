@@ -126,14 +126,15 @@ public class AboutSectionController {
         model.addAttribute("pageTitle", "Create New Record");
         aboutsection.setUser_id(loggedUser.getId());
 
-        if(aboutsection.getCurrInd()&& aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
-        flag = false;
-        }
-        else if(aboutsection.getCurrInd()&& !aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())){
+        if(listAboutActiveRecords.size()>0) {
+            if (aboutsection.getCurrInd() && aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
+                flag = false;
+            } else if (aboutsection.getCurrInd() && !aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
                 ObjectError error = new ObjectError("currIndError", "There is already an Enabled record. Disable it first and then insert a new one!");
                 bindingResult.addError(error);
                 flag = true;
             }
+        }
 
 
 
