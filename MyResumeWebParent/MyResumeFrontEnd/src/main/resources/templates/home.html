@@ -7,6 +7,8 @@
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         html, body, h1, h2, h3, h4, h5, h6 {
             font-family: "Roboto", sans-serif
@@ -47,6 +49,7 @@
                                 class="fa fa-linkedin fa-fw w3-margin-right w3-large w3-text-teal"></i>Website</a></p>
                         <p th:utext="${i.shortDesc}"><i
                                 class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+
                         <hr>
                     </div>
 
@@ -58,14 +61,15 @@
                             <div class="w3-container w3-center w3-round-xlarge w3-green"
                                  th:style="|width:${i.skillLevel}%|" th:text="${i.skillLevel}"></div>
                         </div>
-                      <div class="w3-light-grey w3-round-xlarge w3-small" th:if="${i.skillLevel>40 && i.skillLevel<=70}">
-                        <div class="w3-container w3-center w3-round-xlarge w3-yellow"
-                             th:style="|width:${i.skillLevel}%|" th:text="${i.skillLevel}"></div>
-                      </div>
-                      <div class="w3-light-grey w3-round-xlarge w3-small" th:if="${i.skillLevel<=40}">
-                        <div class="w3-container w3-center w3-round-xlarge w3-red"
-                             th:style="|width:${i.skillLevel}%|" th:text="${i.skillLevel}"></div>
-                      </div>
+                        <div class="w3-light-grey w3-round-xlarge w3-small"
+                             th:if="${i.skillLevel>40 && i.skillLevel<=70}">
+                            <div class="w3-container w3-center w3-round-xlarge w3-yellow"
+                                 th:style="|width:${i.skillLevel}%|" th:text="${i.skillLevel}"></div>
+                        </div>
+                        <div class="w3-light-grey w3-round-xlarge w3-small" th:if="${i.skillLevel<=40}">
+                            <div class="w3-container w3-center w3-round-xlarge w3-red"
+                                 th:style="|width:${i.skillLevel}%|" th:text="${i.skillLevel}"></div>
+                        </div>
                     </div>
                     <br>
 
@@ -73,12 +77,13 @@
                     <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b>
                     </p>
                     <div th:each="i: ${listLanguageRecords}">
-                    <p th:text="${i.language}"></p>
+                        <p th:text="${i.language}"></p>
                         <div class="w3-light-grey w3-round-xlarge w3-small" th:if="${i.languageLevel>70}">
                             <div class="w3-container w3-center w3-round-xlarge w3-green"
                                  th:style="|width:${i.languageLevel}%|" th:text="${i.languageLevel}"></div>
                         </div>
-                        <div class="w3-light-grey w3-round-xlarge w3-small" th:if="${i.languageLevel>40 && i.languageLevel<=70}">
+                        <div class="w3-light-grey w3-round-xlarge w3-small"
+                             th:if="${i.languageLevel>40 && i.languageLevel<=70}">
                             <div class="w3-container w3-center w3-round-xlarge w3-yellow"
                                  th:style="|width:${i.languageLevel}%|" th:text="${i.languageLevel}"></div>
                         </div>
@@ -86,7 +91,7 @@
                             <div class="w3-container w3-center w3-round-xlarge w3-red"
                                  th:style="|width:${i.languageLevel}%|" th:text="${i.languageLevel}"></div>
                         </div>
-                    <br>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -102,34 +107,37 @@
                 <h2 class="w3-text-grey w3-padding-16"><i
                         class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience</h2>
                 <div class="w3-container" th:each="i: ${listWorkRecords}">
-                    <h5 class="w3-opacity"><b>[[${i.jobName}]] / [[${i.company}]]</b> <img src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455__480.jpg" class="img-thumbnail" alt="Cinque Terre" width="44"></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>[[${i.fromDate}]] / [[${i.toDate}]] ([[${i.dateDiff}]])</h6>
+                    <h5 class="w3-opacity"><b>[[${i.jobName}]] / [[${i.company}]]</b> <img
+                            th:src="@{${i.companyLogoImagePath}}" class="img-thumbnail" alt="Cinque Terre" width="44">
+                    </h5>
+                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>[[${i.fromDate}]] /
+                        [[${i.toDate}]] ([[${i.dateDiff}]])</h6>
                     <p th:utext="${i.jobDesc}"></p>
                     <hr>
                 </div>
             </div>
 
-            <div class="w3-container w3-card w3-white">
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
                 <h2 class="w3-text-grey w3-padding-16"><i
-                        class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Education</h2>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>W3Schools.com</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Forever</h6>
-                    <p>Web Development! All I need to know in one place</p>
+                        class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience</h2>
+                <div class="w3-container" th:each="i: ${listEducationRecords}">
+                    <h5 class="w3-opacity"><b>[[${i.programType}]] / [[${i.institutionName}]]</b>
+                    </h5>
+                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>[[${i.fromDate}]] /
+                        [[${i.toDate}]] ([[${i.dateDiff}]])</h6>
                     <hr>
-                </div>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>London Business School</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
-                    <p>Master Degree</p>
-                    <hr>
-                </div>
-                <div class="w3-container">
-                    <h5 class="w3-opacity"><b>School of Coding</b></h5>
-                    <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2010 - 2013</h6>
-                    <p>Bachelor Degree</p><br>
                 </div>
             </div>
+
+<!--            <div class="w3-container w3-card w3-white">-->
+<!--                <h2 class="w3-text-grey w3-padding-16"><i-->
+<!--                        class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Experience-->
+<!--                    Statistics</h2>-->
+<!--                <div class="w3-container">-->
+<!--                    <div id="piechart"></div>-->
+<!--                    <div id="chart_div"></div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <!-- End Right Column -->
         </div>
@@ -139,6 +147,7 @@
 
     <!-- End Page Container -->
 </div>
+
 
 <footer class="w3-container w3-teal w3-center w3-margin-top">
     <p>Find me on social media.</p>
@@ -151,13 +160,61 @@
     <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
 </footer>
 
+
+<!--<script th:inline="javascript">-->
+<!--    var real_data = /*[[${chartData}]]*/'noValue';-->
+<!--    $(document).ready(function () {-->
+<!--        google.charts.load('current', {-->
+<!--            packages: ['corechart', 'bar']-->
+<!--        });-->
+<!--        google.charts.setOnLoadCallback(drawColumnChart);-->
+<!--        google.charts.setOnLoadCallback(drawPieChart);-->
+<!--    });-->
+
+<!--    function drawColumnChart() {-->
+<!--        var data = new google.visualization.DataTable();-->
+<!--        data.addColumn('string', 'Year');-->
+<!--        data.addColumn('number', 'Days');-->
+<!--        Object.keys(real_data).forEach(function (key) {-->
+<!--            data.addRow([key, real_data[key]]);-->
+<!--        });-->
+<!--        var options = {-->
+<!--            title: 'Job stats',-->
+<!--            hAxis: {-->
+<!--                title: 'Jobs',-->
+<!--            },-->
+<!--            vAxis: {-->
+<!--                title: 'Days Count'-->
+<!--            }-->
+<!--        };-->
+<!--        var chart = new google.visualization.ColumnChart(document-->
+<!--            .getElementById('chart_div'));-->
+<!--        chart.draw(data, options);-->
+<!--    }-->
+
+<!--    function drawPieChart() {-->
+<!--        var data = new google.visualization.DataTable();-->
+<!--        data.addColumn('string', 'Year');-->
+<!--        data.addColumn('number', 'Views');-->
+<!--        Object.keys(real_data).forEach(function (key) {-->
+<!--            data.addRow([key, real_data[key]]);-->
+<!--        });-->
+<!--        var options = {-->
+<!--            title: 'Experience Summary (Days)'-->
+<!--        };-->
+<!--        var chart = new google.visualization.PieChart(document-->
+<!--            .getElementById('piechart'));-->
+<!--        chart.draw(data, options);-->
+<!--    }-->
+<!--</script>-->
+
 <script>
     var d = new Date();
-    var month = d.getMonth()+1;
+    var month = d.getMonth() + 1;
     var day = d.getDate();
     var output = d.getFullYear() + '-' +
-        ((''+month).length<2 ? '0' : '') + month + '-' +
-        ((''+day).length<2 ? '0' : '') + day;
+        (('' + month).length < 2 ? '0' : '') + month + '-' +
+        (('' + day).length < 2 ? '0' : '') + day;
 
     $(".w3-text-teal").text(function () {
         return $(this).text().replace(output, "Present");

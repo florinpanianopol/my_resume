@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments :: page_head('Education Section - MyResume')"></head>
+<body>
+
+<div th:replace="navigation :: menu('education_section')"></div>
+
+<!-- Header -->
+<header id="main-header" class="py-2 bg-primary text-white mb-2">
+    <div class="container">
+        <div class="col-md-6">
+            <h1>
+                <i class="fas fa-cog"></i>
+                Education Section
+            </h1>
+        </div>
+    </div>
+</header>
+
+
+<!-- Actions -->
+<div class="container">
+    <div th:if="${message != null}"
+         class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center text-white mb-4" th:classappend="${totalItems ==0} ? bg-warning : bg-success">
+                <div class="card-body">
+                    <h3>Records</h3>
+                    <h4 class="display-4">
+                        <i class="fas fa-database"></i>
+                        <span th:text="${totalItems}"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center bg-success text-white mb-4">
+                <div class="card-body">
+                    <h3>Columns</h3>
+                    <h4 class="display-4">
+                        <i class="fas fa-columns"></i>
+                        <span th:text="${noOfCol}"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center text-white mb-4"
+                 th:classappend="${activeRecordsCount ==0} ? bg-warning : bg-success">
+                <div class="card-body">
+                    <h3>Enabled Records</h3>
+                    <h4 class="display-4">
+                        <i class="fas fa-user"></i>
+                        <span th:text="${activeRecordsCount}"></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="education_section_records">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-0">
+                    <div class="card-header">
+                        <h4>
+                            Records for the Education Section
+                            <a th:href="@{/education_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
+                            <a th:href="@{/education_section/export/excel}"
+                               class="fas fa-file-excel fa-1x icon-green mr-1"></a>
+                            <a th:href="@{/education_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
+                        </h4>
+
+                    </div>
+                    <div>
+                        <form th:action="@{/education_section/page/1}" class="form-inline m-3">
+                            <input type="hidden" name="sortField" th:value="${sortField}"/>
+                            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+                            <h5>Filter:&nbsp</h5>
+                            <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2" required/>
+                            <button type="submit" class="btn btn-success"/>
+                            <i class="fas fa-search"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger ml-2" onclick="clearFilter()">
+                                <i class="fas fa-eraser"></i>
+                            </button>
+                            <a th:href="@{/education_section/new}">
+                                <button type="button" class="btn btn-primary ml-2"/>
+                                <i class="fas fa-plus"></i>
+                                </button>
+                            </a>
+                        </form>
+                    </div>
+                    <div class="full-details">
+                        <table class="table">
+                            <thead class ="thead-dark">
+                            <tr>
+                                <th class="hideable-column">
+                                <th th:replace="fragments :: column_link('id','Id','tag','education_section')"/>
+                                </th>
+                                <th id="institutionName">
+                                    <div th:replace="fragments :: column_link('institutionName', 'Name','none','education_section')">
+                                    </div>
+                                <th id="programType">
+                                    <div th:replace="fragments :: column_link('programType', 'Program Type','none','education_section')">
+                                    </div>
+                                </th>
+                                <th>From date
+                                </th>
+                                <th>To date
+                                </th>
+                                <th>Enabled
+                                </th>
+                                <th>Actions
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="i: ${listEducationRecords}">
+                                <th class="hideable-column" scope="row">[[${i.id}]]</th>
+                                <td>[[${i.institutionName}]]</td>
+                                <td>[[${i.programType}]]</td>
+                                <td>[[${i.fromDate}]]</td>
+                                <td>[[${i.toDate}]]</td>
+                                <td>
+                                    <a th:if="${i.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+                                       th:href="@{'/education_section/' + ${i.id} + '/enabled/false'}"
+                                       title="Disable this education"
+                                    ></a>
+                                    <a th:if="${i.enabled != true}" class="fas fa-circle fa-2x icon-dark"
+                                       th:href="@{'/education_section/' + ${i.id} + '/enabled/true'}"
+                                       title="Enable this education"
+                                    ></a>
+                                </td>
+                                <td><a class = "fas fa-edit fa-2x icon-silver" th:href="@{'/education_section/edit/' + ${i.id}}"
+                                       title = "Edit this education"></a>
+                                    <a class ="fas fa-trash fa-2x icon-silver link-delete" th:href="@{'/education_section/delete/' + ${i.id}}"
+                                       th:educationSectionId = "${i.id}"
+                                       title = "Delete this education"></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="text-center m-1">
+				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
+				No records found
+				</span>
+                        <span th:unless="${currentPage > totalPages}">
+		 		Showing records # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
+		 		</span>
+                    </div>
+                    <div th:if="${totalPages > 1}">
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
+                                    <a class="page-link"
+                                       th:href="@{'/education_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">First</a>
+                                </li>
+                                <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
+                                                                                                         th:href="@{'/education_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Previous</a>
+                                </li>
+                                <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
+                                    th:each="i:${#numbers.sequence(1,totalPages)}">
+                                    <a class="page-link"
+                                       th:href="@{'/education_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">[[${i}]]</a>
+                                </li>
+                                <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
+                                        class="page-link"
+                                        th:href="@{'/education_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Next</a>
+                                </li>
+                                <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
+                                    <a class="page-link"
+                                       th:href="@{'/education_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Last
+                                        Page</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade text-center" id="confirmModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <span id="confirmText"></span>
+            </div>
+
+            <div class="modal-footer">
+                <a class="btn btn-success" href="" id="yesButton">Yes</a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault();
+            link = $(this);
+            educationSectionId = link.attr("educationSectionId");
+            $("#yesButton").attr("href", link.attr("href"));
+            $("#confirmText").text("Are you sure you want to delete education with id " + educationSectionId + "?");
+            $("#confirmModal").modal();
+        });
+    });
+
+    function clearFilter() {
+        window.location = "[[@{/education_section}]]"
+    }
+</script>
+
+</body>
+</html>

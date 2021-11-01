@@ -1,27 +1,30 @@
 package com.myresume.admin.workSection.controller;
 
+import com.myresume.admin.FileUploadUtil;
 import com.myresume.admin.security.MyResumeUserDetails;
 import com.myresume.admin.workSection.WorkSectionNotFoundException;
 import com.myresume.admin.workSection.WorkSectionService;
 import com.myresume.common.entity.WorkSection;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Controller
@@ -132,21 +135,21 @@ public class WorkSectionController {
             month = "< 1 month";
         }
 
+        int days = (int) ChronoUnit.DAYS.between(secondDate, firstDate);
         workSection.setDateDiff(year + month);
+        workSection.setDaysDiff(days);
     }
 
     @PostMapping("/work_section/save")
-    public String saveWorkSection(@ModelAttribute("workSection") @Valid WorkSection workSection, BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                            Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser
+    public String saveWorkSection(@ModelAttribute("workSection") @Valid WorkSection workSection, BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes,
+                                  @RequestParam("image") MultipartFile multipartFile,
+                                  Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser
     ) throws IOException {
 
-        dateDifference(workSection);
-
-        model.addAttribute("workSection", workSection);
-        model.addAttribute("pageTitle", "Create New Work Section Record");
-        workSection.setUser_id(loggedUser.getId());
-
+        String target = "";
         int errorCountFix = 0;
+
         if (workSection.getFromDate() == null && workSection.getToDate() != null) {
             ObjectError error = new ObjectError("fromDateError", "- Can't be null");
             bindingResult.addError(error);
@@ -166,14 +169,21 @@ public class WorkSectionController {
             model.addAttribute("fromDateError", errorFromDate.getDefaultMessage());
             errorCountFix=2;
         }
-        else {
-            assert workSection.getFromDate() != null;
-            if (workSection.getFromDate().after(workSection.getToDate())) {
+        else if (workSection.getFromDate() != null && workSection.getFromDate().after(workSection.getToDate())) {
                 ObjectError error = new ObjectError("fromDateError", "- from date can't be greater than to Date.");
                 bindingResult.addError(error);
                 model.addAttribute("fromDateError", error.getDefaultMessage());
             }
+        else {
+            dateDifference(workSection);
         }
+
+
+
+        model.addAttribute("workSection", workSection);
+        model.addAttribute("pageTitle", "Add New work section");
+        workSection.setUser_id(loggedUser.getId());
+
 
 
         if (bindingResult.hasErrors()) {
@@ -185,20 +195,36 @@ public class WorkSectionController {
             {
                 model.addAttribute("message", "You have "+errorCount+" error to address!");
             }
-            return "workSection/work_section_form";
+            target = "workSection/work_section_form";
+        } else {
+
+            if (!multipartFile.isEmpty()) {
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                workSection.setCompanyLogoPhoto(fileName);
+                WorkSection savedSection = service.save(workSection);
+                String uploadDir = "user_company_logos/" + savedSection.getId();
+
+                try {
+                    File file = new File("user_company_logos/" + savedSection.getId());
+                    FileUtils.cleanDirectory(file);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+//                FileUploadUtil.cleanDir(uploadDir);
+                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+
+            } else {
+                if (workSection.getCompanyLogoPhoto().isEmpty()) workSection.setCompanyLogoPhoto(null);
+                service.save(workSection);
+            }
+
+            redirectAttributes.addFlashAttribute("message", "The record has been saved successfully");
+            String jobNamePart = workSection.getJobName();
+            target = "redirect:/work_section/page/1?sortField=id&sortDir=asc&keyword=" + jobNamePart;
         }
-
-        workSection.setUser_id(loggedUser.getId());
-        service.save(workSection);
-
-        redirectAttributes.addFlashAttribute("message","The work section has been saved successfully");
-        return getRedirectURLtoAffectedUser(workSection);
-
-    }
-
-    private String getRedirectURLtoAffectedUser(WorkSection workSection) {
-        String jobName=workSection.getJobName();
-        return "redirect:/work_section/page/1?sortField=id&sortDir=asc&keyword=" +jobName;
+        return target;
     }
 
     @GetMapping("/work_section/{id}/enabled/{status}")
@@ -221,9 +247,11 @@ public class WorkSectionController {
 
         try {
             service.delete(id);
+            File file = new File("user_company_logos/" + id);
+            FileUtils.deleteDirectory(file);
             redirectAttributes.addFlashAttribute("message","The workSection ID "+ id +" has been deleted successfully");
 
-        } catch (WorkSectionNotFoundException ex) {
+        } catch (WorkSectionNotFoundException | IOException ex) {
             redirectAttributes.addFlashAttribute("message","din delete "+ ex.getMessage());
 
         }
@@ -241,7 +269,7 @@ public class WorkSectionController {
 
 
             model.addAttribute("workSection", workSection);
-            model.addAttribute("pageTitle", "Edit work section with ID: " + id);
+            model.addAttribute("pageTitle", "Edit work section");
             return "workSection/work_section_form";
 
         } catch (WorkSectionNotFoundException ex) {

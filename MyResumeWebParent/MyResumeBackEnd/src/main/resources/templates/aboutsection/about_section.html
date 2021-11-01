@@ -1,76 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-
 <head th:replace="fragments :: page_head('About Section - MyResume')"></head>
 <body>
-
 <div th:replace="navigation :: menu('about_section')"></div>
-
 <!-- Header -->
-<header id="main-header" class="py-2 bg-primary text-white mb-2">
-    <div class="container">
-        <div class="col-md-6">
-            <h1>
-                <i class="fas fa-address-book"></i>
-                About Section
-            </h1>
-        </div>
-    </div>
-</header>
-
-
-
-
+<div th:replace="fragments :: header('fas fa-address-book','About Section')">
+</div>
 <div class="container">
-    <div th:if="${message != null && message == 'There is already an Enabled record. Disable it first and then insert a new one!'}"
+    <div th:if="${flag!=null && flag}"
          class="alert alert-danger text-center">
         [[${message}]]
     </div>
-    <div th:if="${message != null && message != 'There is already an Enabled record. Disable it first and then insert a new one!'}"
+    <div th:if="${flag!=null && !flag}"
          class="alert alert-success text-center">
         [[${message}]]
     </div>
 </div>
+<div th:replace="fragments :: dynamicCounts(${totalItems},${noOfCol},${activeRecordsCount})"></div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card text-center text-white mb-4" th:classappend="${totalItems ==0} ? bg-warning : bg-success">
-                <div class="card-body">
-                    <h3>Records</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-database"></i>
-                        <span th:text="${totalItems}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center bg-success text-white mb-4">
-                <div class="card-body">
-                    <h3>Columns</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-columns"></i>
-                        <span th:text="${noOfCol}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center text-white mb-4"
-                 th:classappend="${activeRecordsCount ==0} ? bg-warning : bg-success">
-                <div class="card-body">
-                    <h3>Enabled Records</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-user"></i>
-                        <span th:text="${activeRecordsCount}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <section id="about_section_records">
     <div class="container">
@@ -85,17 +33,15 @@
                                class="fas fa-file-excel fa-1x icon-green mr-1"></a>
                             <a th:href="@{/about_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
                         </h4>
-
                     </div>
-
-
                     <div class="full-details" id="main_section">
                         <div>
                             <form id="searchForm" th:action="@{/about_section/page/1/}" class="form-inline m-3">
                                 <input type="hidden" name="sortField" th:value="${sortField}"/>
                                 <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                                 <h5>Filter:&nbsp</h5>
-                                <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2" required/>
+                                <input type="search" name="keyword" th:value="${keyword}"
+                                       class="form-control search-form mr-2" required/>
                                 <button type="submit" class="btn btn-success"/>
                                 <i class="fas fa-search"></i>
                                 </button>
@@ -107,31 +53,20 @@
                                     <i class="fas fa-plus"></i>
                                     </button>
                                 </a>
-
                             </form>
-
                         </div>
                         <table class="table table-responsive">
                             <thead class="thead-dark">
                             <tr class="d-flex">
                                 <th class="col-1">Actions</th>
-                                <th class="hideable-column col-1" id="id">
-                                <th th:replace="fragments :: column_link('id','Id','tag','about_section')"/>
-                                </th>
                                 <th class="col-2">Profile Photo</th>
-
-
                                 <th class="col-1" id="name">
                                     <div th:replace="fragments :: column_link('name', 'Name','none','about_section')">
                                     </div>
-
                                 </th>
-
                                 <th class="col-2" id="currentJob">
-
                                     <div th:replace="fragments :: column_link('currentJob', 'Current Job','none','about_section')">
                                     </div>
-
                                 </th>
                                 <th class="col-3">Short Description</th>
                                 <th class="col-1">Web site</th>
@@ -152,11 +87,6 @@
                                        th:aboutSectionId="${i.id}"
                                        title="Delete this user"></a>
                                 </td>
-                                <td class="col-1 hideable-column">
-                                    <span class="badge badge-primary">
-                                    [[${i.id}]]
-                                    </span>
-                                </td>
                                 <td class="col-2">
                                     <span th:if="${i.profilePhoto ==null}"
                                           class="fas fa-portrait fa-3x icon-silver"></span>
@@ -171,11 +101,13 @@
                                 <td class="col-2">[[${i.degree}]]</td>
                                 <td class="col-2">[[${i.email}]]</td>
                                 <td class="col-1">
-                                    <a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green text-decoration-none"
+                                    <a th:if="${i.currInd == true}"
+                                       class="fas fa-check-circle fa-2x icon-green text-decoration-none"
                                        th:href="@{'/about_section/' + ${i.id} + '/currInd/false#enabled'}"
                                        title="Disable this user" style=""
                                     ></a>
-                                    <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark text-decoration-none"
+                                    <a th:if="${i.currInd != true}"
+                                       class="fas fa-circle fa-2x icon-dark text-decoration-none"
                                        th:href="@{'/about_section/' + ${i.id} + '/currInd/true#enabled'}"
                                        title="Enable this user"
                                     ></a>
@@ -191,7 +123,6 @@
                             </tr>
                             </tbody>
                         </table>
-
                         <div class="text-center m-1">
 				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
 				No records found
@@ -207,8 +138,9 @@
                                         <a class="page-link"
                                            th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">First</a>
                                     </li>
-                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
-                                                                                                             th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Previous</a>
+                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a
+                                            class="page-link"
+                                            th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Previous</a>
                                     </li>
                                     <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
                                         th:each="i:${#numbers.sequence(1,totalPages)}">
@@ -227,17 +159,15 @@
                                 </ul>
                             </nav>
                         </div>
-
                     </div>
-
-
                     <div class="less-details" id="main">
                         <div>
                             <form th:action="@{/about_section/page/1}" class="form-inline m-3">
                                 <input type="hidden" name="sortField" th:value="${sortField}"/>
                                 <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                                 <h5>Filter:&nbsp</h5>
-                                <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2" required/>
+                                <input type="search" name="keyword" th:value="${keyword}"
+                                       class="form-control search-form mr-2" required/>
                                 <button type="submit" class="btn btn-success"/>
                                 <i class="fas fa-search"></i>
                                 </button>
@@ -249,9 +179,7 @@
                                     <i class="fas fa-plus"></i>
                                     </button>
                                 </a>
-
                             </form>
-
                         </div>
                         <div th:each="i: ${listAboutRecords}" class="row m-1 less_details_row">
                             <div class="col-4">
@@ -276,16 +204,16 @@
                             </div>
                             <div class="col-8">
                                 <div class="row">
-                                <div class="col-5">
+                                    <div class="col-5">
                                     <span class="text-primary font-weight-bold">
                                         Name
                                     </span>
-                                </div>
-                                <div class="col-7">
+                                    </div>
+                                    <div class="col-7">
                                        <span class="text-info">
                                             [[${i.name}]]
                                         </span>
-                                </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-5">
@@ -306,7 +234,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <div th:class="${i.shortDesc.contains('#ffffff')} ? 'bg-dark pt-1 pb-1 pl-1 pr-1 font-weight-light' : ''" th:utext="${i.shortDesc}"></div>
+                                        <div th:class="${i.shortDesc.contains('#ffffff')} ? 'bg-dark pt-1 pb-1 pl-1 pr-1 font-weight-light' : ''"
+                                             th:utext="${i.shortDesc}"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -316,7 +245,8 @@
                                     </span>
                                     </div>
                                     <div class="col-7">
-                                        </span><a th:href="${i.webSite}"><span class="badge badge-info">Click Here</span></a>
+                                        </span><a th:href="${i.webSite}"><span
+                                            class="badge badge-info">Click Here</span></a>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -394,8 +324,9 @@
                                         <a class="page-link"
                                            th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">First</a>
                                     </li>
-                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
-                                                                                                             th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">Previous</a>
+                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a
+                                            class="page-link"
+                                            th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main'}">Previous</a>
                                     </li>
                                     <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
                                         th:each="i:${#numbers.sequence(1,totalPages)}">
@@ -419,13 +350,11 @@
                     </div>
 
 
-
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 <div class="modal fade text-center" id="confirmModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -446,7 +375,6 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
     $(document).ready(function () {
         $(".link-delete").on("click", function (e) {
@@ -458,7 +386,6 @@
             $("#confirmModal").modal();
         });
     });
-
     function clearFilterMobile() {
         window.location = "[[@{/about_section#main}]]"
     }

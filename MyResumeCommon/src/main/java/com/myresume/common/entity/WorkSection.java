@@ -52,10 +52,15 @@ public class WorkSection {
 
     private String dateDiff;
 
+    private int daysDiff;
+
+    @Column(length = 64)
+    private String companyLogoPhoto;
+
     public WorkSection() {
     }
 
-    public WorkSection(@Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String jobName, @Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String company, @Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String webSite,Date fromDate, Date toDate, String jobDesc, Integer user_id, boolean isCurrentJob, boolean enabled, String dateDiff) {
+    public WorkSection(@Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String jobName, @Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String company, @Size(min = 3, message = "- at least 3 characters") @NotEmpty(message = "- is required") String webSite,Date fromDate, Date toDate, String jobDesc, Integer user_id, boolean isCurrentJob, boolean enabled, String dateDiff,int daysDiff) {
         this.jobName = jobName;
         this.company = company;
         this.webSite = webSite;
@@ -66,6 +71,7 @@ public class WorkSection {
         this.isCurrentJob = isCurrentJob;
         this.enabled = enabled;
         this.dateDiff = dateDiff;
+        this.daysDiff = daysDiff;
     }
 
     public Integer getId() {
@@ -156,6 +162,22 @@ public class WorkSection {
         this.dateDiff = dateDiff;
     }
 
+    public String getCompanyLogoPhoto() {
+        return companyLogoPhoto;
+    }
+
+    public void setCompanyLogoPhoto(String companyLogoPhoto) {
+        this.companyLogoPhoto = companyLogoPhoto;
+    }
+
+    public int getDaysDiff() {
+        return daysDiff;
+    }
+
+    public void setDaysDiff(int daysDiff) {
+        this.daysDiff = daysDiff;
+    }
+
     @Override
     public String toString() {
         return "WorkSection{" +
@@ -170,6 +192,17 @@ public class WorkSection {
                 ", isCurrentJob=" + isCurrentJob +
                 ", enabled=" + enabled +
                 ", dateDiff=" + dateDiff +
+                ", daysDiff=" + daysDiff +
                 '}';
     }
+
+
+    @Transient
+    public String getCompanyLogoImagePath() {
+        if(id==null||companyLogoPhoto ==null) return "/images/pic.png";
+
+        return "/user_company_logos/"+this.id +"/" +this.companyLogoPhoto;
+    }
+
+
 }

@@ -37,48 +37,29 @@ public class AboutSectionController {
 
 
     @GetMapping("/about_section")
-    public String listFirstPage(Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
+    public String listFirstPage(Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser) {
         List<AboutSection> listAboutRecords = service.listAll();
         model.addAttribute("listAboutRecords", listAboutRecords);
 
-        int noOfCol = 0;
-        if (listAboutRecords.size() > 0) {
-            noOfCol = listAboutRecords.get(0).getClass().getDeclaredFields().length;
-        }
+        getColActiveRecordCounts(model, loggedUser, listAboutRecords);
 
-
-        List<AboutSection> listActiveAboutRecords =service.findAllActiveRecords(loggedUser.getId());
-        int activeRecordsCount = listActiveAboutRecords.size();
-
-        model.addAttribute("noOfCol", noOfCol);
-        model.addAttribute("activeRecordsCount", activeRecordsCount);
-
-        return listByPage(1, model, "name", "asc", null,loggedUser);
+        return listByPage(1, model, "name", "asc", null, loggedUser);
     }
 
     @GetMapping("about_section/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
                              @Param("sortField") String sortField, @Param("sortDir") String sortDir,
-                             @Param("keyword") String keyword,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
+                             @Param("keyword") String keyword, @AuthenticationPrincipal MyResumeUserDetails loggedUser) {
 
 
-        Page<AboutSection> page = service.listByPage(pageNum, sortField, sortDir, keyword,loggedUser.getId());
+        Page<AboutSection> page = service.listByPage(pageNum, sortField, sortDir, keyword, loggedUser.getId());
         List<AboutSection> listAboutRecords = page.getContent();
 
-        int noOfCol = 0;
-        if (listAboutRecords.size() > 0) {
-            noOfCol = listAboutRecords.get(0).getClass().getDeclaredFields().length;
-        }
-
-
-        List<AboutSection> listActiveAboutRecords = service.findAllActiveRecords(loggedUser.getId());
-        int activeRecordsCount = listActiveAboutRecords.size();
-
-        model.addAttribute("noOfCol", noOfCol);
-        model.addAttribute("activeRecordsCount", activeRecordsCount);
+        getColActiveRecordCounts(model, loggedUser, listAboutRecords);
 
         long startCount = (pageNum - 1) * AboutSectionService.USERS_PER_PAGE + 1;
         long endCount = startCount + AboutSectionService.USERS_PER_PAGE - 1;
+
         if (endCount > page.getTotalElements()) {
             endCount = page.getTotalElements();
         }
@@ -99,6 +80,20 @@ public class AboutSectionController {
         return "aboutsection/about_section";
     }
 
+    private void getColActiveRecordCounts(Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser, List<AboutSection> listAboutRecords) {
+        int noOfCol = 0;
+        if (listAboutRecords.size() > 0) {
+            noOfCol = listAboutRecords.get(0).getClass().getDeclaredFields().length;
+        }
+
+
+        List<AboutSection> listActiveAboutRecords = service.findAllActiveRecords(loggedUser.getId());
+        int activeRecordsCount = listActiveAboutRecords.size();
+
+        model.addAttribute("noOfCol", noOfCol);
+        model.addAttribute("activeRecordsCount", activeRecordsCount);
+    }
+
     @GetMapping("/about_section/new")
     public String newRecord(Model model) {
 
@@ -113,7 +108,8 @@ public class AboutSectionController {
     public String saveAboutSection(@ModelAttribute("aboutsection") @Valid AboutSection aboutsection, BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes,
                                    @RequestParam("image") MultipartFile multipartFile,
-                                   Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) throws IOException {
+                                   Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser)
+            throws IOException {
 
         String target = "";
         boolean flag = false;
@@ -121,12 +117,12 @@ public class AboutSectionController {
         List<AboutSection> listAboutRecords = service.listAll().stream()
                 .filter(p -> p.getUser_id().equals(loggedUser.getId())).collect(Collectors.toList());
         List<AboutSection> listAboutActiveRecords = service.listAll().stream()
-                .filter(p -> p.getUser_id().equals(loggedUser.getId())&&p.getCurrInd()).collect(Collectors.toList());
+                .filter(p -> p.getUser_id().equals(loggedUser.getId()) && p.getCurrInd()).collect(Collectors.toList());
         model.addAttribute("aboutsection", aboutsection);
         model.addAttribute("pageTitle", "Create New Record");
         aboutsection.setUser_id(loggedUser.getId());
 
-        if(listAboutActiveRecords.size()>0) {
+        if (listAboutActiveRecords.size() > 0) {
             if (aboutsection.getCurrInd() && aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
                 flag = false;
             } else if (aboutsection.getCurrInd() && !aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
@@ -135,7 +131,6 @@ public class AboutSectionController {
                 flag = true;
             }
         }
-
 
 
         if (bindingResult.hasErrors()) {
@@ -154,8 +149,7 @@ public class AboutSectionController {
                 try {
                     File file = new File("profile-photos/" + savedSection.getId());
                     FileUtils.cleanDirectory(file);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
 
@@ -168,10 +162,7 @@ public class AboutSectionController {
                 service.save(aboutsection);
             }
 
-
             redirectAttributes.addFlashAttribute("message", "The record has been saved successfully");
-
-            // de adaugat o coloana unica gen email pe care sa o inclidem la 165
             String emailPart = aboutsection.getEmail();
             target = "redirect:/about_section/page/1?sortField=name&sortDir=asc&keyword=" + emailPart;
         }
@@ -208,11 +199,9 @@ public class AboutSectionController {
 
         try {
             service.delete(id);
-            String uploadDir = "profile-photos/" + id;
             File file = new File("profile-photos/" + id);
-//            FileUploadUtil.removeDir(uploadDir);
             FileUtils.deleteDirectory(file);
-            redirectAttributes.addFlashAttribute("message","The section ID "+ id +" has been deleted successfully");
+            redirectAttributes.addFlashAttribute("message", "The section ID " + id + " has been deleted successfully");
 
         } catch (AboutSectionNotFoundException | IOException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
@@ -223,16 +212,13 @@ public class AboutSectionController {
     @GetMapping("/about_section/{id}/currInd/{status}")
     public String updateCurrentInd(@PathVariable("id") Integer id,
                                    @PathVariable("status") boolean currInd, RedirectAttributes redirectAttributes, AboutSection aboutsection,
-                                   Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
-
+                                   Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser) {
 
         boolean flag = false;
-
         List<AboutSection> listAboutRecords = service.listAll();
         model.addAttribute("aboutsection", aboutsection);
-
         List<AboutSection> filteredlistAboutRecords = listAboutRecords.stream()
-                .filter(p -> p.getUser_id()==loggedUser.getId()).collect(Collectors.toList());
+                .filter(p -> p.getUser_id() == loggedUser.getId()).collect(Collectors.toList());
 
         for (int i = 0; i < filteredlistAboutRecords.size(); i++) {
             if (filteredlistAboutRecords.get(i).getCurrInd() && !filteredlistAboutRecords.get(i).getId().equals(id)
@@ -241,7 +227,6 @@ public class AboutSectionController {
                 break;
             }
         }
-
         if (flag) {
             redirectAttributes.addFlashAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");
         } else {
@@ -250,6 +235,7 @@ public class AboutSectionController {
             String message = "The about section with ID " + id + " has been " + status;
             redirectAttributes.addFlashAttribute("message", message);
         }
+        redirectAttributes.addFlashAttribute("flag", flag);
 
         return "redirect:/about_section";
     }

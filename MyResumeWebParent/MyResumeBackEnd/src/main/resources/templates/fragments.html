@@ -2,31 +2,94 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <html>
 <head th:fragment="page_head(title)">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
-	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/common.js}"></script>
-	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
-	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
-	<title>[[${title}]]</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <link th:if="${title=='Add New work section' || title=='Edit work section'||title=='Add New Education' || title=='Edit Education section'}" rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script th:if="${title=='Add New work section' || title=='Edit work section'||title=='Add New Education' || title=='Edit Education section'}" src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script th:if="${title=='Add New work section' || title=='Edit work section'||title=='Add New Education' || title=='Edit Education section'}" src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}"/>
+    <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+    <title>[[${title}]]</title>
 
 </head>
 <body>
 
-	<div th:fragment="column_link(fieldName, columnLabel,removeTag,sectionName)" th:remove="${removeTag}">
-				<a class="text-white"
-				 th:href="@{'/'+ ${sectionName} +'/page/' + ${currentPage} + '?sortField='+${fieldName}+'&sortDir=' +${sortField != fieldName ?sortDir : reverseSortDir} +${keyword!=null ? '&keyword='+keyword : ''}+'#'+${fieldName}}">
-				 [[${columnLabel}]]
-				 </a>
+<!--Header-->
+<div th:fragment="header(icon,title)">
+    <header id="main-header" class="py-2 bg-primary text-white mb-2">
+        <div class="container">
+            <div class="col-md-6">
+                <h1>
+                    <i th:class="${icon}"></i>
+                   [[${title}]]
+                </h1>
+            </div>
+        </div>
+    </header>
+</div>
 
-				<span th:if="${sortField == fieldName}"
-				th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+<!--Column mapping-->
+<div th:fragment="column_link(fieldName, columnLabel,removeTag,sectionName)" th:remove="${removeTag}">
+    <a class="text-white"
+       th:href="@{'/'+ ${sectionName} +'/page/' + ${currentPage} + '?sortField='+${fieldName}+'&sortDir=' +${sortField != fieldName ?sortDir : reverseSortDir} +${keyword!=null ? '&keyword='+keyword : ''}+'#'+${fieldName}}">
+        [[${columnLabel}]]
+    </a>
+
+    <span th:if="${sortField == fieldName}"
+          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+</div>
+
+
+<!--Dynamic counts-->
+<div th:fragment="dynamicCounts(totalItems,noOfCol,activeRecordsCount)">
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="card text-center text-white mb-4" th:classappend="${totalItems ==0} ? bg-warning : bg-success">
+				<div class="card-body">
+					<h3>Records</h3>
+					<h4 class="display-4">
+						<i class="fas fa-database"></i>
+						<span th:text="${totalItems}"></span>
+					</h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="card text-center bg-success text-white mb-4">
+				<div class="card-body">
+					<h3>Columns</h3>
+					<h4 class="display-4">
+						<i class="fas fa-columns"></i>
+						<span th:text="${noOfCol}"></span>
+					</h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="card text-center text-white mb-4"
+				 th:classappend="${activeRecordsCount ==0} ? bg-warning : bg-success">
+				<div class="card-body">
+					<h3>Enabled Records</h3>
+					<h4 class="display-4">
+						<i class="fas fa-user"></i>
+						<span th:text="${activeRecordsCount}"></span>
+					</h4>
+				</div>
+			</div>
+		</div>
 	</div>
+</div>
+</div>
+
+
 
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.myresume.site.webpage;
 
 import com.myresume.admin.aboutsection.AboutSectionService;
+import com.myresume.admin.educationSection.EducationSectionService;
 import com.myresume.admin.languageSection.LanguageSectionService;
 import com.myresume.admin.skillsection.SkillsSectionService;
 import com.myresume.admin.user.UserService;
@@ -11,9 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -34,6 +33,9 @@ public class WebPageController {
 	@Autowired
 	private WorkSectionService workSectionService;
 
+	@Autowired
+	private EducationSectionService educationSectionService;
+
 	@GetMapping("/")
 	public String findAllActiveRecords(Model model) {
 
@@ -52,10 +54,22 @@ public class WebPageController {
 		List<WorkSection> listWorkRecords = workSectionService.listAll().stream()
 				.filter(p -> p.isEnabled()&& p.getUser_id().equals(listUsers.get(0).getId())).collect(Collectors.toList());
 
+		List<EducationSection> listEducationRecords = educationSectionService.listAll().stream()
+				.filter(p -> p.isEnabled()&& p.getUser_id().equals(listUsers.get(0).getId())).collect(Collectors.toList());
+
 		Set<String> distinctCategories = new HashSet<String>();
 		for(int i=0;i<listSkillRecords.size();i++){
 			distinctCategories.add(listSkillRecords.get(i).getSkillCategory());
 		}
+
+		Map<String, Integer> graphData = new TreeMap<>();
+
+//		for(int i=0;i<listWorkRecords.size();i++) {
+//			graphData.put(listWorkRecords.get(i).getJobName(), listWorkRecords.get(i).getDaysDiff());
+//		}
+//		model.addAttribute("chartData", graphData);
+
+
 
 
 		model.addAttribute("distinctCategories",distinctCategories);
@@ -64,6 +78,7 @@ public class WebPageController {
 		model.addAttribute("listSkillRecords",listSkillRecords);
 		model.addAttribute("listLanguageRecords",listLanguageRecords);
 		model.addAttribute("listWorkRecords",listWorkRecords);
+		model.addAttribute("listEducationRecords",listEducationRecords);
 
 		return "home";
 	}

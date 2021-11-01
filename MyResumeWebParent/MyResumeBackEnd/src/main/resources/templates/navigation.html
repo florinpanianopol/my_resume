@@ -4,95 +4,67 @@
 <body>
 
 <div th:fragment="menu(activeParam)">
-<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
-	<input type="submit" />
-</form>
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit"/>
+    </form>
 
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
-	<div class="container">
-		<span class="navbar-brand pl-2">Admin Dash</span>
-		<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarCollapse">
-			<ul class="navbar-nav">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+        <div class="container">
+            <span class="navbar-brand pl-2">Admin Dash</span>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav">
 
-				<li class="nav-item dropdown mr-3">
-					<a href="#" class="nav-link dropdown-toggle pl-2" data-toggle="dropdown">Sections
-					</a>
-					<div class="dropdown-menu">
-						<a th:href="@{/about_section}" class="dropdown-item">About
-						</a>
-						<a href="settings.html" class="dropdown-item">Contact
-						</a>
-						<a href="settings.html" class="dropdown-item">Resume
-						</a>
-						<a th:href="@{/skills_section}" class="dropdown-item">Skills
-						</a>
-						<a th:href="@{/language_section}" class="dropdown-item">Languages
-						</a>
-						<a th:href="@{/work_section}" class="dropdown-item">Work Experience
-						</a>
-					</div>
-				</li>
+                    <li class="nav-item dropdown mr-3">
+                        <a href="#" class="nav-link dropdown-toggle pl-2" data-toggle="dropdown">Sections
+                        </a>
+                        <div class="dropdown-menu">
+                            <a th:href="@{/about_section}" class="dropdown-item">About
+                            </a>
+                            <a th:href="@{/education_section}" class="dropdown-item">Education
+                            </a>
+                            <a th:href="@{/language_section}" class="dropdown-item">Languages
+                            </a>
+                            <a th:href="@{/skills_section}" class="dropdown-item">Skills
+                            </a>
+                            <a th:href="@{/work_section}" class="dropdown-item">Work Experience
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item px-2" sec:authorize="hasAuthority('Admin')">
+                        <a th:href="@{/users}"
+                           th:class="${activeParam == 'users' ? 'nav-link active' : 'nav-link'}"
+                           class="nav-link active">Users</a>
+                    </li>
+                </ul>
 
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item px-2">
+                        <img id="profilePhoto" th:src="@{${#authentication.principal.photosImagePath}}" width="48"/>
+                    </li>
+                    <li class="nav-item dropdown mr-3">
+                        <!--                    <i class="fas fa-user"></i>-->
+                        <a href="#" class="nav-link dropdown-toggle pl-2" sec:authentication="principal.fullname"
+                           data-toggle="dropdown">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a th:href="@{/account}" class="dropdown-item">
+                                <i class="fas fa-user-circle"></i> Profile
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a class="nav-link" id="logoutLink" href="">
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-<!--				<li class="nav-item px-2">-->
-<!--					<a th:href="@{/}"-->
-<!--					   th:class="${activeParam == 'home' ? 'nav-link active' : 'nav-link'}"-->
-<!--					   class="nav-link active">Home</a>-->
-<!--				</li>-->
-<!--				<li class="nav-item px-2">-->
-<!--					<a th:href="@{/about_section}"-->
-<!--					   th:class="${activeParam == 'about_section' ? 'nav-link active' : 'nav-link'}"-->
-<!--					   class="nav-link active">About</a>-->
-<!--				</li>-->
-<!--				<li class="nav-item px-2">-->
-<!--					<a th:href="@{/skills_section}"-->
-<!--					   th:class="${activeParam == 'skills_section' ? 'nav-link active' : 'nav-link'}"-->
-<!--					   class="nav-link active">Skills</a>-->
-<!--				</li>-->
-<!--				<li class="nav-item px-2">-->
-<!--					<a th:href="@{/resume_section}"-->
-<!--					   th:class="${activeParam == 'resume_section' ? 'nav-link active' : 'nav-link'}"-->
-<!--					   class="nav-link active">Resume</a>-->
-<!--				</li>-->
-				<li class="nav-item px-2" sec:authorize="hasAuthority('Admin')">
-					<a th:href="@{/users}"
-					   th:class="${activeParam == 'users' ? 'nav-link active' : 'nav-link'}"
-					   class="nav-link active">Users</a>
-				</li>
-			</ul>
-
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item px-2">
-					<img id="profilePhoto" th:src="@{${#authentication.principal.photosImagePath}}" width="48" />
-				</li>
-				<li class="nav-item dropdown mr-3">
-					<!--                    <i class="fas fa-user"></i>-->
-					<a href="#" class="nav-link dropdown-toggle pl-2" sec:authentication="principal.fullname" data-toggle="dropdown">
-					</a>
-					<div class="dropdown-menu">
-						<a th:href="@{/account}" class="dropdown-item">
-							<i class="fas fa-user-circle"></i> Profile
-						</a>
-						<a href="settings.html" class="dropdown-item">
-							<i class="fas fa-user-cog"></i> Settings
-						</a>
-					</div>
-				</li>
-				<li class="nav-item px-2">
-					<a class="nav-link" id="logoutLink" href="">
-						Logout
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-
-<!--	<img id="thumbnail" alt="default picture" th:src="@{${user.photosImagePath}}">-->
-
-</nav>
+    </nav>
 </div>
 
 </body>
