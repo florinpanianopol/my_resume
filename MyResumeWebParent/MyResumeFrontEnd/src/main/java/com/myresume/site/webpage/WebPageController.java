@@ -1,12 +1,13 @@
 package com.myresume.site.webpage;
 
-import com.myresume.admin.aboutsection.AboutSectionService;
-import com.myresume.admin.educationSection.EducationSectionService;
-import com.myresume.admin.languageSection.LanguageSectionService;
-import com.myresume.admin.skillsection.SkillsSectionService;
-import com.myresume.admin.user.UserService;
-import com.myresume.admin.workSection.WorkSectionService;
+
 import com.myresume.common.entity.*;
+import com.myresume.site.aboutsection.AboutSectionService;
+import com.myresume.site.educationSection.EducationSectionService;
+import com.myresume.site.languageSection.LanguageSectionService;
+import com.myresume.site.skillsection.SkillsSectionService;
+import com.myresume.site.user.UserService;
+import com.myresume.site.workSection.WorkSectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

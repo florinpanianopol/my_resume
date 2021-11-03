@@ -1,7 +1,6 @@
 package com.myresume.site.security;
 
 
-import com.myresume.admin.security.MyResumeUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
