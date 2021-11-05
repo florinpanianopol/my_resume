@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -34,9 +33,7 @@ public class EducationSectionController {
     public String listFirstPage(Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
         List<EducationSection> listEducationRecords = service.listAll();
         model.addAttribute("listEducationRecords", listEducationRecords);
-
         getNoOfCols(model, loggedUser, listEducationRecords);
-
         return listByPage(1, model, "institutionName", "asc", null, loggedUser);
     }
 
@@ -138,7 +135,7 @@ public class EducationSectionController {
     @PostMapping("/education_section/save")
     public String saveEducation(@ModelAttribute("educationSection") @Valid EducationSection educationSection, BindingResult bindingResult, RedirectAttributes redirectAttributes,
                             Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser
-    ) throws IOException {
+    ) {
 
         boolean existingEducationFlag = false;
 
@@ -173,7 +170,7 @@ public class EducationSectionController {
             dateDifference(educationSection);
         }
 
-        List<EducationSection> listEducations = service.listAll();
+        List<EducationSection> listEducations = service.findAllActiveRecords(loggedUser.getId());
         model.addAttribute("educationSection", educationSection);
         educationSection.setUser_id(loggedUser.getId());
 
@@ -181,7 +178,6 @@ public class EducationSectionController {
         for(int i =0;i<listEducations.size();i++){
             if(listEducations.get(i).getInstitutionName().toLowerCase().equals(educationSection.getInstitutionName().toLowerCase())
                     && listEducations.get(i).getProgramType().toLowerCase().equals(educationSection.getProgramType().toLowerCase())
-                    && listEducations.get(i).getUser_id()==(loggedUser.getId())
                     &&listEducations.get(i).getId()!= educationSection.getId()
             ){
                 existingEducationFlag=true;
@@ -190,9 +186,8 @@ public class EducationSectionController {
         }
 
         if(existingEducationFlag){
-            ObjectError error = new ObjectError("artificialBindingError", "artificialBindingError");
-            bindingResult.addError(error);
             model.addAttribute("uniquenessMessage","The institution & program combo must be unique!");
+            return "educationSection/education_section_form";
         }
 
         if (bindingResult.hasErrors()) {

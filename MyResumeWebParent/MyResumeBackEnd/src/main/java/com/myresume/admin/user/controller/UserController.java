@@ -70,10 +70,6 @@ public class UserController {
         model.addAttribute("noOfCol", noOfCol);
         model.addAttribute("activeRecordsCount", activeRecordsCount);
 
-//		System.out.print("PageNum = "+pageNum);
-//		System.out.print("Total elements = "+page.getTotalElements());
-//		System.out.print("Total pages = "+page.getTotalPages());
-
         long startCount = (pageNum - 1) * UserService.USERS_PER_PAGE+1;
         long endCount = startCount + UserService.USERS_PER_PAGE-1;
 
@@ -212,9 +208,7 @@ public class UserController {
 
         try {
             service.delete(id);
-            String uploadDir = "user-photos/" + id;
             File file = new File("user-photos/" + id);
-//            FileUploadUtil.removeDir(uploadDir);
             FileUtils.deleteDirectory(file);
             redirectAttributes.addFlashAttribute("message","The user ID "+ id +" has been deleted successfully");
 

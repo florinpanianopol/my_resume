@@ -28,6 +28,10 @@ public class AboutSectionService {
 		public List<AboutSection> findAllActiveRecords(Integer userId) {
 			return(List<AboutSection>) repo.findAllActiveRecords(userId);
 		}
+
+		public List<AboutSection> findAllRecordsOfUser(Integer userId) {
+			return(List<AboutSection>) repo.findAllRecordsOfUser(userId);
+		}
 		
 		public Page<AboutSection> listByPage(int pageNum, String sortField, String sortDir, String keyword,Integer userId) {
 			Sort sort = Sort.by(sortField);
@@ -43,11 +47,6 @@ public class AboutSectionService {
 		}
 		
 		public AboutSection save(AboutSection aboutsection) {
-//			boolean isUpdatingAboutSection = (aboutsection.getId()!= null);
-//			
-//			if(isUpdatingAboutSection) {
-//				AboutSection existingAboutSection = repo.findById(aboutsection.getId()).get();
-//			}
 			return repo.save(aboutsection);
 		}
 		

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -27,7 +26,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Controller
 public class AboutSectionController {
@@ -40,10 +39,9 @@ public class AboutSectionController {
     public String listFirstPage(Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser) {
         List<AboutSection> listAboutRecords = service.listAll();
         model.addAttribute("listAboutRecords", listAboutRecords);
-
         getColActiveRecordCounts(model, loggedUser, listAboutRecords);
-
         return listByPage(1, model, "name", "asc", null, loggedUser);
+
     }
 
     @GetMapping("about_section/page/{pageNum}")
@@ -111,52 +109,30 @@ public class AboutSectionController {
                                    Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser)
             throws IOException {
 
-        String target = "";
-        boolean flag = false;
-
-        List<AboutSection> listAboutRecords = service.listAll().stream()
-                .filter(p -> p.getUser_id().equals(loggedUser.getId())).collect(Collectors.toList());
-        List<AboutSection> listAboutActiveRecords = service.listAll().stream()
-                .filter(p -> p.getUser_id().equals(loggedUser.getId()) && p.getCurrInd()).collect(Collectors.toList());
+        List<AboutSection> listAboutActiveRecords = service.findAllActiveRecords(loggedUser.getId());
         model.addAttribute("aboutsection", aboutsection);
         model.addAttribute("pageTitle", "Create New Record");
         aboutsection.setUser_id(loggedUser.getId());
 
-        if (listAboutActiveRecords.size() > 0) {
-            if (aboutsection.getCurrInd() && aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
-                flag = false;
-            } else if (aboutsection.getCurrInd() && !aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
-                ObjectError error = new ObjectError("currIndError", "There is already an Enabled record. Disable it first and then insert a new one!");
-                bindingResult.addError(error);
-                flag = true;
-            }
+        if (listAboutActiveRecords.size() > 0 && aboutsection.getCurrInd() && !aboutsection.getId().equals(listAboutActiveRecords.get(0).getId())) {
+            model.addAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");
+            return "aboutsection/about_section_form";
         }
-
-
         if (bindingResult.hasErrors()) {
-            if (flag) {
-                model.addAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");
-            }
-            target = "aboutsection/about_section_form";
+            return "aboutsection/about_section_form";
         } else {
-
             if (!multipartFile.isEmpty()) {
-                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
                 aboutsection.setProfilePhoto(fileName);
                 AboutSection savedSection = service.save(aboutsection);
                 String uploadDir = "profile-photos/" + savedSection.getId();
-
                 try {
                     File file = new File("profile-photos/" + savedSection.getId());
                     FileUtils.cleanDirectory(file);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-
-//                FileUploadUtil.cleanDir(uploadDir);
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-
-
             } else {
                 if (aboutsection.getProfilePhoto().isEmpty()) aboutsection.setProfilePhoto(null);
                 service.save(aboutsection);
@@ -164,9 +140,8 @@ public class AboutSectionController {
 
             redirectAttributes.addFlashAttribute("message", "The record has been saved successfully");
             String emailPart = aboutsection.getEmail();
-            target = "redirect:/about_section/page/1?sortField=name&sortDir=asc&keyword=" + emailPart;
+            return "redirect:/about_section/page/1?sortField=name&sortDir=asc&keyword=" + emailPart;
         }
-        return target;
     }
 
 
@@ -174,21 +149,15 @@ public class AboutSectionController {
     public String editAboutSection(@PathVariable(name = "id") Integer id,
                                    Model model,
                                    RedirectAttributes redirectAttributes) {
-
         try {
             AboutSection aboutsection = service.get(id);
-
-
             model.addAttribute("aboutsection", aboutsection);
             model.addAttribute("pageTitle", "Edit about section with ID: " + id);
             return "aboutsection/about_section_form";
-
         } catch (AboutSectionNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/about_section";
         }
-
-
     }
 
 
@@ -215,18 +184,17 @@ public class AboutSectionController {
                                    Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser) {
 
         boolean flag = false;
-        List<AboutSection> listAboutRecords = service.listAll();
+        List<AboutSection> listAboutRecords = service.findAllRecordsOfUser(loggedUser.getId());
         model.addAttribute("aboutsection", aboutsection);
-        List<AboutSection> filteredlistAboutRecords = listAboutRecords.stream()
-                .filter(p -> p.getUser_id() == loggedUser.getId()).collect(Collectors.toList());
 
-        for (int i = 0; i < filteredlistAboutRecords.size(); i++) {
-            if (filteredlistAboutRecords.get(i).getCurrInd() && !filteredlistAboutRecords.get(i).getId().equals(id)
+        for (AboutSection listAboutRecord : listAboutRecords) {
+            if (listAboutRecord.getCurrInd() && !listAboutRecord.getId().equals(id)
             ) {
                 flag = true;
                 break;
             }
         }
+
         if (flag) {
             redirectAttributes.addFlashAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");
         } else {

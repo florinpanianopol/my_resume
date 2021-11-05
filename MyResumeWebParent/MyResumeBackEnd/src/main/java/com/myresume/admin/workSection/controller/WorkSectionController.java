@@ -149,6 +149,7 @@ public class WorkSectionController {
 
         String target = "";
         int errorCountFix = 0;
+        boolean existingEducationFlag = false;
 
         if (workSection.getFromDate() == null && workSection.getToDate() != null) {
             ObjectError error = new ObjectError("fromDateError", "- Can't be null");
@@ -179,12 +180,26 @@ public class WorkSectionController {
         }
 
 
-
+        List<WorkSection> listWorkSections = service.findAllActiveRecords(loggedUser.getId());
         model.addAttribute("workSection", workSection);
         model.addAttribute("pageTitle", "Add New work section");
         workSection.setUser_id(loggedUser.getId());
 
 
+        for(int i =0;i<listWorkSections.size();i++){
+            if(listWorkSections.get(i).getCompany().toLowerCase().equals(workSection.getCompany().toLowerCase())
+                    && listWorkSections.get(i).getJobName().toLowerCase().equals(workSection.getJobName().toLowerCase())
+                    &&listWorkSections.get(i).getId()!= workSection.getId()
+            ){
+                existingEducationFlag=true;
+                break;
+            }
+        }
+
+        if(existingEducationFlag){
+            model.addAttribute("uniquenessMessage","The job name & company combo must be unique!");
+            return "workSection/work_section_form";
+        }
 
         if (bindingResult.hasErrors()) {
             int errorCount = bindingResult.getAllErrors().size()-errorCountFix;

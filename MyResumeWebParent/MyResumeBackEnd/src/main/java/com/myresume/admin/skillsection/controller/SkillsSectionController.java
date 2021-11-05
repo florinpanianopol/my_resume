@@ -11,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,9 +32,7 @@ public class SkillsSectionController {
     public String listFirstPage(Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
         List<SkillsSection> listSkillsRecords = service.listAll();
         model.addAttribute("listSkillsRecords", listSkillsRecords);
-
         getNoOfCols(model, loggedUser, listSkillsRecords);
-
         return listByPage(1, model, "skillCategory", "asc", null, loggedUser);
     }
 
@@ -47,7 +45,6 @@ public class SkillsSectionController {
 
         List<SkillsSection> listActiveSkillsRecords = service.findAllActiveRecords(loggedUser.getId());
         int activeRecordsCount = listActiveSkillsRecords.size();
-
         model.addAttribute("noOfCol", noOfCol);
         model.addAttribute("activeRecordsCount", activeRecordsCount);
     }
@@ -62,13 +59,11 @@ public class SkillsSectionController {
         List<SkillsSection> listSkillsRecords = page.getContent();
 
         getNoOfCols(model, loggedUser, listSkillsRecords);
-
         long startCount = (pageNum - 1) * SkillsSectionService.SKILLS_PER_PAGE + 1;
         long endCount = startCount + SkillsSectionService.SKILLS_PER_PAGE - 1;
         if (endCount > page.getTotalElements()) {
             endCount = page.getTotalElements();
         }
-
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 
         model.addAttribute("currentPage", pageNum);
@@ -93,9 +88,21 @@ public class SkillsSectionController {
         SkillsSection skillsSection = new SkillsSection();
         skillsSection.setEnabled(true);
 
+        PredefinedCategoriesForDropdown(model);
+
         model.addAttribute("skillsSection",skillsSection);
+
         model.addAttribute("pageTitle","Add New Skill");
         return "skillsSection/skills_section_form";
+    }
+
+    private void PredefinedCategoriesForDropdown(Model model) {
+        ArrayList<String> skillCategories = new ArrayList<>();
+        skillCategories.add("FrontEnd");
+        skillCategories.add("BackEnd");
+        skillCategories.add("Tools");
+        skillCategories.add("Others");
+        model.addAttribute("skillCategories", skillCategories);
     }
 
     @PostMapping("/skills_section/save")
@@ -104,12 +111,12 @@ public class SkillsSectionController {
     ) throws IOException {
 
         boolean existingSkillFlag = false;
-
-        List<SkillsSection> listSkills = service.listAll();
+        List<SkillsSection> listSkills = service.findAllActiveRecords(loggedUser.getId());
         model.addAttribute("skillSection", skillsSection);
 
         for(int i =0;i<listSkills.size();i++){
-            if(listSkills.get(i).getSkillTitle().toLowerCase().equals(skillsSection.getSkillTitle().toLowerCase())&& listSkills.get(i).getUser_id()==(loggedUser.getId())
+            if(listSkills.get(i).getSkillTitle().toLowerCase().equals(skillsSection.getSkillTitle().toLowerCase())
+                    && listSkills.get(i).getUser_id()==(loggedUser.getId())
             &&listSkills.get(i).getId()!=skillsSection.getId()
             ){
                 existingSkillFlag=true;
@@ -117,30 +124,24 @@ public class SkillsSectionController {
             }
         }
 
+        PredefinedCategoriesForDropdown(model);
+
         if(existingSkillFlag){
-            ObjectError error = new ObjectError("artificialBindingError", "artificialBindingError");
-            bindingResult.addError(error);
             model.addAttribute("skills_message","The skill must be unique");
+            return "skillsSection/skills_section_form";
         }
 
         if (bindingResult.hasErrors()) {
             return "skillsSection/skills_section_form";
         }
-
-
             skillsSection.setUser_id(loggedUser.getId());
+        try {
             service.save(skillsSection);
-
-        //for updating the profile photo of the logged user
-//        if(user.getEmail().equals(loggedUser.getUsername())) {
-//            loggedUser.setFirstName(user.getFirstName());
-//            loggedUser.setLastName(user.getLastName());
-//            loggedUser.setPhotos(user.getPhotos());
-//        }
-
-
+        } catch (Exception e){
+            model.addAttribute("skills_message",e.getMessage());
+            return "skillsSection/skills_section_form";
+        }
         redirectAttributes.addFlashAttribute("message","The skill has been saved successfully");
-
         return getRedirectURLtoAffectedUser(skillsSection);
 
     }
@@ -182,10 +183,10 @@ public class SkillsSectionController {
                                    Model model,
                                    RedirectAttributes redirectAttributes) {
 
+        PredefinedCategoriesForDropdown(model);
+
         try {
             SkillsSection skillsSection = service.get(id);
-
-
             model.addAttribute("skillsSection", skillsSection);
             model.addAttribute("pageTitle", "Edit skills section with ID: " + id);
             return "skillsSection/skills_section_form";
@@ -194,8 +195,5 @@ public class SkillsSectionController {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/skills_section";
         }
-
-
     }
-
 }

@@ -41,7 +41,7 @@
                                 <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                                 <h5>Filter:&nbsp</h5>
                                 <input type="search" name="keyword" th:value="${keyword}"
-                                       class="form-control search-form mr-2" required/>
+                                       class="form-control search-form mr-2"/>
                                 <button type="submit" class="btn btn-success"/>
                                 <i class="fas fa-search"></i>
                                 </button>
@@ -60,7 +60,7 @@
                             <tr class="d-flex">
                                 <th class="col-1">Actions</th>
                                 <th class="col-2">Profile Photo</th>
-                                <th class="col-1" id="name">
+                                <th class="col-2" id="name">
                                     <div th:replace="fragments :: column_link('name', 'Name','none','about_section')">
                                     </div>
                                 </th>
@@ -93,7 +93,7 @@
                                     <img class="uploadedPhoto" th:if="${i.profilePhoto !=null}"
                                          th:src="@{${i.profilePhotoImagePath}}"/>
                                 </td>
-                                <td class="col-1">[[${i.name}]]</td>
+                                <td class="col-2">[[${i.name}]]</td>
                                 <td class="col-2">[[${i.currentJob}]]</td>
                                 <td class="col-3" th:utext="${i.shortDesc}"></td>
                                 <td class="col-1"><a th:href="${i.webSite}">Click Here</a></td>
@@ -123,51 +123,14 @@
                             </tr>
                             </tbody>
                         </table>
-                        <div class="text-center m-1">
-				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
-				No records found
-				</span>
-                            <span th:unless="${currentPage > totalPages}">
-		 		Showing records # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
-		 		</span>
-                        </div>
-                        <div th:if="${totalPages > 1}">
-                            <nav>
-                                <ul class="pagination justify-content-center">
-                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
-                                        <a class="page-link"
-                                           th:href="@{'/about_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">First</a>
-                                    </li>
-                                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a
-                                            class="page-link"
-                                            th:href="@{'/about_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Previous</a>
-                                    </li>
-                                    <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
-                                        th:each="i:${#numbers.sequence(1,totalPages)}">
-                                        <a class="page-link"
-                                           th:href="@{'/about_section/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">[[${i}]]</a>
-                                    </li>
-                                    <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}"><a
-                                            class="page-link"
-                                            th:href="@{'/about_section/page/'+${currentPage+1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">Next</a>
-                                    </li>
-                                    <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
-                                        <a class="page-link"
-                                           th:href="@{'/about_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}+'#main_section'}">
-                                            Last</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
                     </div>
                     <div class="less-details" id="main">
-                        <div>
-                            <form th:action="@{/about_section/page/1}" class="form-inline m-3">
+                            <form th:action="@{/about_section/page/1}" class="form-inline">
                                 <input type="hidden" name="sortField" th:value="${sortField}"/>
                                 <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                                 <h5>Filter:&nbsp</h5>
                                 <input type="search" name="keyword" th:value="${keyword}"
-                                       class="form-control search-form mr-2" required/>
+                                       class="form-control search-form mr-2"/>
                                 <button type="submit" class="btn btn-success"/>
                                 <i class="fas fa-search"></i>
                                 </button>
@@ -180,20 +143,14 @@
                                     </button>
                                 </a>
                             </form>
-                        </div>
                         <div th:each="i: ${listAboutRecords}" class="row m-1 less_details_row">
+                            <div class = "row">
                             <div class="col-4">
                                 <span th:if="${i.profilePhoto ==null}"
                                       class="fas fa-portrait fa-3x icon-silver"></span>
                                 <img class="uploadedPhoto" th:if="${i.profilePhoto !=null}"
                                      th:src="@{${i.profilePhotoImagePath}}"/>
                                 <div class="mt-2">
-                                    <a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green"
-                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/false'}"
-                                       title="Disable this user"></a>
-                                    <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark"
-                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/true'}"
-                                       title="Enable this user"></a>
                                     <a class="fas fa-edit icon-silver fa-2x text-decoration-none"
                                        th:href="@{'/about_section/edit/' + ${i.id}}"
                                        title="Edit the user"></a>
@@ -225,17 +182,6 @@
                                        <span class="text-info">
                                             [[${i.currentJob}]]
                                         </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <span class="text-primary font-weight-bold">Short Description</span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div th:class="${i.shortDesc.contains('#ffffff')} ? 'bg-dark pt-1 pb-1 pl-1 pr-1 font-weight-light' : ''"
-                                             th:utext="${i.shortDesc}"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -302,10 +248,36 @@
                                         </span>
                                     </div>
                                 </div>
-
+                                <div class="row">
+                                    <div class="col-5">
+                                    <span class="text-primary font-weight-bold">
+                                        Enabled
+                                    </span>
+                                    </div>
+                                    <div class="col-7">
+                                       <span class="text-info">
+                                            <a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green"
+                                               th:href="@{'/about_section/' + ${i.id} + '/currInd/false'}"
+                                               title="Disable this user"></a>
+                                            <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark"
+                                               th:href="@{'/about_section/' + ${i.id} + '/currInd/true'}"
+                                               title="Enable this user"></a>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-
-
+                            </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="text-primary font-weight-bold">Short Description &nbsp; </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div th:utext="${i.shortDesc}" style="text-align: justify;text-justify: inter-word;"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
 

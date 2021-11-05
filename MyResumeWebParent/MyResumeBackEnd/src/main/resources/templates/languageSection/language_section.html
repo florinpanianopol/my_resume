@@ -6,18 +6,8 @@
 <body>
 
 <div th:replace="navigation :: menu('language_section')"></div>
-
 <!-- Header -->
-<header id="main-header" class="py-2 bg-primary text-white mb-2">
-    <div class="container">
-        <div class="col-md-6">
-            <h1>
-                <i class="fas fa-cog"></i>
-                Language Section
-            </h1>
-        </div>
-    </div>
-</header>
+<div th:replace="fragments :: header('fas fa-grin-tongue','Language Section')"></div>
 
 
 <!-- Actions -->
@@ -28,44 +18,7 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card text-center text-white mb-4" th:classappend="${totalItems ==0} ? bg-warning : bg-success">
-                <div class="card-body">
-                    <h3>Records</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-database"></i>
-                        <span th:text="${totalItems}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center bg-success text-white mb-4">
-                <div class="card-body">
-                    <h3>Columns</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-columns"></i>
-                        <span th:text="${noOfCol}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center text-white mb-4"
-                 th:classappend="${activeRecordsCount ==0} ? bg-warning : bg-success">
-                <div class="card-body">
-                    <h3>Enabled Records</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-user"></i>
-                        <span th:text="${activeRecordsCount}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="fragments :: dynamicCounts(${totalItems},${noOfCol},${activeRecordsCount})"></div>
 
 <section id="language_section_records">
     <div class="container">
@@ -75,19 +28,16 @@
                     <div class="card-header">
                         <h4>
                             Records for the Languages Section
-                            <a th:href="@{/language_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
-                            <a th:href="@{/language_section/export/excel}"
-                               class="fas fa-file-excel fa-1x icon-green mr-1"></a>
-                            <a th:href="@{/language_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
                         </h4>
 
                     </div>
-                    <div>
+                    <div class="full-details">
                         <form th:action="@{/language_section/page/1}" class="form-inline m-3">
                             <input type="hidden" name="sortField" th:value="${sortField}"/>
                             <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                             <h5>Filter:&nbsp</h5>
-                            <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2" required/>
+                            <input type="search" name="keyword" th:value="${keyword}"
+                                   class="form-control search-form mr-2"/>
                             <button type="submit" class="btn btn-success"/>
                             <i class="fas fa-search"></i>
                             </button>
@@ -103,11 +53,8 @@
                     </div>
                     <div class="full-details">
                         <table class="table">
-                            <thead class ="thead-dark">
+                            <thead class="thead-dark">
                             <tr>
-                                <th class="hideable-column">
-                                <th th:replace="fragments :: column_link('id','Id','tag','language_section')"/>
-                                </th>
                                 <th id="language">
                                     <div th:replace="fragments :: column_link('language', 'Language','none','language_section')">
                                     </div>
@@ -123,7 +70,6 @@
                             </thead>
                             <tbody>
                             <tr th:each="i: ${listLanguageRecords}">
-                                <th class="hideable-column" scope="row">[[${i.id}]]</th>
                                 <td>[[${i.language}]]</td>
                                 <td>[[${i.languageLevel}]]</td>
                                 <td>
@@ -136,43 +82,76 @@
                                        title="Enable this language"
                                     ></a>
                                 </td>
-                                <td><a class = "fas fa-edit fa-2x icon-silver" th:href="@{'/language_section/edit/' + ${i.id}}"
-                                       title = "Edit this language"></a>
-                                    <a class ="fas fa-trash fa-2x icon-silver link-delete" th:href="@{'/language_section/delete/' + ${i.id}}"
-                                       th:languageSectionId = "${i.id}"
-                                       title = "Delete this language"></a>
+                                <td><a class="fas fa-edit fa-2x icon-silver"
+                                       th:href="@{'/language_section/edit/' + ${i.id}}"
+                                       title="Edit this language"></a>
+                                    <a class="fas fa-trash fa-2x icon-silver link-delete"
+                                       th:href="@{'/language_section/delete/' + ${i.id}}"
+                                       th:languageSectionId="${i.id}"
+                                       title="Delete this language"></a>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="less-details">
-                        <div th:each="i: ${listLanguageRecords}" class="row m-1">
-                            <div class="col-12">
-                                <div>Language</div>
-                                <div>[[${i.language}]]</div>
-                                <div>Language Level</div>
-                                <div>[[${i.languageLevel}]]</div>
-                                <div class="mt-2">
-                                    <a th:if="${i.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+                    <div class="less-details" id="main" style="white-space: nowrap">
+                        <form th:action="@{/language_section/page/1}" class="form-inline">
+                            <input type="hidden" name="sortField" th:value="${sortField}"/>
+                            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+                            <h5>Filter:&nbsp</h5>
+                            <input type="search" name="keyword" th:value="${keyword}"
+                                   class="form-control search-form mr-2"/>
+                            <button type="submit" class="btn btn-success"/>
+                            <i class="fas fa-search"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger ml-2" onclick="clearFilterMobile()"/>
+                            <i class="fas fa-eraser"></i>
+                            </button>
+                            <a th:href="@{/language_section/new}">
+                                <button type="button" class="btn btn-primary ml-2"/>
+                                <i class="fas fa-plus"></i>
+                                </button>
+                            </a>
+                        </form>
+
+
+                        <table th:each="i: ${listLanguageRecords}" class="table table-responsive table-borderless" style="display:table;">
+                            <tbody>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Language</span></td>
+                                <td class="text-center"><span class="text-info">[[${i.language}]]</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold"> Language Level</span></td>
+                                <td class="text-center"><span class="text-info">[[${i.languageLevel}]]</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Enabled</span></td>
+                                <td class="text-center"><a th:if="${i.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
                                        th:href="@{'/language_section/' + ${i.id} + '/enabled/false'}"
                                        title="Disable this language"></a>
                                     <a th:if="${i.enabled != true}" class="fas fa-circle fa-2x icon-dark"
                                        th:href="@{'/language_section/' + ${i.id} + '/enabled/true'}"
-                                       title="Enable this language"></a>
-                                    <a class="fas fa-edit fa-2x icon-silver text-decoration-none"
+                                       title="Enable this language"></a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Actions</span></td>
+                                <td class="text-center">
+                                    <a class="fas fa-edit icon-silver fa-2x text-decoration-none"
                                        th:href="@{'/language_section/edit/' + ${i.id}}"
-                                       title="Edit the user"></a>
-                                    <a class="fas fa-trash fa-2x icon-silver link-delete text-decoration-none"
+                                       title="Edit this language"></a>
+                                    <a class="fas fa-trash icon-silver link-delete fa-2x text-decoration-none"
                                        th:href="@{'/language_section/delete/' + ${i.id}}"
                                        th:languageSectionId="${i.id}" title="Delete this language"></a>
-                                </div>
-                            </div>
-
-
-                        </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <hr style="width:100%;text-align:left;margin-left:0">
+                        </table>
                     </div>
+
+
 
                     <div class="text-center m-1">
 				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
@@ -189,8 +168,9 @@
                                     <a class="page-link"
                                        th:href="@{'/language_section/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">First</a>
                                 </li>
-                                <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a class="page-link"
-                                                                                                         th:href="@{'/language_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Previous</a>
+                                <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}"><a
+                                        class="page-link"
+                                        th:href="@{'/language_section/page/'+${currentPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Previous</a>
                                 </li>
                                 <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
                                     th:each="i:${#numbers.sequence(1,totalPages)}">
@@ -203,8 +183,7 @@
                                 </li>
                                 <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
                                     <a class="page-link"
-                                       th:href="@{'/language_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Last
-                                        Page</a>
+                                       th:href="@{'/language_section/page/'+${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+${keyword!=null ? '&keyword='+keyword : ''}}">Last</a>
                                 </li>
                             </ul>
                         </nav>
@@ -250,7 +229,7 @@
         });
     });
 
-    function clearFilter() {
+    function clearFilterMobile() {
         window.location = "[[@{/language_section}]]"
     }
 </script>

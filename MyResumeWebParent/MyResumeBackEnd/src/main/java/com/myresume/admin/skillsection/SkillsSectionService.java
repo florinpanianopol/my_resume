@@ -43,11 +43,6 @@ public class SkillsSectionService {
     }
 
     public SkillsSection save(SkillsSection skillsSection) {
-//			boolean isUpdatingAboutSection = (aboutsection.getId()!= null);
-//
-//			if(isUpdatingAboutSection) {
-//				AboutSection existingAboutSection = repo.findById(aboutsection.getId()).get();
-//			}
         return skillsRepo.save(skillsSection);
     }
 
@@ -71,7 +66,4 @@ public class SkillsSectionService {
     public void updateEnabled(Integer id, boolean enabled) {
         skillsRepo.updateEnabled(id, enabled);
     }
-
-
-
 }

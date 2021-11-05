@@ -11,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -32,9 +30,7 @@ public class LanguageSectionController {
     public String listFirstPage(Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser) {
         List<LanguageSection> listLanguageRecords = service.listAll();
         model.addAttribute("listLanguageRecords", listLanguageRecords);
-
         getNoOfCols(model, loggedUser, listLanguageRecords);
-
         return listByPage(1, model, "language", "asc", null, loggedUser);
     }
 
@@ -101,15 +97,15 @@ public class LanguageSectionController {
     @PostMapping("/language_section/save")
     public String saveLanguage(@ModelAttribute("languageSection") @Valid LanguageSection languageSection, BindingResult bindingResult, RedirectAttributes redirectAttributes,
                             Model model, @AuthenticationPrincipal MyResumeUserDetails loggedUser
-    ) throws IOException {
+    ) {
 
         boolean existingLanguageFlag = false;
-
-        List<LanguageSection> listLanguages = service.listAll();
+        List<LanguageSection> listLanguages = service.findAllActiveRecords(loggedUser.getId());
         model.addAttribute("languageSection", languageSection);
 
         for(int i =0;i<listLanguages.size();i++){
-            if(listLanguages.get(i).getLanguage().toLowerCase().equals(languageSection.getLanguage().toLowerCase())&& listLanguages.get(i).getUser_id()==(loggedUser.getId())
+            if(listLanguages.get(i).getLanguage().toLowerCase().equals(languageSection.getLanguage().toLowerCase())&&
+                    listLanguages.get(i).getUser_id()==(loggedUser.getId())
                     &&listLanguages.get(i).getId()!=languageSection.getId()
             ){
                 existingLanguageFlag=true;
@@ -118,29 +114,22 @@ public class LanguageSectionController {
         }
 
         if(existingLanguageFlag){
-            ObjectError error = new ObjectError("artificialBindingError", "artificialBindingError");
-            bindingResult.addError(error);
             model.addAttribute("language_message","The language must be unique");
+            return "languageSection/language_section_form";
         }
 
         if (bindingResult.hasErrors()) {
             return "languageSection/language_section_form";
         }
-
-
         languageSection.setUser_id(loggedUser.getId());
-        service.save(languageSection);
-
-        //for updating the profile photo of the logged user
-//        if(user.getEmail().equals(loggedUser.getUsername())) {
-//            loggedUser.setFirstName(user.getFirstName());
-//            loggedUser.setLastName(user.getLastName());
-//            loggedUser.setPhotos(user.getPhotos());
-//        }
-
-
+        try {
+            service.save(languageSection);
+        }
+        catch(Exception e){
+            model.addAttribute("language_message",e.getMessage());
+            return "languageSection/language_section_form";
+        }
         redirectAttributes.addFlashAttribute("message","The language has been saved successfully");
-
         return getRedirectURLtoAffectedUser(languageSection);
 
     }
@@ -161,8 +150,7 @@ public class LanguageSectionController {
     }
 
     @GetMapping("/language_section/delete/{id}")
-    public String deleteLanguage(@PathVariable(name="id") Integer id, Model model,
-                              RedirectAttributes redirectAttributes
+    public String deleteLanguage(@PathVariable(name="id") Integer id,RedirectAttributes redirectAttributes
     )  {
 
         try {

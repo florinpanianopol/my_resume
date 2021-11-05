@@ -29,7 +29,10 @@
             <div class = "form-group row">
                 <label class = "col-sm-4 col-form-label">Skill Category</label>
                 <div class = "col-sm-8">
-                    <input type="text" class = "form-control" th:field="*{skillCategory}"/>
+<!--                    skillCategories-->
+                    <select class = "form-control" th:field="*{skillCategory}">
+                    <option th:each="operator : ${skillCategories}" th:value="${operator}" th:text="${operator}"></option>
+                    </select>
                     <span th:if="${#fields.hasErrors('skillCategory')}" th:errors="*{skillCategory}" class="error"></span>
                 </div>
             </div>

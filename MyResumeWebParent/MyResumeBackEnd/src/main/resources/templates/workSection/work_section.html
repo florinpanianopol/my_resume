@@ -8,16 +8,7 @@
 <div th:replace="navigation :: menu('work_section')"></div>
 
 <!-- Header -->
-<header id="main-header" class="py-2 bg-primary text-white mb-2">
-    <div class="container">
-        <div class="col-md-6">
-            <h1>
-                <i class="fas fa-address-book"></i>
-                Work Section
-            </h1>
-        </div>
-    </div>
-</header>
+<div th:replace="fragments :: header('fas fa-address-book','Work Section')"></div>
 
 
 
@@ -33,44 +24,7 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card text-center text-white mb-4" th:classappend="${totalItems ==0} ? bg-warning : bg-success">
-                <div class="card-body">
-                    <h3>Records</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-database"></i>
-                        <span th:text="${totalItems}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center bg-success text-white mb-4">
-                <div class="card-body">
-                    <h3>Columns</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-columns"></i>
-                        <span th:text="${noOfCol}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center text-white mb-4"
-                 th:classappend="${activeRecordsCount ==0} ? bg-warning : bg-success">
-                <div class="card-body">
-                    <h3>Enabled Records</h3>
-                    <h4 class="display-4">
-                        <i class="fas fa-user"></i>
-                        <span th:text="${activeRecordsCount}"></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="fragments :: dynamicCounts(${totalItems},${noOfCol},${activeRecordsCount})"></div>
 
 <section id="work_section_records">
     <div class="container">
@@ -80,10 +34,6 @@
                     <div class="card-header">
                         <h4>
                             Records for the Work Section
-                            <a th:href="@{/work_section/export/csv}" class="fas fa-file-csv fa-1x icon-green mr-1"></a>
-                            <a th:href="@{/work_section/export/excel}"
-                               class="fas fa-file-excel fa-1x icon-green mr-1"></a>
-                            <a th:href="@{/work_section/export/pdf}" class="fas fa-file-pdf fa-1x icon-green mr-1"></a>
                         </h4>
 
                     </div>
@@ -95,7 +45,7 @@
                                 <input type="hidden" name="sortField" th:value="${sortField}"/>
                                 <input type="hidden" name="sortDir" th:value="${sortDir}"/>
                                 <h5>Filter:&nbsp</h5>
-                                <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2" required/>
+                                <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2"/>
                                 <button type="submit" class="btn btn-success"/>
                                 <i class="fas fa-search"></i>
                                 </button>
@@ -115,11 +65,6 @@
                             <thead class="thead-dark">
                             <tr class="d-flex">
                                 <th class="col-2">Actions</th>
-                                <th class="hideable-column col-1" id="id">
-                                <th th:replace="fragments :: column_link('id','Id','tag','work_section')"/>
-                                </th>
-
-
                                 <th class="col-2" id="jobName">
                                     <div th:replace="fragments :: column_link('jobName', 'Job Name','none','work_section')">
                                     </div>
@@ -150,11 +95,6 @@
                                        th:href="@{'/work_section/delete/' + ${i.id}}"
                                        th:workSectionId="${i.id}"
                                        title="Delete this work section"></a>
-                                </td>
-                                <td class="col-1 hideable-column">
-                                    <span class="badge badge-primary">
-                                    [[${i.id}]]
-                                    </span>
                                 </td>
                                 <td class="col-2">[[${i.jobName}]]</td>
                                 <td class="col-2">[[${i.company}]]</td>
@@ -239,7 +179,7 @@
                                 <button type="submit" class="btn btn-success"/>
                                 <i class="fas fa-search"></i>
                                 </button>
-                                <button type="button" class="btn btn-danger ml-2" onclick="clearFilterMobile()"/>
+                                <button type="button" class="btn btn-danger ml-2" onclick="clearFilter()"/>
                                 <i class="fas fa-eraser"></i>
                                 </button>
                                 <a th:href="@{/work_section/new}">
@@ -251,98 +191,61 @@
                             </form>
 
                         </div>
-                        <div th:each="i: ${listWorkSectionRecords}" class="row m-1 less_details_row">
-                            <div class="col-4">
-                                <div class="mt-2">
-                                    <a th:if="${i.enabled == true}" class="fas fa-check-circle icon-green"
-                                       th:href="@{'/work_section/' + ${i.id} + '/enabled/false'}"
-                                       title="Disable this work section"></a>
-                                    <a th:if="${i.enabled != true}" class="fas fa-circle icon-dark"
+
+                        <table th:each="i: ${listWorkSectionRecords}" class="table table-responsive table-borderless" style="display:table;">
+                            <tbody>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Company</span></td>
+                                <td class="text-center"><span class="text-info">[[${i.company}]]</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Company Logo</span></td>
+                                <td class="text-center">
+                                     <span th:if="${i.companyLogoPhoto ==null}"
+                                           class="fas fa-portrait fa-3x icon-silver"></span>
+                                    <img class="uploadedPhoto" th:if="${i.companyLogoPhoto !=null}"
+                                         th:src="@{${i.companyLogoImagePath}}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Job Name</span></td>
+                                <td class="text-center"><span class="text-info">[[${i.jobName}]]</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Job Desc</span></td>
+                                <td><span class="text-info" th:utext="${i.jobDesc}"></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">From Date</span></td>
+                                <td class="text-center"><span class="text-info">[[${i.fromDate}]]</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">To Date</span></td>
+                                <td class="text-center"><span class="text-info">[[${i.toDate}]]</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Enabled</span></td>
+                                <td class="text-center"><a th:if="${i.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+                                                           th:href="@{'/work_section/' + ${i.id} + '/enabled/false'}"
+                                                           title="Disable this section"></a>
+                                    <a th:if="${i.enabled != true}" class="fas fa-circle fa-2x icon-dark"
                                        th:href="@{'/work_section/' + ${i.id} + '/enabled/true'}"
-                                       title="Enable this work section"></a>
-                                    <a class="fas fa-edit icon-silver text-decoration-none"
+                                       title="Enable this section"></a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="text-primary font-weight-bold">Actions</span></td>
+                                <td class="text-center">
+                                    <a class="fas fa-edit icon-silver fa-2x text-decoration-none"
                                        th:href="@{'/work_section/edit/' + ${i.id}}"
-                                       title="Edit the work section"></a>
-                                    <a class="fas fa-trash icon-silver link-delete text-decoration-none"
+                                       title="Edit this section"></a>
+                                    <a class="fas fa-trash icon-silver link-delete fa-2x text-decoration-none"
                                        th:href="@{'/work_section/delete/' + ${i.id}}"
-                                       th:workSectionId="${i.id}" title="Delete this work section"></a>
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Company
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.company}]]
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Job Name
-                                    </span>
-                                </div>
-                                <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.jobName}]]
-                                        </span>
-                                </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Job Description
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.jobDesc}]]
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Website
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                        </span><a th:href="${i.webSite}"><span class="badge badge-info">Click Here</span></a>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        From date
-                                    </span>
-                                    </div>
-                                    <span class="text-info">
-                                            [[${i.fromDate}]]
-                                        </span>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        To date
-                                    </span>
-                                    </div>
-                                    <span class="text-info">
-                                            [[${i.toDate}]]
-                                        </span>
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
+                                       th:workSectionId="${i.id}" title="Delete this section"></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <hr style="width:100%;text-align:left;margin-left:0">
+                        </table>
 
                         <div class="text-center m-1">
 				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
