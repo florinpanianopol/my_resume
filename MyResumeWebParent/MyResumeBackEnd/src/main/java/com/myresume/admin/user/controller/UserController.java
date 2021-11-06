@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -110,10 +109,10 @@ public class UserController {
     public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes,
                            @RequestParam("image") MultipartFile multipartFile, Model model,@AuthenticationPrincipal MyResumeUserDetails loggedUser
     ) throws IOException {
-        boolean passwordFlag = false;
+
         boolean userExistingFlag = false;
 
-        List<User> listUsers = service.listAll();
+        List<User> listUsers = service.findAllActiveRecords();
         List<Role> listRoles = service.listRoles();
         model.addAttribute("user", user);
         model.addAttribute("listRoles",listRoles);
@@ -125,51 +124,45 @@ public class UserController {
             }
         }
 
+        if (listUsers.size() > 0 && user.isEnabled() && !user.getId().equals(listUsers.get(0).getId())) {
+            model.addAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");
+            return "users/user_form";
+        }
         if(user.getPassword().trim().length()<8 &&!userExistingFlag){
-            ObjectError error = new ObjectError("artificialBindingError", "artificialBindingError");
-            bindingResult.addError(error);
-            passwordFlag=true;
+            model.addAttribute("password_message", "The password must be greater than 8 characters!");
+            return "users/user_form";
         }
-
         if (bindingResult.hasErrors()) {
-            if(passwordFlag) {
-                model.addAttribute("password_message", "The password must be greater than 8 characters!");
-            }
-        return "users/user_form";
-        }
-
-
-        if(!multipartFile.isEmpty()) {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            user.setPhotos(fileName);
-            User savedUser = service.save(user);
-            String uploadDir = "user-photos/" + savedUser.getId();
-            try {
-                File file = new File("user-photos/" + savedUser.getId());
-                FileUtils.cleanDirectory(file);
-            }
-            catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-
-
+            return "users/user_form";
         }
         else {
-            if(user.getPhotos().isEmpty()) user.setPhotos(null);
-            service.save(user);
+            if (!multipartFile.isEmpty()) {
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                user.setPhotos(fileName);
+                User savedUser = service.save(user);
+                String uploadDir = "user-photos/" + savedUser.getId();
+                try {
+                    File file = new File("user-photos/" + savedUser.getId());
+                    FileUtils.cleanDirectory(file);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            } else {
+                if (user.getPhotos().isEmpty()) user.setPhotos(null);
+                service.save(user);
+            }
+            //for updating the profile photo of the logged user
+            if (user.getEmail().equals(loggedUser.getUsername())) {
+                loggedUser.setFirstName(user.getFirstName());
+                loggedUser.setLastName(user.getLastName());
+                loggedUser.setPhotos(user.getPhotos());
+            }
+
+
+            redirectAttributes.addFlashAttribute("message", "The user has been saved successfully");
+            return getRedirectURLtoAffectedUser(user);
         }
-        //for updating the profile photo of the logged user
-        if(user.getEmail().equals(loggedUser.getUsername())) {
-            loggedUser.setFirstName(user.getFirstName());
-            loggedUser.setLastName(user.getLastName());
-            loggedUser.setPhotos(user.getPhotos());
-        }
-
-
-        redirectAttributes.addFlashAttribute("message","The user has been saved successfully");
-
-        return getRedirectURLtoAffectedUser(user);
 
     }
 
@@ -223,10 +216,29 @@ public class UserController {
     @GetMapping("/users/{id}/enabled/{status}")
     public String updateUserEnabledStatus(@PathVariable("id") Integer id,
                                           @PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes ) {
-        service.updateUserEnabledStatus(id, enabled);
-        String status = enabled ? "enabled" : "disabled";
-        String message = "The user ID "+id+ " has been " + status;
-        redirectAttributes.addFlashAttribute("message",message);
+
+
+        boolean flag = false;
+        List<User> listUsers = service.listAll();
+
+        for (User user : listUsers) {
+            if (user.isEnabled() && !user.getId().equals(id)
+            ) {
+                flag = true;
+                break;
+            }
+        }
+
+        if (flag) {
+            redirectAttributes.addFlashAttribute("message", "There is already an Enabled record. Disable it first and then insert a new one!");
+        } else {
+            service.updateUserEnabledStatus(id, enabled);
+            String status = enabled ? "enabled" : "disabled";
+            String message = "The user with ID " + id + " has been " + status;
+            redirectAttributes.addFlashAttribute("message", message);
+        }
+        redirectAttributes.addFlashAttribute("flag", flag);
+
         return "redirect:/users";
     }
 

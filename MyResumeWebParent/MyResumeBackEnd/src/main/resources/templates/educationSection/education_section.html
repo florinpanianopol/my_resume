@@ -100,7 +100,7 @@
                         </table>
                     </div>
 
-                    <div class="less-details" id="main" style="white-space: nowrap">
+                    <div class="less-details" id="main">
                         <form th:action="@{/education_section/page/1}" class="form-inline">
                             <input type="hidden" name="sortField" th:value="${sortField}"/>
                             <input type="hidden" name="sortDir" th:value="${sortDir}"/>
@@ -120,9 +120,10 @@
                             </a>
                         </form>
 
+                        <hr style="width:94%;">
 
-                        <table th:each="i: ${listEducationRecords}" class="table table-responsive table-borderless" style="display:table;">
-                            <tbody>
+                        <table class="table table-responsive table-borderless" style="display:table;">
+                            <tbody th:each="i: ${listEducationRecords}" >
                             <tr>
                                 <td><span class="text-primary font-weight-bold">Name</span></td>
                                 <td class="text-center"><span class="text-info">[[${i.institutionName}]]</span></td>
@@ -159,8 +160,14 @@
                                        th:educationSectionId="${i.id}" title="Delete this education"></a>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <hr style="width:100%;">
+                                </td>
+                            </tr>
+
                             </tbody>
-                            <hr style="width:100%;text-align:left;margin-left:0">
+
                         </table>
                     </div>
 

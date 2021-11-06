@@ -125,160 +125,97 @@
                         </table>
                     </div>
                     <div class="less-details" id="main">
-                            <form th:action="@{/about_section/page/1}" class="form-inline">
-                                <input type="hidden" name="sortField" th:value="${sortField}"/>
-                                <input type="hidden" name="sortDir" th:value="${sortDir}"/>
-                                <h5>Filter:&nbsp</h5>
-                                <input type="search" name="keyword" th:value="${keyword}"
-                                       class="form-control search-form mr-2"/>
-                                <button type="submit" class="btn btn-success"/>
-                                <i class="fas fa-search"></i>
+                        <div>
+                        <form th:action="@{/about_section/page/1}" class="form-inline m-3">
+                            <input type="hidden" name="sortField" th:value="${sortField}"/>
+                            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+                            <h5>Filter:&nbsp</h5>
+                            <input type="search" name="keyword" th:value="${keyword}" class="form-control search-form mr-2"/>
+                            <button type="submit" class="btn btn-success"/>
+                            <i class="fas fa-search"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger ml-2" onclick="clearFilter()"/>
+                            <i class="fas fa-eraser"></i>
+                            </button>
+                            <a th:href="@{/about_section/new}">
+                                <button type="button" class="btn btn-primary ml-2"/>
+                                <i class="fas fa-plus"></i>
                                 </button>
-                                <button type="button" class="btn btn-danger ml-2" onclick="clearFilterMobile()"/>
-                                <i class="fas fa-eraser"></i>
-                                </button>
-                                <a th:href="@{/about_section/new}">
-                                    <button type="button" class="btn btn-primary ml-2"/>
-                                    <i class="fas fa-plus"></i>
-                                    </button>
-                                </a>
-                            </form>
-                        <div th:each="i: ${listAboutRecords}" class="row m-1 less_details_row">
-                            <div class = "row">
-                            <div class="col-4">
-                                <span th:if="${i.profilePhoto ==null}"
-                                      class="fas fa-portrait fa-3x icon-silver"></span>
-                                <img class="uploadedPhoto" th:if="${i.profilePhoto !=null}"
-                                     th:src="@{${i.profilePhotoImagePath}}"/>
-                                <div class="mt-2">
-                                    <a class="fas fa-edit icon-silver fa-2x text-decoration-none"
-                                       th:href="@{'/about_section/edit/' + ${i.id}}"
-                                       title="Edit the user"></a>
-                                    <a class="fas fa-trash icon-silver link-delete fa-2x text-decoration-none"
-                                       th:href="@{'/about_section/delete/' + ${i.id}}"
-                                       th:aboutSectionId="${i.id}" title="Delete this user"></a>
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Name
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.name}]]
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Current Job
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.currentJob}]]
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Website
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                        </span><a th:href="${i.webSite}"><span
-                                            class="badge badge-info">Click Here</span></a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        City
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.city}]]
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Degree
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.degree}]]
-                                        </span>
-                                    </div>
-                                </div>
-
-
-                                <div class="row" th:if="${i.email.length() <= 11}">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Email
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            [[${i.email}]]
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="row" th:if="${i.email.length() > 11}">
-                                    <div class="col-12">
-                                    <span class="text-primary font-weight-bold">
-                                        Email
-                                    </span>
-                                    </div>
-                                </div>
-                                <div class="row" th:if="${i.email.length() > 11}">
-                                    <div class="col-12">
-                                       <span class="text-info">
-                                            [[${i.email}]]
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-5">
-                                    <span class="text-primary font-weight-bold">
-                                        Enabled
-                                    </span>
-                                    </div>
-                                    <div class="col-7">
-                                       <span class="text-info">
-                                            <a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green"
-                                               th:href="@{'/about_section/' + ${i.id} + '/currInd/false'}"
-                                               title="Disable this user"></a>
-                                            <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark"
-                                               th:href="@{'/about_section/' + ${i.id} + '/currInd/true'}"
-                                               title="Enable this user"></a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <span class="text-primary font-weight-bold">Short Description &nbsp; </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div th:utext="${i.shortDesc}" style="text-align: justify;text-justify: inter-word;"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            </a>
+                        </form>
                         </div>
+
+                    <hr style="width:94%;">
+                    <table class="table table-responsive table-borderless" style="display:table;">
+                        <tbody th:each="i: ${listAboutRecords}">
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Name</span></td>
+                            <td class="text-center"><span class="text-info">[[${i.name}]]</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Photo</span></td>
+                            <td class="text-center">
+                                     <span th:if="${i.profilePhoto ==null}"
+                                           class="fas fa-portrait fa-3x icon-silver"></span>
+                                <img class="uploadedPhoto" th:if="${i.profilePhoto !=null}"
+                                     th:src="@{${i.getProfilePhotoImagePath()}}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Current Job</span></td>
+                            <td class="text-center"><span class="text-info">[[${i.currentJob}]]</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Website</span></td>
+                            <td class="text-center"><a th:href="${i.webSite}"><span class="badge badge-info">Click Here</span></a></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">City</span></td>
+                            <td class="text-center"><span class="text-info">[[${i.city}]]</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Degree</span></td>
+                            <td class="text-center"><span class="text-info">[[${i.degree}]]</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Email</span></td>
+                            <td class="text-center"><span class="text-info">[[${i.email}]]</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Enabled</span></td>
+                            <td class="text-center"><a th:if="${i.currInd == true}" class="fas fa-check-circle fa-2x icon-green"
+                                                       th:href="@{'/about_section/' + ${i.id} + '/currInd/false'}"
+                                                       title="Disable this section"></a>
+                                <a th:if="${i.currInd != true}" class="fas fa-circle fa-2x icon-dark"
+                                   th:href="@{'/about_section/' + ${i.id} + '/enabled/true'}"
+                                   title="Enable this section"></a></td>
+                        </tr>
+
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Short Desc (formated)</span></td>
+                            <td><span th:utext="${i.shortDesc}"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-primary font-weight-bold">Actions</span></td>
+                            <td class="text-center">
+                                <a class="fas fa-edit icon-silver fa-2x text-decoration-none"
+                                   th:href="@{'/work_section/edit/' + ${i.id}}"
+                                   title="Edit this section"></a>
+                                <a class="fas fa-trash icon-silver link-delete fa-2x text-decoration-none"
+                                   th:href="@{'/work_section/delete/' + ${i.id}}"
+                                   th:workSectionId="${i.id}" title="Delete this section"></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <hr style="width:100%;">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+
 
 
                         <div class="text-center m-1">
@@ -320,12 +257,11 @@
 
 
                     </div>
-
+            </div>
 
                 </div>
             </div>
         </div>
-    </div>
 </section>
 <div class="modal fade text-center" id="confirmModal">
     <div class="modal-dialog">
@@ -358,9 +294,6 @@
             $("#confirmModal").modal();
         });
     });
-    function clearFilterMobile() {
-        window.location = "[[@{/about_section#main}]]"
-    }
     function clearFilter() {
         window.location = "[[@{/about_section#main_section}]]"
     }

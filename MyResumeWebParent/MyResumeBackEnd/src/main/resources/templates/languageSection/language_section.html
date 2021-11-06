@@ -115,9 +115,10 @@
                             </a>
                         </form>
 
+                        <hr style="width:94%;">
 
-                        <table th:each="i: ${listLanguageRecords}" class="table table-responsive table-borderless" style="display:table;">
-                            <tbody>
+                        <table class="table table-responsive table-borderless" style="display:table;">
+                            <tbody th:each="i: ${listLanguageRecords}">
                             <tr>
                                 <td><span class="text-primary font-weight-bold">Language</span></td>
                                 <td class="text-center"><span class="text-info">[[${i.language}]]</span></td>
@@ -146,8 +147,12 @@
                                        th:languageSectionId="${i.id}" title="Delete this language"></a>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <hr style="width:100%;">
+                                </td>
+                            </tr>
                             </tbody>
-                            <hr style="width:100%;text-align:left;margin-left:0">
                         </table>
                     </div>
 

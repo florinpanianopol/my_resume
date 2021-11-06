@@ -191,9 +191,9 @@
                             </form>
 
                         </div>
-
-                        <table th:each="i: ${listWorkSectionRecords}" class="table table-responsive table-borderless" style="display:table;">
-                            <tbody>
+                        <hr style="width:94%;">
+                        <table class="table table-responsive table-borderless" style="display:table;">
+                            <tbody th:each="i: ${listWorkSectionRecords}">
                             <tr>
                                 <td><span class="text-primary font-weight-bold">Company</span></td>
                                 <td class="text-center"><span class="text-info">[[${i.company}]]</span></td>
@@ -243,8 +243,12 @@
                                        th:workSectionId="${i.id}" title="Delete this section"></a>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <hr style="width:100%;">
+                                </td>
+                            </tr>
                             </tbody>
-                            <hr style="width:100%;text-align:left;margin-left:0">
                         </table>
 
                         <div class="text-center m-1">

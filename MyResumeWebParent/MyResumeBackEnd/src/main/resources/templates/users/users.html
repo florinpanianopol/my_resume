@@ -6,157 +6,83 @@
 
 <div th:replace="navigation :: menu('users')"></div>
 
-<header id="main-header" class="py-2 bg-primary text-white">
-	<div class="container">
-		<div class="col-md-6">
-			<h1>
-				<i class="fas fa-users-cog"></i>
-				Users
-			</h1>
-		</div>
-	</div>
-</header>
+<!-- Header -->
+<div th:replace="fragments :: header('fas fa-users-cog','Users')"></div>
 
 
 <!-- Actions -->
-<section id="actions" class="py-4 mb-4 bg-light">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-3">
-				<a th:href="@{/users/new}" class="btn btn-primary btn-block">
-					<i class="fas fa-plus"></i> Add Record
-				</a>
-			</div>
-		</div>
-	</div>
-</section>
-
 <div class="container">
-	<div th:if="${message != null && message == 'There is already an Enabled record. Disable it first and then insert a new one!'}"
+	<div th:if="${flag!=null && flag}"
 		 class="alert alert-danger text-center">
 		[[${message}]]
 	</div>
-	<div th:if="${message != null && message != 'There is already an Enabled record. Disable it first and then insert a new one!'}"
+	<div th:if="${flag!=null && !flag}"
 		 class="alert alert-success text-center">
 		[[${message}]]
 	</div>
 </div>
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-4">
-			<div class="card text-center text-white mb-4" th:classappend="${totalItems ==0} ? bg-warning : bg-success">
-				<div class="card-body">
-					<h3>Records</h3>
-					<h4 class="display-4">
-						<i class="fas fa-database"></i>
-						<span th:text="${totalItems}"></span>
-					</h4>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="card text-center bg-success text-white mb-4">
-				<div class="card-body">
-					<h3>Columns</h3>
-					<h4 class="display-4">
-						<i class="fas fa-columns"></i>
-						<span th:text="${noOfCol}"></span>
-					</h4>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="card text-center text-white mb-4"
-				 th:classappend="${activeRecordsCount ==0} ? bg-warning : bg-success">
-				<div class="card-body">
-					<h3>Enabled Users</h3>
-					<h4 class="display-4">
-						<i class="fas fa-user"></i>
-						<span th:text="${activeRecordsCount}"></span>
-					</h4>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+	<div th:replace="fragments :: dynamicCounts(${totalItems},${noOfCol},${activeRecordsCount})"></div>
 
 
 <section id="about_section_records">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-                <span th:if="${totalItems ==0}"
-					  class="alert alert-danger text-center">No users added!</span>
-				<div th:if="${totalItems !=0}" class="card border-0">
 					<div class="card-header">
 						<h4>
-							Users
-<!--							<a th:href="@{/users/export/csv}" class="fas fa-file-csv fa-1x icon-dark mr-1"></a>-->
-<!--							<a th:href="@{/users/export/excel}"-->
-<!--							   class="fas fa-file-excel fa-1x icon-dark mr-1"></a>-->
-<!--							<a th:href="@{/users/export/pdf}" class="fas fa-file-pdf fa-1x icon-dark mr-1"></a>-->
+							User Records
 						</h4>
 
 					</div>
 					<div>
-						<form th:action="@{/users/page/1}" class="form-inline m-3">
+						<form id="searchForm" th:action="@{/users/page/1/}" class="form-inline m-3">
 							<input type="hidden" name="sortField" th:value="${sortField}"/>
 							<input type="hidden" name="sortDir" th:value="${sortDir}"/>
-							Filter:&nbsp
-							<input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
-							&nbsp;&nbsp;
-							<button type="submit" class="btn btn-primary"/>
+							<h5>Filter:&nbsp</h5>
+							<input type="search" name="keyword" th:value="${keyword}"
+								   class="form-control search-form mr-2"/>
+							<button type="submit" class="btn btn-success"/>
 							<i class="fas fa-search"></i>
 							</button>
-							&nbsp; &nbsp;
-							<button type="button" class="btn btn-secondary" onclick="clearFilter()">
-								<i class="fas fa-eraser"></i>
+							<button type="button" class="btn btn-danger ml-2" onclick="clearFilter()"/>
+							<i class="fas fa-eraser"></i>
 							</button>
+							<a th:href="@{/about_section/new}">
+								<button type="button" class="btn btn-primary ml-2"/>
+								<i class="fas fa-plus"></i>
+								</button>
+							</a>
 						</form>
 					</div>
 					<div class="full-details">
 						<table class = "table table-responsive-xl">
 							<thead class ="thead-dark">
 							<tr>
-								<th class="hideable-column">
+								<th class="hideable-column col-2">
 								<th th:replace="user_fragments :: column_link('id','User id','tag')"/>
 								</th>
 								<th>Photos</th>
 								<th class="hideable-column">
 								<th th:replace="user_fragments :: column_link('email','Email','tag')">
 								</th>
-								<!-- 				<th> -->
-								<!-- 				<a th:if="${sortField != 'email'}" -->
-								<!-- 				 th:href="@{'/users/page/' + ${currentPage} + '?sortField=email&sortDir=' +${sortDir} +${keyword!=null ? '&keyword='+keyword : ''}}"> -->
-								<!-- 				 Email -->
-								<!-- 				 </a> -->
-								<!-- 				 <a th:if="${sortField == 'email'}" -->
-								<!-- 				 th:href="@{'/users/page/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}+${keyword!=null ? '&keyword='+keyword : ''}}"> -->
-								<!-- 				 Email -->
-								<!-- 				 </a> -->
-
-								<!-- 				<span th:if="${sortField == 'email'}" -->
-								<!-- 				th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span> -->
-								<!-- 				</th> -->
-
-								<th th:replace="user_fragments :: column_link('firstName','First Name','none')"></th>
-								<th th:replace="user_fragments :: column_link('lastName','Last Name','none')"></th>
+								<th class="col-2" th:replace="user_fragments :: column_link('firstName','First Name','none')"></th>
+								<th class="col-2" th:replace="user_fragments :: column_link('lastName','Last Name','none')"></th>
 								<th>Roles</th>
 								<th th:replace="user_fragments :: column_link('enabled','Enabled','none')"></th>
-								<th>Actions</th>
+								<th class="col-2">Actions</th>
 							</tr>
 							</thead>
 							<tbody>
 							<tr th:each="user: ${listUsers}">
-								<td class = "hideable-column">[[${user.id}]]</td>
+								<td class = "hideable-column col-2">[[${user.id}]]</td>
 								<td>
 									<span th:if="${user.photos ==null}" class = "fas fa-portrait fa-3x icon-silver"></span>
 									<img class = "uploadedPhoto" th:if="${user.photos !=null}" th:src = "@{${user.photosImagePath}}"/>
 								</td>
 								<td class = "hideable-column">[[${user.email}]]</td>
-								<td>[[${user.firstName}]]</td>
-								<td>[[${user.lastName}]]</td>
+								<td class="col-2">[[${user.firstName}]]</td>
+								<td class="col-2">[[${user.lastName}]]</td>
 								<td>[[${user.roles}]]</td>
 
 								<td>
@@ -169,7 +95,7 @@
 									   title = "Enable this user"
 									></a>
 								</td>
-								<td><a class = "fas fa-edit fa-2x icon-silver" th:href="@{'/users/edit/' + ${user.id}}"
+								<td class="col-2"><a class = "fas fa-edit fa-2x icon-silver" th:href="@{'/users/edit/' + ${user.id}}"
 									   title = "Edit the user"></a>
 									<a class ="fas fa-trash fa-2x icon-silver link-delete" th:href="@{'/users/delete/' + ${user.id}}"
 									   th:userId = "${user.id}"
@@ -179,6 +105,15 @@
 
 							</tbody>
 						</table>
+
+						<div class="text-center m-1">
+				<span class="alert alert-danger" th:if="${currentPage > totalPages}">
+				No records found
+				</span>
+							<span th:unless="${currentPage > totalPages}">
+		 		Showing records # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
+		 		</span>
+						</div>
 
 					</div>
 
@@ -190,8 +125,8 @@
 								<img class = "uploadedPhoto" th:if="${user.photos !=null}" th:src = "@{${user.photosImagePath}}"/>
 							</div>
 							<div class="col-8">
-								<div>[[${user.fullName}]]</div>
-								<div>[[${user.roles}]]</div>
+								<div><span class="text-primary font-weight-bold">[[${user.fullName}]]</span></div>
+								<div><span class="text-primary font-weight-bold">[[${user.roles}]]</span></div>
 								<div class="mt-2">
 									<a th:if="${user.enabled == true}" class = "fas fa-check-circle fa-2x icon-green"
 									   th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
@@ -213,7 +148,7 @@
 						</div>
 					</div>
 					<div  class = "text-center m-1">
-		<span th:if="${currentPage > totalPages}">
+		<span class="alert alert-danger" th:if="${currentPage > totalPages}">
 		No Users found
 		 </span>
 						<span th:unless="${currentPage > totalPages}">
@@ -243,11 +178,7 @@
 								</li>
 							</ul>
 						</nav>
-
 					</div>
-
-
-				</div>
 			</div>
 		</div>
 	</div>

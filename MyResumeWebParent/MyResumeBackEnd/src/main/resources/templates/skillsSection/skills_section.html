@@ -125,11 +125,11 @@
                                 </button>
                             </a>
                         </form>
-                        <div class="row m-1">
 
+                        <hr style="width:94%;">
 
-                            <table th:each="i: ${listSkillsRecords}" class="table table-responsive table-borderless" style="display:table;">
-                                <tbody>
+                            <table class="table table-responsive table-borderless" style="display:table;">
+                                <tbody th:each="i: ${listSkillsRecords}">
                                 <tr>
                                     <td><span class="text-primary font-weight-bold">Skill Category</span></td>
                                     <td class="text-center"><span class="text-info">[[${i.skillCategory}]]</span></td>
@@ -162,10 +162,13 @@
                                                    th:skillSectionId="${i.id}" title="Delete this skill"></a>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <hr style="width:100%;">
+                                    </td>
+                                </tr>
                                 </tbody>
-                                <hr style="width:100%;text-align:left;margin-left:0">
                             </table>
-                        </div>
                     </div>
 
                     <div class="text-center m-1">
